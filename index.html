@@ -7,27 +7,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:      #09090f;
-  --surf:    #111118;
-  --surf2:   #18181f;
-  --surf3:   #1f1f2a;
-  --bord:    #262633;
-  --bord2:   #32324a;
-  --acc:     #5b7cf6;
-  --aglow:   rgba(91,124,246,.14);
-  --green:   #22c55e;
-  --gd:      rgba(34,197,94,.11);
-  --red:     #f43f5e;
-  --rd:      rgba(244,63,94,.11);
-  --yel:     #f59e0b;
-  --yd:      rgba(245,158,11,.11);
-  --gray:    #6272a4;
-  --grd:     rgba(98,114,164,.11);
-  --text:    #e2e4f0;
-  --dim:     #8890b0;
-  --muted:   #494d6a;
-  --mono:    'Space Mono', monospace;
-  --sans:    'Pretendard', -apple-system, sans-serif;
+  --bg:    #09090f;
+  --surf:  #111118;
+  --surf2: #18181f;
+  --surf3: #1f1f2a;
+  --bord:  #262633;
+  --bord2: #32324a;
+  --acc:   #5b7cf6;
+  --aglow: rgba(91,124,246,.14);
+  --green: #22c55e; --gd: rgba(34,197,94,.12);
+  --red:   #f43f5e; --rd: rgba(244,63,94,.12);
+  --yel:   #f59e0b; --yd: rgba(245,158,11,.12);
+  --gray:  #6272a4; --grd:rgba(98,114,164,.12);
+  --text:  #e2e4f0;
+  --dim:   #8890b0;
+  --muted: #494d6a;
+  --mono:  'Space Mono', monospace;
+  --sans:  'Pretendard', -apple-system, sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -36,226 +32,183 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 /* ── HEADER ── */
 header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:12px 22px;background:var(--surf);border-bottom:1px solid var(--bord);
-  flex-shrink:0;z-index:50;gap:10px;flex-wrap:wrap;
+  padding:13px 24px;background:var(--surf);border-bottom:1px solid var(--bord);
+  flex-shrink:0;gap:12px;flex-wrap:wrap;
 }
-.logo{display:flex;align-items:center;gap:10px}
-.li{width:32px;height:32px;background:linear-gradient(135deg,var(--acc),#9b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.lt{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.05em}
-.ls{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.1em;margin-top:1px}
-/* 출처 태그 */
-.src-tag{
-  font-family:var(--mono);font-size:9px;
-  background:rgba(255,69,0,.12);border:1px solid rgba(255,69,0,.3);
-  color:#ff6534;padding:4px 10px;border-radius:20px;letter-spacing:.06em;
-  display:flex;align-items:center;gap:5px;
-}
-.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.stat-chip{
-  display:flex;align-items:center;gap:5px;
+.logo{display:flex;align-items:center;gap:11px}
+.li{width:36px;height:36px;background:linear-gradient(135deg,var(--acc),#9b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.lt{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.05em}
+/* 출처를 로고 아래 작게 */
+.ls{
   font-family:var(--mono);font-size:9px;color:var(--muted);
-  background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:5px 11px;
+  letter-spacing:.06em;margin-top:2px;
+  display:flex;align-items:center;gap:4px;
 }
-.sdot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.ls svg{opacity:.6}
+.hdr-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stat-chip{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:6px 13px}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
 .sdot.warn{background:var(--yel);animation:blink 1.4s infinite}
 .sdot.err{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.btn-sm{background:var(--acc);border:none;color:#fff;padding:7px 14px;border-radius:7px;font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:opacity .2s}
-.btn-sm:hover{opacity:.85}
+.btn-refresh{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:8px 16px;border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.btn-refresh:hover{border-color:var(--acc);color:var(--acc)}
 
 /* ── SEARCH ── */
-.search-bar{
-  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
-  padding:10px 22px;background:var(--surf);border-bottom:1px solid var(--bord);
-  flex-shrink:0;
-}
-.sbox{flex:1;min-width:160px;position:relative}
-.sbox svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.sinput{
-  width:100%;background:var(--surf2);border:1px solid var(--bord2);color:var(--text);
-  padding:8px 12px 8px 32px;border-radius:7px;font-family:var(--sans);font-size:12px;
-  outline:none;transition:border-color .2s;
-}
+.search-bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:12px 24px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
+.sbox{flex:1;min-width:180px;position:relative}
+.sbox svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.sinput{width:100%;background:var(--surf2);border:1px solid var(--bord2);color:var(--text);padding:10px 14px 10px 36px;border-radius:8px;font-family:var(--sans);font-size:14px;outline:none;transition:border-color .2s}
 .sinput:focus{border-color:var(--acc)}
 .sinput::placeholder{color:var(--muted)}
-.ssel{
-  background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);
-  padding:8px 10px;border-radius:7px;font-family:var(--sans);font-size:11px;
-  outline:none;cursor:pointer;
-}
+.ssel{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:10px 12px;border-radius:8px;font-family:var(--sans);font-size:13px;outline:none;cursor:pointer}
 .ssel:focus{border-color:var(--acc)}
-.btn-go{
-  background:var(--acc);border:none;color:#fff;padding:8px 18px;
-  border-radius:7px;font-family:var(--sans);font-size:12px;font-weight:600;
-  cursor:pointer;transition:opacity .2s,transform .1s;white-space:nowrap;
-}
+.btn-go{background:var(--acc);border:none;color:#fff;padding:10px 22px;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;white-space:nowrap}
 .btn-go:hover{opacity:.88;transform:translateY(-1px)}
 
 /* ── STATS ── */
-.stats{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:7px;
-  padding:10px 22px;background:var(--surf);border-bottom:1px solid var(--bord);
-  flex-shrink:0;
-}
-.sc{background:var(--surf2);border:1px solid var(--bord);border-radius:7px;padding:9px 11px;transition:border-color .2s}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:12px 24px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
+.sc{background:var(--surf2);border:1px solid var(--bord);border-radius:8px;padding:11px 14px;transition:border-color .2s}
 .sc:hover{border-color:var(--acc)}
-.scl{font-family:var(--mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
-.scv{font-family:var(--mono);font-size:19px;font-weight:700;line-height:1}
+.scl{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.scv{font-family:var(--mono);font-size:22px;font-weight:700;line-height:1}
 .scv.b{color:var(--acc)}.scv.g{color:var(--green)}.scv.r{color:var(--red)}.scv.y{color:var(--yel)}.scv.gr{color:var(--gray)}
-.mb{height:3px;border-radius:2px;background:var(--surf3);margin-top:4px;overflow:hidden}
+.mb{height:3px;border-radius:2px;background:var(--surf3);margin-top:5px;overflow:hidden}
 .mf{height:100%;border-radius:2px;transition:width .6s ease}
 
 /* ── BODY ── */
 .body{display:flex;flex:1;overflow:hidden;min-height:0}
 
-/* LEFT PANE */
+/* LEFT */
 .left-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.pane-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px 7px 22px;flex-shrink:0}
-.tab-row{display:flex;gap:4px}
-.tab{padding:5px 12px;border-radius:6px;font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .18s;letter-spacing:.03em}
+.pane-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 16px 9px 24px;flex-shrink:0}
+.tab-row{display:flex;gap:5px}
+.tab{padding:7px 16px;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .18s;letter-spacing:.03em}
 .tab.active{background:var(--surf2);border-color:var(--bord2);color:var(--text)}
 .tab:hover:not(.active){color:var(--dim)}
-.cbadge{font-family:var(--mono);font-size:9px;background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:3px 9px;color:var(--muted)}
-.post-scroll{flex:1;overflow-y:auto;padding:3px 14px 20px 22px}
+.cbadge{font-family:var(--mono);font-size:11px;background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:4px 12px;color:var(--muted)}
+.post-scroll{flex:1;overflow-y:auto;padding:4px 16px 24px 24px}
 
 /* Post card */
 .pcard{
-  background:var(--surf2);border:1px solid var(--bord);border-radius:10px;
-  padding:12px 14px;margin-bottom:8px;cursor:pointer;
+  background:var(--surf2);border:1px solid var(--bord);border-radius:11px;
+  padding:15px 17px;margin-bottom:10px;cursor:pointer;
   transition:border-color .18s,transform .13s,box-shadow .18s;
   animation:fu .3s ease both;position:relative;
 }
 @keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-.pcard:hover{border-color:var(--acc);transform:translateY(-1px);box-shadow:0 4px 14px rgba(91,124,246,.1)}
+.pcard:hover{border-color:var(--acc);transform:translateY(-1px);box-shadow:0 4px 16px rgba(91,124,246,.1)}
 .pcard.sel{border-color:var(--acc);background:var(--surf3);box-shadow:0 0 0 2px var(--aglow)}
-.pcard.sel::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--acc);border-radius:3px 0 0 3px}
+.pcard.sel::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;background:var(--acc);border-radius:3px 0 0 3px}
 
-.pt{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
-.spill{
-  flex-shrink:0;font-size:8px;font-family:var(--mono);font-weight:700;
-  letter-spacing:.07em;padding:3px 7px;border-radius:4px;text-transform:uppercase;
-  margin-top:1px;display:flex;align-items:center;gap:3px;
-}
-.spill.pos{background:var(--gd); color:var(--green);border:1px solid rgba(34,197,94,.3)}
-.spill.neu{background:var(--grd);color:var(--gray); border:1px solid rgba(98,114,164,.3)}
-.spill.neg{background:var(--rd); color:var(--red);  border:1px solid rgba(244,63,94,.3)}
-.cdot{display:inline-block;width:5px;height:5px;border-radius:50%}
+.pt{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.spill{flex-shrink:0;font-size:10px;font-family:var(--mono);font-weight:700;letter-spacing:.06em;padding:4px 9px;border-radius:5px;text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:4px}
+.spill.pos{background:var(--gd);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.spill.neu{background:var(--grd);color:var(--gray);border:1px solid rgba(98,114,164,.3)}
+.spill.neg{background:var(--rd);color:var(--red);border:1px solid rgba(244,63,94,.3)}
+.cdot{display:inline-block;width:6px;height:6px;border-radius:50%}
 .ch{background:var(--green)}.cm{background:var(--yel)}.cl{background:var(--gray)}
-.ptitle{font-size:12px;font-weight:600;color:var(--text);line-height:1.44;flex:1}
-.ptitle mark{background:rgba(91,124,246,.2);color:#9ab4ff;border-radius:2px;padding:0 2px}
-.psnip{
-  font-size:11px;color:var(--dim);line-height:1.6;
-  background:var(--surf3);border-left:2px solid var(--bord2);
-  border-radius:0 5px 5px 0;padding:5px 10px;margin:5px 0;
-}
+
+.ptitle{font-size:14px;font-weight:600;color:var(--text);line-height:1.5;flex:1}
+.ptitle mark{background:rgba(91,124,246,.22);color:#9ab4ff;border-radius:2px;padding:0 2px}
+
+.psnip{font-size:13px;color:var(--dim);line-height:1.65;background:var(--surf3);border-left:2px solid var(--bord2);border-radius:0 6px 6px 0;padding:7px 12px;margin:7px 0}
 .psnip mark{background:rgba(91,124,246,.18);color:#9ab4ff;border-radius:2px;padding:0 2px}
-.pmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.sub-t{font-size:9px;font-family:var(--mono);color:var(--acc);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);padding:2px 7px;border-radius:3px}
-.mi{font-size:9px;color:var(--muted);font-family:var(--mono)}
-.aibadge{
-  display:inline-flex;align-items:center;gap:3px;font-size:8px;font-family:var(--mono);
-  background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);color:var(--acc);
-  padding:2px 7px;border-radius:4px;
-}
+
+.pmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sub-t{font-size:11px;font-family:var(--mono);color:var(--acc);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);padding:3px 9px;border-radius:4px}
+.mi{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.aibadge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-family:var(--mono);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);color:var(--acc);padding:3px 9px;border-radius:4px}
 .aibadge.done{background:var(--gd);border-color:rgba(34,197,94,.25);color:var(--green)}
-.plink{font-size:9px;color:var(--acc);font-family:var(--mono);text-decoration:none;margin-left:auto;opacity:.65}
+.plink{font-size:11px;color:var(--acc);font-family:var(--mono);text-decoration:none;margin-left:auto;opacity:.65}
 .plink:hover{opacity:1;text-decoration:underline}
+
+/* Ad badge */
+.ad-badge{font-size:9px;font-family:var(--mono);background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--yel);padding:2px 7px;border-radius:4px;letter-spacing:.05em}
 
 /* RESIZER */
 .resizer{width:4px;background:var(--bord);cursor:col-resize;flex-shrink:0;transition:background .2s}
 .resizer:hover{background:var(--acc)}
 
 /* RIGHT: AI PANE */
-.ai-pane{
-  width:380px;flex-shrink:0;background:var(--surf);
-  border-left:1px solid var(--bord);display:flex;flex-direction:column;overflow:hidden;
-}
-.aph{
-  padding:11px 15px 10px;border-bottom:1px solid var(--bord);
-  display:flex;align-items:center;gap:8px;flex-shrink:0;
-}
-.api-i{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4285f4,#34a853);display:flex;align-items:center;justify-content:center;font-size:13px}
-.apt2{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em}
-.aps2{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.08em}
-.model-tag{
-  margin-left:auto;font-family:var(--mono);font-size:8px;color:var(--muted);
-  background:var(--surf2);border:1px solid var(--bord);border-radius:3px;padding:2px 7px;
-}
-.ai-body{flex:1;overflow-y:auto;padding:13px 15px}
+.ai-pane{width:400px;flex-shrink:0;background:var(--surf);border-left:1px solid var(--bord);display:flex;flex-direction:column;overflow:hidden}
+.aph{padding:13px 17px 12px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:9px;flex-shrink:0}
+.api-i{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#4285f4,#34a853);display:flex;align-items:center;justify-content:center;font-size:14px}
+.apt2{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.05em}
+.aps2{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.07em;margin-top:1px}
+.model-tag{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--muted);background:var(--surf2);border:1px solid var(--bord);border-radius:4px;padding:3px 8px}
+.ai-body{flex:1;overflow-y:auto;padding:16px 17px}
 
 /* AI Empty */
-.aie{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:9px}
-.aie-i{font-size:34px;opacity:.4}
-.aie-t{font-size:12px;color:var(--muted);line-height:1.7}
+.aie{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:10px}
+.aie-i{font-size:40px;opacity:.4}
+.aie-t{font-size:14px;color:var(--muted);line-height:1.75}
 
 /* AI Loading */
-.ail{display:flex;flex-direction:column;gap:7px;padding:4px 0}
-.ask{height:11px;border-radius:4px;background:var(--surf2);animation:shimmer 1.4s ease infinite}
+.ail{display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.ail-label{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.ail-spinner{width:12px;height:12px;border:2px solid var(--bord2);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ask{height:12px;border-radius:5px;background:var(--surf2);animation:shimmer 1.4s ease infinite}
 @keyframes shimmer{0%,100%{opacity:.3}50%{opacity:.85}}
 
 /* AI Result */
 .air{animation:fu .3s ease}
-.air-h{background:var(--surf2);border:1px solid var(--bord2);border-radius:8px;padding:10px 12px;margin-bottom:12px}
-.air-title{font-size:11px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:5px}
-.air-meta{display:flex;gap:5px;flex-wrap:wrap}
-.air-mc{font-family:var(--mono);font-size:8px;color:var(--muted);background:var(--surf3);border-radius:3px;padding:2px 5px}
+.air-h{background:var(--surf2);border:1px solid var(--bord2);border-radius:9px;padding:12px 14px;margin-bottom:14px}
+.air-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.45;margin-bottom:6px}
+.air-meta{display:flex;gap:6px;flex-wrap:wrap}
+.air-mc{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--surf3);border-radius:4px;padding:2px 7px}
 
-.aisec{margin-bottom:13px}
-.aisec-t{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.aisec{margin-bottom:15px}
+.aisec-t{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:7px}
 .aisec-t::after{content:'';flex:1;height:1px;background:var(--bord)}
 
-.sent-box{display:flex;align-items:center;gap:10px;background:var(--surf2);border-radius:7px;padding:9px 12px}
-.sbig{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
-.sbig.pos{background:var(--gd); color:var(--green);border:1px solid rgba(34,197,94,.3)}
-.sbig.neu{background:var(--grd);color:var(--gray); border:1px solid rgba(98,114,164,.3)}
-.sbig.neg{background:var(--rd); color:var(--red);  border:1px solid rgba(244,63,94,.3)}
+.sent-box{display:flex;align-items:center;gap:11px;background:var(--surf2);border-radius:8px;padding:11px 14px}
+.sbig{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 13px;border-radius:7px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.sbig.pos{background:var(--gd);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.sbig.neu{background:var(--grd);color:var(--gray);border:1px solid rgba(98,114,164,.3)}
+.sbig.neg{background:var(--rd);color:var(--red);border:1px solid rgba(244,63,94,.3)}
 .sw{flex:1}
-.sw-l{font-size:9px;color:var(--muted);font-family:var(--mono);margin-bottom:3px}
-.sw-b{height:5px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.sw-l{font-size:10px;color:var(--muted);font-family:var(--mono);margin-bottom:4px}
+.sw-b{height:6px;background:var(--surf3);border-radius:3px;overflow:hidden}
 .sw-f{height:100%;border-radius:3px;transition:width .7s ease}
 .sw-f.pos{background:var(--green)}.sw-f.neu{background:var(--gray)}.sw-f.neg{background:var(--red)}
-.sw-n{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px}
-.mismatch{font-size:9px;color:var(--yel);font-family:var(--mono);margin-top:5px;padding:4px 9px;background:var(--yd);border-radius:5px}
+.sw-n{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px}
+.mismatch{font-size:10px;color:var(--yel);font-family:var(--mono);margin-top:6px;padding:5px 10px;background:var(--yd);border-radius:6px}
 
-.ai-sum{font-size:12.5px;color:var(--dim);line-height:1.75;background:var(--surf2);border-radius:7px;padding:10px 13px}
+.ai-sum{font-size:13.5px;color:var(--dim);line-height:1.8;background:var(--surf2);border-radius:8px;padding:12px 14px}
 .ai-sum b{color:var(--text);font-weight:600}
-.kpt{display:flex;flex-direction:column;gap:5px}
-.kpt-item{font-size:11px;color:var(--dim);background:var(--surf2);border-radius:5px;padding:6px 10px;border-left:2px solid var(--bord2);line-height:1.5}
-.kwtags{display:flex;flex-wrap:wrap;gap:4px}
-.kwt{font-family:var(--mono);font-size:9px;background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:3px 7px;border-radius:4px}
+.kpt{display:flex;flex-direction:column;gap:6px}
+.kpt-item{font-size:13px;color:var(--dim);background:var(--surf2);border-radius:6px;padding:8px 12px;border-left:2px solid var(--bord2);line-height:1.55}
+.kwtags{display:flex;flex-wrap:wrap;gap:5px}
+.kwt{font-family:var(--mono);font-size:10px;background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:3px 9px;border-radius:5px}
 .kwt.pk{border-color:rgba(34,197,94,.3);color:var(--green);background:var(--gd)}
 .kwt.nk{border-color:rgba(244,63,94,.3);color:var(--red);background:var(--rd)}
-.rel-box{font-size:11px;color:var(--dim);background:var(--surf2);border-radius:6px;padding:8px 11px;line-height:1.55}
-.ai-foot{font-family:var(--mono);font-size:8px;color:var(--muted);text-align:right;margin-top:10px}
+.rel-box{font-size:13px;color:var(--dim);background:var(--surf2);border-radius:7px;padding:10px 13px;line-height:1.6}
+.ai-foot{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right;margin-top:12px}
 
 /* AI Error */
-.ai-err{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:11px 13px;font-size:12px;color:#fca5a5;line-height:1.65}
+.ai-err{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:8px;padding:13px 15px;font-size:13px;color:#fca5a5;line-height:1.7}
 .ai-err strong{color:var(--red);font-family:var(--mono)}
 
-/* AI init loading */
-.ai-init{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:9px}
-.ai-init-spinner{width:28px;height:28px;border:3px solid var(--bord2);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Skeleton */
-.skel-list{display:flex;flex-direction:column;gap:8px}
-.skel-c{background:var(--surf2);border:1px solid var(--bord);border-radius:10px;padding:14px;animation:shimmer 1.4s ease infinite}
-.sl{background:var(--surf3);border-radius:4px;margin-bottom:7px}
-/* State */
-.stbox{text-align:center;padding:50px 20px;color:var(--muted)}
-.stbox .ic{font-size:38px;margin-bottom:10px}
-.stbox p{font-size:12px;line-height:1.6}
-.errbox{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:9px;padding:15px 18px;color:#fca5a5;font-size:12px;line-height:1.65}
+/* States */
+.skel-list{display:flex;flex-direction:column;gap:9px}
+.skel-c{background:var(--surf2);border:1px solid var(--bord);border-radius:11px;padding:16px;animation:shimmer 1.4s ease infinite}
+.sl{background:var(--surf3);border-radius:5px;margin-bottom:8px}
+.stbox{text-align:center;padding:60px 24px;color:var(--muted)}
+.stbox .ic{font-size:44px;margin-bottom:12px}
+.stbox p{font-size:14px;line-height:1.65}
+.errbox{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:10px;padding:17px 20px;color:#fca5a5;font-size:13px;line-height:1.7}
 .errbox strong{color:var(--red);font-family:var(--mono)}
 
-::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--acc)}
 
 @media(max-width:760px){
   .body{flex-direction:column}
-  .ai-pane{width:100%;border-left:none;border-top:1px solid var(--bord);height:400px}
+  .ai-pane{width:100%;border-left:none;border-top:1px solid var(--bord);height:420px}
   .resizer{display:none}
   .stats{grid-template-columns:repeat(3,1fr)}
 }
@@ -263,56 +216,41 @@ header{
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">
     <div class="li">📡</div>
     <div>
       <div class="lt">REDDIT MONITOR</div>
-      <div class="ls">COWAY BRAND TRACKER</div>
+      <!-- 출처: 로고 아래 작게 -->
+      <div class="ls">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#ff6534"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+        출처: Reddit
+      </div>
     </div>
-  </div>
-  <!-- 출처 표시 -->
-  <div class="src-tag">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
-    출처: Reddit
   </div>
   <div class="hdr-r">
     <div class="stat-chip">
       <div class="sdot" id="sdot"></div>
       <span id="stext">대기 중</span>
     </div>
-    <button class="btn-sm" onclick="fetchPosts()">⟳ 새로고침</button>
+    <button class="btn-refresh" onclick="fetchPosts()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      새로고침
+    </button>
   </div>
 </header>
 
-<!-- SEARCH -->
 <div class="search-bar">
   <div class="sbox">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input class="sinput" id="kw" type="text" placeholder="키워드 (예: Coway, Airmega, air purifier...)" value="Coway"/>
   </div>
-  <select class="ssel" id="sort">
-    <option value="new">최신순</option>
-    <option value="hot">인기순</option>
-    <option value="top">탑순</option>
-    <option value="relevance">관련도순</option>
-  </select>
-  <select class="ssel" id="time">
-    <option value="week">최근 1주</option>
-    <option value="month">최근 1달</option>
-    <option value="year">최근 1년</option>
-    <option value="all">전체</option>
-  </select>
-  <select class="ssel" id="lim">
-    <option value="25">25개</option>
-    <option value="50">50개</option>
-    <option value="100">100개</option>
-  </select>
+  <select class="ssel" id="sort"><option value="new">최신순</option><option value="hot">인기순</option><option value="top">탑순</option><option value="relevance">관련도순</option></select>
+  <select class="ssel" id="time"><option value="week">최근 1주</option><option value="month">최근 1달</option><option value="year">최근 1년</option><option value="all">전체</option></select>
+  <select class="ssel" id="lim"><option value="25">25개</option><option value="50">50개</option><option value="100">100개</option></select>
   <button class="btn-go" onclick="fetchPosts()">🔍 검색</button>
 </div>
 
-<!-- STATS -->
 <div class="stats">
   <div class="sc"><div class="scl">총 게시물</div><div class="scv b" id="sT">—</div></div>
   <div class="sc"><div class="scl">긍정 🟢</div><div class="scv g" id="sP">—</div><div class="mb"><div class="mf" id="bP" style="width:0%;background:var(--green)"></div></div></div>
@@ -321,9 +259,7 @@ header{
   <div class="sc"><div class="scl">총 업보트</div><div class="scv y" id="sU">—</div></div>
 </div>
 
-<!-- BODY -->
 <div class="body">
-
   <!-- LEFT -->
   <div class="left-pane">
     <div class="pane-hdr">
@@ -340,36 +276,54 @@ header{
     </div>
   </div>
 
-  <!-- RESIZER -->
   <div class="resizer" id="resizer"></div>
 
-  <!-- RIGHT: AI PANE -->
+  <!-- RIGHT: AI -->
   <div class="ai-pane" id="aiPane">
     <div class="aph">
       <div class="api-i">🤖</div>
       <div>
         <div class="apt2">AI 한글 요약</div>
-        <div class="aps2">게시물 클릭 → Gemini 분석</div>
+        <div class="aps2">게시물 클릭 → 자동 분석</div>
       </div>
-      <div class="model-tag">Gemini · Puter.js</div>
+      <div class="model-tag">Pollinations AI · 무료</div>
     </div>
     <div class="ai-body" id="aiBody">
-      <!-- Puter 로딩 중 표시 -->
-      <div class="ai-init" id="aiInit">
-        <div class="ai-init-spinner"></div>
-        <div class="aie-t" style="font-size:11px">AI 초기화 중...</div>
+      <div class="aie">
+        <div class="aie-i">✨</div>
+        <div class="aie-t">왼쪽 게시물을 클릭하면<br>AI가 내용을 분석해<br><strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>제공합니다.</div>
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
 // ══════════════════════════════════════
-// SENTIMENT ENGINE v2
+// 광고 필터링 키워드
 // ══════════════════════════════════════
-const POS = ['excellent','outstanding','amazing','fantastic','incredible','superb','love','great','good','best','awesome','perfect','wonderful','brilliant','impressive','recommend','worth','happy','clean','quiet','effective','quality','reliable','satisfied','works','working','pleased','positive','fresh','healthy','efficient','silent','smooth','powerful','strong','improved','hepa','filter','allergy'];
-const NEG = ['terrible','horrible','awful','disgusting','disaster','pathetic','bad','worst','broken','poor','disappoint','disappointed','issue','problem','fail','failed','failure','waste','useless','expensive','overpriced','scam','avoid','defective','leaking','loud','noisy','stopped','died','dead','return','returned','refund','regret','mistake','smell','stink','rattling','worse','overrated','not worth','warranty','broke'];
+const AD_SIGNALS = [
+  'deal finder','deals today','handpicked','amazon deals','affiliate',
+  'sponsored','promotion','coupon','discount code','promo code',
+  'best deals','shop now','buy now','limited time','flash sale',
+  'hot deals','daily deals','top deals','deal alert','price drop',
+  '[ad]','[sponsored]','#ad','#sponsored',
+];
+
+function isAd(post) {
+  const combined = (post.title + ' ' + (post.selftext||'')).toLowerCase();
+  // 광고 서브레딧
+  const adSubs = ['topdealsusa','dealsinamerica','deals','frugal','buildapcsales','hotdeals','blackfriday','coupons'];
+  if (adSubs.some(s => post.subreddit.toLowerCase().includes(s))) return true;
+  // 광고 키워드 매칭
+  const matchCount = AD_SIGNALS.filter(sig => combined.includes(sig)).length;
+  return matchCount >= 2;
+}
+
+// ══════════════════════════════════════
+// 감성 분석
+// ══════════════════════════════════════
+const POS = ['excellent','outstanding','amazing','fantastic','incredible','superb','love','great','good','best','awesome','perfect','wonderful','brilliant','impressive','recommend','worth','happy','clean','quiet','effective','quality','reliable','satisfied','works','working','pleased','positive','fresh','healthy','efficient','silent','smooth','powerful','strong','improved','hepa','filter','allergy','helpful'];
+const NEG = ['terrible','horrible','awful','disgusting','disaster','pathetic','bad','worst','broken','poor','disappoint','disappointed','issue','problem','fail','failed','failure','waste','useless','expensive','overpriced','scam','avoid','defective','leaking','loud','noisy','stopped','died','dead','return','returned','refund','regret','mistake','smell','stink','rattling','worse','overrated','not worth','warranty','broke','weird','sick'];
 const NEG_MOD = ['not','no','never','cannot','cant',"can't",'dont',"don't",'isnt',"isn't",'wasnt',"wasn't",'without'];
 
 function analyzeSentiment(text) {
@@ -380,46 +334,16 @@ function analyzeSentiment(text) {
     const ng = i > 0 && NEG_MOD.includes(words[i-1].replace(/[^a-z']/g,''));
     const bg = i < words.length-1 ? w+' '+words[i+1].replace(/[^a-z]/g,'') : '';
     const isP = POS.some(p => w===p || bg.startsWith(p));
-    const isN = NEG.some(n => w===n || bg.startsWith(n) || text.toLowerCase().includes(n));
-    if (isP) { ng ? ns++ : ps++; }
-    if (isN) { ng ? ps++ : ns++; }
+    const isN = NEG.some(n => w===n || bg.startsWith(n));
+    if (isP){ ng?ns++:ps++; }
+    if (isN){ ng?ps++:ns++; }
   }
-  const diff = ps - ns;
+  const diff = ps-ns;
   return {
-    label: diff >= 2 ? 'pos' : diff <= -2 ? 'neg' : 'neu',
-    confLevel: Math.abs(diff) >= 3 ? 'high' : Math.abs(diff) >= 1 ? 'mid' : 'low',
+    label: diff>=2?'pos':diff<=-2?'neg':'neu',
+    confLevel: Math.abs(diff)>=3?'high':Math.abs(diff)>=1?'mid':'low',
     ps, ns
   };
-}
-
-// ══════════════════════════════════════
-// PUTER.JS 로딩 관리
-// ══════════════════════════════════════
-let puterReady = false;
-
-function loadPuter() {
-  return new Promise((resolve) => {
-    // 이미 로드된 경우
-    if (typeof puter !== 'undefined') {
-      puterReady = true;
-      resolve(true);
-      return;
-    }
-    // 동적으로 스크립트 로드
-    const script = document.createElement('script');
-    script.src = 'https://js.puter.com/v2/';
-    script.onload = () => {
-      // Puter가 초기화될 시간을 줌
-      setTimeout(() => {
-        puterReady = true;
-        resolve(true);
-      }, 1500);
-    };
-    script.onerror = () => {
-      resolve(false);
-    };
-    document.head.appendChild(script);
-  });
 }
 
 // ══════════════════════════════════════
@@ -439,39 +363,41 @@ const ago = utc => {
   return Math.floor(d/86400)+'일 전';
 };
 const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-function hl(text, kw) {
-  if (!kw) return esc(text);
-  const e = kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function hl(text,kw){
+  if(!kw) return esc(text);
+  const e=kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
   return esc(text).replace(new RegExp(`(${e})`,'gi'),'<mark>$1</mark>');
 }
 
 // ══════════════════════════════════════
 // RENDER
 // ══════════════════════════════════════
-function getList() {
-  return curTab==='all' ? allPosts : allPosts.filter(p=>p.sent.label===curTab);
+function getList(){
+  let list = curTab==='all' ? allPosts : allPosts.filter(p=>p.sent.label===curTab);
+  return list;
 }
 
-function renderPosts() {
-  const kw = document.getElementById('kw').value.trim();
-  const list = getList();
-  const el = document.getElementById('postScroll');
-  document.getElementById('cBadge').textContent = list.length+' results';
-  if (!list.length) {
+function renderPosts(){
+  const kw=document.getElementById('kw').value.trim();
+  const list=getList();
+  const el=document.getElementById('postScroll');
+  document.getElementById('cBadge').textContent=list.length+' results';
+  if(!list.length){
     el.innerHTML=`<div class="stbox"><div class="ic">🔍</div><p>해당 조건의 게시물이 없습니다.</p></div>`;
     return;
   }
-  const cdot = lv => `<span class="cdot ${lv==='high'?'ch':lv==='mid'?'cm':'cl'}" title="신뢰도 ${lv==='high'?'높음':lv==='mid'?'중간':'낮음'}"></span>`;
-  const sl = {pos:'긍정',neu:'중립',neg:'부정'};
-  el.innerHTML = list.map((p,i)=>`
+  const cdot=lv=>`<span class="cdot ${lv==='high'?'ch':lv==='mid'?'cm':'cl'}" title="신뢰도 ${lv==='high'?'높음':lv==='mid'?'중간':'낮음'}"></span>`;
+  const sl={pos:'긍정',neu:'중립',neg:'부정'};
+  el.innerHTML=list.map((p,i)=>`
   <div class="pcard${selIdx===i?' sel':''}" id="pc${i}" style="animation-delay:${Math.min(i*.03,.15)}s" onclick="selectPost(${i})">
     <div class="pt">
       <span class="spill ${p.sent.label}">${sl[p.sent.label]}${cdot(p.sent.confLevel)}</span>
       <div class="ptitle">${hl(p.title,kw)}</div>
     </div>
-    ${p.selftext?`<div class="psnip">${hl(p.selftext.slice(0,150),kw)}${p.selftext.length>150?'…':''}</div>`:''}
+    ${p.selftext?`<div class="psnip">${hl(p.selftext.slice(0,160),kw)}${p.selftext.length>160?'…':''}</div>`:''}
     <div class="pmeta">
       <span class="sub-t">r/${esc(p.subreddit)}</span>
+      ${p.isAd?'<span class="ad-badge">광고 의심</span>':''}
       <span class="mi">▲${fn(p.ups)}</span>
       <span class="mi">💬${fn(p.num_comments)}</span>
       <span class="mi">${ago(p.created_utc)}</span>
@@ -481,7 +407,7 @@ function renderPosts() {
   </div>`).join('');
 }
 
-function updateStats() {
+function updateStats(){
   const p=allPosts;
   const pos=p.filter(x=>x.sent.label==='pos').length;
   const neu=p.filter(x=>x.sent.label==='neu').length;
@@ -497,7 +423,7 @@ function updateStats() {
   document.getElementById('bN').style.width=(neg/tot*100)+'%';
 }
 
-function filterTab(tab, el) {
+function filterTab(tab,el){
   curTab=tab; selIdx=null;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
@@ -507,32 +433,34 @@ function filterTab(tab, el) {
 // ══════════════════════════════════════
 // FETCH REDDIT
 // ══════════════════════════════════════
-async function fetchPosts() {
+async function fetchPosts(){
   const kw=document.getElementById('kw').value.trim()||'Coway';
   const sort=document.getElementById('sort').value;
   const time=document.getElementById('time').value;
   const lim=document.getElementById('lim').value;
   setStat('warn','불러오는 중...');
-  document.getElementById('postScroll').innerHTML=`<div class="skel-list">${[0,1,2,3,4].map(()=>`<div class="skel-c"><div class="sl" style="width:85%;height:12px"></div><div class="sl" style="width:65%;height:10px"></div><div class="sl" style="width:40%;height:9px;margin-bottom:0"></div></div>`).join('')}</div>`;
-  try {
+  document.getElementById('postScroll').innerHTML=`<div class="skel-list">${[0,1,2,3,4].map(()=>`<div class="skel-c"><div class="sl" style="width:85%;height:13px"></div><div class="sl" style="width:65%;height:11px"></div><div class="sl" style="width:40%;height:10px;margin-bottom:0"></div></div>`).join('')}</div>`;
+  try{
     const url=`https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=${sort}&t=${time}&limit=${lim}&restrict_sr=false`;
     const res=await fetch(url,{headers:{Accept:'application/json'}});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const data=await res.json();
     allPosts=data.data.children.map(c=>{
       const d=c.data;
-      return {
+      const post={
         title:d.title, selftext:d.selftext||'',
         subreddit:d.subreddit, ups:d.ups,
         num_comments:d.num_comments, created_utc:d.created_utc,
         permalink:d.permalink,
-        sent:analyzeSentiment(d.title+' '+(d.selftext||''))
+        sent:analyzeSentiment(d.title+' '+(d.selftext||'')),
       };
+      post.isAd = isAd(post);
+      return post;
     });
     selIdx=null; updateStats(); renderPosts(); showAIEmpty();
     setStat('ok','업데이트: '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
-  } catch(e) {
-    document.getElementById('postScroll').innerHTML=`<div class="errbox"><strong>⚠ 연결 실패</strong><br><br>Reddit API에 연결할 수 없습니다.<br>원인: ${esc(e.message)}<br><br>• CORS 차단 시: <strong>CORS Unblock</strong> 브라우저 확장을 사용하세요.<br>• 또는 Python Flask 백엔드를 통해 프록시로 실행하세요.</div>`;
+  }catch(e){
+    document.getElementById('postScroll').innerHTML=`<div class="errbox"><strong>⚠ 연결 실패</strong><br><br>Reddit API에 연결할 수 없습니다.<br>원인: ${esc(e.message)}<br><br>• CORS 차단 시: <strong>CORS Unblock</strong> 브라우저 확장을 사용하세요.</div>`;
     setStat('err','오류');
   }
 }
@@ -542,18 +470,13 @@ function setStat(t,txt){
 }
 
 // ══════════════════════════════════════
-// AI SUMMARY via Puter.js
+// AI 요약 — Pollinations AI (진짜 무료, 키 없음)
 // ══════════════════════════════════════
 function showAIEmpty(){
   document.getElementById('aiBody').innerHTML=`
   <div class="aie">
     <div class="aie-i">✨</div>
-    <div class="aie-t">
-      왼쪽 게시물을 클릭하면<br>
-      Gemini AI가 내용을 분석해<br>
-      <strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>
-      제공합니다.
-    </div>
+    <div class="aie-t">왼쪽 게시물을 클릭하면<br>AI가 내용을 분석해<br><strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>제공합니다.</div>
   </div>`;
 }
 
@@ -567,7 +490,7 @@ function selectPost(idx){
   const post=list[idx];
   if(cache[post.permalink]){showAIResult(post,cache[post.permalink]);return;}
   showAILoading();
-  callPuterAI(post).then(r=>{
+  callAI(post).then(r=>{
     cache[post.permalink]=r;
     showAIResult(post,r);
     renderPosts();
@@ -579,8 +502,8 @@ function selectPost(idx){
 function showAILoading(){
   document.getElementById('aiBody').innerHTML=`
   <div class="ail">
-    <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:4px">🤖 Gemini 분석 중...</div>
-    ${['92','75','83','55','78','68','88','58','72'].map(w=>`<div class="ask" style="width:${w}%"></div>`).join('')}
+    <div class="ail-label"><div class="ail-spinner"></div>AI 분석 중... (10~20초 소요)</div>
+    ${['90','72','82','52','76','65','86','56','70','60'].map(w=>`<div class="ask" style="width:${w}%"></div>`).join('')}
   </div>`;
 }
 
@@ -589,12 +512,12 @@ function showAIErr(msg){
   <div class="ai-err">
     <strong>⚠ AI 요약 실패</strong><br><br>
     ${esc(msg)}<br><br>
-    • 페이지를 새로고침 후 다시 시도해 주세요.<br>
-    • Puter.js 서비스에 일시적 문제일 수 있습니다.
+    • 잠시 후 다시 시도해 주세요.<br>
+    • 네트워크 연결을 확인해 주세요.
   </div>`;
 }
 
-function showAIResult(post, r){
+function showAIResult(post,r){
   const sl={pos:'긍정 😊',neu:'중립 😐',neg:'부정 😞'};
   const sc=r.sentiment||'neu';
   const score=r.sentScore||50;
@@ -608,11 +531,12 @@ function showAIResult(post, r){
         <span class="air-mc">▲${fn(post.ups)}</span>
         <span class="air-mc">💬${fn(post.num_comments)}</span>
         <span class="air-mc">${ago(post.created_utc)}</span>
+        ${post.isAd?'<span class="air-mc" style="color:var(--yel)">⚠ 광고 의심</span>':''}
       </div>
     </div>
 
     <div class="aisec">
-      <div class="aisec-t">Gemini AI 감성 분석</div>
+      <div class="aisec-t">AI 감성 분석</div>
       <div class="sent-box">
         <div class="sbig ${sc}">${sl[sc]||'중립 😐'}</div>
         <div class="sw">
@@ -650,105 +574,55 @@ function showAIResult(post, r){
       <div class="rel-box">${esc(r.cowayRelevance)}</div>
     </div>`:''}
 
-    <div class="ai-foot">Gemini via Puter.js · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div class="ai-foot">Pollinations AI · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
   </div>`;
 }
 
-async function callPuterAI(post){
-  // Puter가 준비될 때까지 대기
-  if (!puterReady) {
-    await new Promise(resolve => {
-      const check = setInterval(() => {
-        if (typeof puter !== 'undefined') {
-          clearInterval(check);
-          puterReady = true;
-          resolve();
-        }
-      }, 200);
-      // 10초 타임아웃
-      setTimeout(() => { clearInterval(check); resolve(); }, 10000);
-    });
-  }
+// Pollinations AI — 완전 무료, API 키 불필요, 로그인 불필요
+async function callAI(post){
+  const content = `제목: ${post.title}\n\n본문: ${post.selftext||'(본문 없음)'}`;
 
-  if (typeof puter === 'undefined') {
-    throw new Error('AI 서비스를 불러올 수 없습니다. 페이지를 새로고침해 주세요.');
-  }
-
-  const content=`제목: ${post.title}\n\n본문: ${post.selftext||'(본문 없음)'}`;
-  const prompt=`당신은 공기청정기 브랜드 Coway(코웨이)에 대한 Reddit 게시물을 분석하는 마케팅 분석가입니다.
-
-아래 Reddit 게시물을 분석하고 반드시 순수 JSON만 응답하세요. 마크다운 코드 블록이나 다른 텍스트 없이 JSON만 출력하세요.
+  const prompt = `당신은 공기청정기 브랜드 Coway(코웨이)에 대한 Reddit 게시물을 분석하는 마케팅 분석가입니다.
+아래 Reddit 게시물을 분석하고 반드시 순수 JSON만 응답하세요. 코드 블록 없이 JSON만 출력하세요.
 
 게시물:
 ${content}
 
-응답 JSON:
-{
-  "sentiment": "pos" 또는 "neu" 또는 "neg",
-  "sentScore": 0에서 100 사이 숫자,
-  "summary": "3-4문장 자연스러운 한국어 요약",
-  "keyPoints": ["핵심포인트1 한국어", "핵심포인트2 한국어", "핵심포인트3 한국어"],
-  "posKws": ["긍정키워드1", "긍정키워드2"],
-  "negKws": ["부정키워드1", "부정키워드2"],
-  "topics": ["주제1", "주제2", "주제3"],
-  "cowayRelevance": "Coway 직접 관련성 1-2문장 한국어 또는 null"
-}`;
+응답 JSON 형식:
+{"sentiment":"pos또는neu또는neg","sentScore":0~100숫자,"summary":"3~4문장 한국어 요약","keyPoints":["포인트1","포인트2","포인트3"],"posKws":["긍정키워드1","긍정키워드2"],"negKws":["부정키워드1","부정키워드2"],"topics":["주제1","주제2","주제3"],"cowayRelevance":"Coway 관련성 1~2문장 또는 null"}`;
 
-  const response = await puter.ai.chat(prompt, { model: 'gemini-2.0-flash' });
+  const encoded = encodeURIComponent(prompt);
+  const url = `https://text.pollinations.ai/${encoded}?model=openai&json=true`;
 
-  // 응답 텍스트 추출
-  let text = '';
-  if (typeof response === 'string') {
-    text = response;
-  } else if (response?.message?.content) {
-    const c = response.message.content;
-    text = Array.isArray(c) ? c.map(x=>x.text||'').join('') : String(c);
-  } else if (typeof response?.text === 'string') {
-    text = response.text;
-  } else {
-    text = String(response || '');
-  }
+  const res = await fetch(url, { signal: AbortSignal.timeout(30000) });
+  if (!res.ok) throw new Error(`AI 서버 오류 (${res.status})`);
 
-  // JSON 파싱
-  const clean = text.replace(/```json|```/g,'').trim();
-  const jsonMatch = clean.match(/\{[\s\S]*\}/);
+  const text = await res.text();
+
+  // JSON 추출
+  const jsonMatch = text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
   if (!jsonMatch) throw new Error('응답 파싱 실패');
+
   try {
     return JSON.parse(jsonMatch[0]);
   } catch {
-    return { sentiment:'neu', sentScore:50, summary:text.slice(0,400)||'파싱 실패', keyPoints:[], posKws:[], negKws:[], topics:[], cowayRelevance:null };
+    return {
+      sentiment:'neu', sentScore:50,
+      summary: text.slice(0,500) || '파싱 실패',
+      keyPoints:[], posKws:[], negKws:[], topics:[], cowayRelevance:null
+    };
   }
 }
 
-// ══════════════════════════════════════
-// INIT
-// ══════════════════════════════════════
-
-// 패널 드래그 리사이즈
+// 패널 리사이즈
 (function(){
   const r=document.getElementById('resizer');
   const ap=document.getElementById('aiPane');
   let drag=false,sx=0,sw=0;
   r.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;sw=ap.offsetWidth;document.body.style.cursor='col-resize';e.preventDefault();});
-  document.addEventListener('mousemove',e=>{if(!drag)return;const w=Math.max(260,Math.min(600,sw-(e.clientX-sx)));ap.style.width=w+'px';});
+  document.addEventListener('mousemove',e=>{if(!drag)return;const w=Math.max(280,Math.min(620,sw-(e.clientX-sx)));ap.style.width=w+'px';});
   document.addEventListener('mouseup',()=>{drag=false;document.body.style.cursor='';});
 })();
-
-// Puter 로드 후 앱 시작
-loadPuter().then(ok => {
-  if (ok) {
-    showAIEmpty(); // AI 패널 준비 완료
-  } else {
-    document.getElementById('aiBody').innerHTML=`
-    <div class="aie">
-      <div class="aie-i">⚠️</div>
-      <div class="aie-t" style="color:#f59e0b">
-        AI 서비스 로드 실패<br>
-        <span style="font-size:11px;color:var(--muted)">게시물 조회는 정상 작동합니다.</span>
-      </div>
-    </div>`;
-  }
-});
 
 fetchPosts();
 </script>
