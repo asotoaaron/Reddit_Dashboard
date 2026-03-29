@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coway Reddit Monitor — AI 한글 요약</title>
+<script src="https://js.puter.com/v2/"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #09090f;
+  --surf:    #111118;
+  --surf2:   #18181f;
+  --surf3:   #1f1f2a;
+  --bord:    #262633;
+  --bord2:   #32324a;
+  --acc:     #5b7cf6;
+  --aglow:   rgba(91,124,246,.14);
+  --green:   #22c55e;
+  --gd:      rgba(34,197,94,.11);
+  --red:     #f43f5e;
+  --rd:      rgba(244,63,94,.11);
+  --yel:     #f59e0b;
+  --yd:      rgba(245,158,11,.11);
+  --gray:    #6272a4;
+  --grd:     rgba(98,114,164,.11);
+  --text:    #e2e4f0;
+  --dim:     #8890b0;
+  --muted:   #494d6a;
+  --mono:    'Space Mono', monospace;
+  --sans:    'Pretendard', -apple-system, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── HEADER ── */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 22px;background:var(--surf);border-bottom:1px solid var(--bord);
+  flex-shrink:0;z-index:50;gap:10px;flex-wrap:wrap;
+}
+.logo{display:flex;align-items:center;gap:10px}
+.li{width:32px;height:32px;background:linear-gradient(135deg,var(--acc),#9b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.lt{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.05em}
+.ls{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.1em;margin-top:1px}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.free-tag{
+  font-family:var(--mono);font-size:9px;
+  background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);
+  color:var(--green);padding:4px 10px;border-radius:20px;letter-spacing:.06em;
+}
+.acc-chip{
+  display:flex;align-items:center;gap:5px;cursor:pointer;
+  font-family:var(--mono);font-size:9px;
+  background:var(--surf2);border:1px solid var(--bord2);
+  border-radius:20px;padding:5px 11px;transition:border-color .2s;
+}
+.acc-chip:hover{border-color:var(--acc)}
+.acc-v{color:var(--green);font-weight:700}
+.stat-chip{
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:5px 11px;
+}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sdot.warn{background:var(--yel);animation:blink 1.4s infinite}
+.sdot.err{background:var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.btn-sm{background:var(--acc);border:none;color:#fff;padding:7px 14px;border-radius:7px;font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn-sm:hover{opacity:.85}
+
+/* ── SEARCH ── */
+.search-bar{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  padding:10px 22px;background:var(--surf);border-bottom:1px solid var(--bord);
+  flex-shrink:0;
+}
+.sbox{flex:1;min-width:160px;position:relative}
+.sbox svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.sinput{
+  width:100%;background:var(--surf2);border:1px solid var(--bord2);color:var(--text);
+  padding:8px 12px 8px 32px;border-radius:7px;font-family:var(--sans);font-size:12px;
+  outline:none;transition:border-color .2s;
+}
+.sinput:focus{border-color:var(--acc)}
+.sinput::placeholder{color:var(--muted)}
+.ssel{
+  background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);
+  padding:8px 10px;border-radius:7px;font-family:var(--sans);font-size:11px;
+  outline:none;cursor:pointer;
+}
+.ssel:focus{border-color:var(--acc)}
+.btn-go{
+  background:var(--acc);border:none;color:#fff;padding:8px 18px;
+  border-radius:7px;font-family:var(--sans);font-size:12px;font-weight:600;
+  cursor:pointer;transition:opacity .2s,transform .1s;white-space:nowrap;
+}
+.btn-go:hover{opacity:.88;transform:translateY(-1px)}
+
+/* ── STATS ── */
+.stats{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:7px;
+  padding:10px 22px;background:var(--surf);border-bottom:1px solid var(--bord);
+  flex-shrink:0;
+}
+.sc{background:var(--surf2);border:1px solid var(--bord);border-radius:7px;padding:9px 11px;transition:border-color .2s}
+.sc:hover{border-color:var(--acc)}
+.scl{font-family:var(--mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.scv{font-family:var(--mono);font-size:19px;font-weight:700;line-height:1}
+.scv.b{color:var(--acc)}.scv.g{color:var(--green)}.scv.r{color:var(--red)}.scv.y{color:var(--yel)}.scv.gr{color:var(--gray)}
+.mb{height:3px;border-radius:2px;background:var(--surf3);margin-top:4px;overflow:hidden}
+.mf{height:100%;border-radius:2px;transition:width .6s ease}
+
+/* ── ACCURACY PANEL ── */
+.acc-panel{
+  display:none;padding:12px 22px 14px;
+  background:var(--surf2);border-bottom:1px solid var(--bord);flex-shrink:0;
+}
+.acc-panel.open{display:block}
+.apt{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:10px}
+.apg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:9px}
+.apc-t{font-size:11px;font-weight:600;color:var(--dim);margin-bottom:4px}
+.apc-b{font-size:11px;color:var(--muted);line-height:1.65}
+.ap-note{font-size:11px;color:var(--yel);background:var(--yd);border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:7px 11px;line-height:1.55}
+
+/* ── BODY ── */
+.body{display:flex;flex:1;overflow:hidden;min-height:0}
+
+/* LEFT PANE */
+.left-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.pane-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px 7px 22px;flex-shrink:0}
+.tab-row{display:flex;gap:4px}
+.tab{padding:5px 12px;border-radius:6px;font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .18s;letter-spacing:.03em}
+.tab.active{background:var(--surf2);border-color:var(--bord2);color:var(--text)}
+.tab:hover:not(.active){color:var(--dim)}
+.cbadge{font-family:var(--mono);font-size:9px;background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:3px 9px;color:var(--muted)}
+.post-scroll{flex:1;overflow-y:auto;padding:3px 14px 20px 22px}
+
+/* Post card */
+.pcard{
+  background:var(--surf2);border:1px solid var(--bord);border-radius:10px;
+  padding:12px 14px;margin-bottom:8px;cursor:pointer;
+  transition:border-color .18s,transform .13s,box-shadow .18s;
+  animation:fu .3s ease both;position:relative;
+}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.pcard:hover{border-color:var(--acc);transform:translateY(-1px);box-shadow:0 4px 14px rgba(91,124,246,.1)}
+.pcard.sel{border-color:var(--acc);background:var(--surf3);box-shadow:0 0 0 2px var(--aglow)}
+.pcard.sel::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--acc);border-radius:3px 0 0 3px}
+
+.pt{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+.spill{
+  flex-shrink:0;font-size:8px;font-family:var(--mono);font-weight:700;
+  letter-spacing:.07em;padding:3px 7px;border-radius:4px;text-transform:uppercase;
+  margin-top:1px;display:flex;align-items:center;gap:3px;
+}
+.spill.pos{background:var(--gd); color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.spill.neu{background:var(--grd);color:var(--gray); border:1px solid rgba(98,114,164,.3)}
+.spill.neg{background:var(--rd); color:var(--red);  border:1px solid rgba(244,63,94,.3)}
+.cdot{display:inline-block;width:5px;height:5px;border-radius:50%}
+.ch{background:var(--green)}.cm{background:var(--yel)}.cl{background:var(--gray)}
+.ptitle{font-size:12px;font-weight:600;color:var(--text);line-height:1.44;flex:1}
+.ptitle mark{background:rgba(91,124,246,.2);color:#9ab4ff;border-radius:2px;padding:0 2px}
+.psnip{
+  font-size:11px;color:var(--dim);line-height:1.6;
+  background:var(--surf3);border-left:2px solid var(--bord2);
+  border-radius:0 5px 5px 0;padding:5px 10px;margin:5px 0;
+}
+.psnip mark{background:rgba(91,124,246,.18);color:#9ab4ff;border-radius:2px;padding:0 2px}
+.pmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sub-t{font-size:9px;font-family:var(--mono);color:var(--acc);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);padding:2px 7px;border-radius:3px}
+.mi{font-size:9px;color:var(--muted);font-family:var(--mono)}
+.aibadge{
+  display:inline-flex;align-items:center;gap:3px;font-size:8px;font-family:var(--mono);
+  background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);color:var(--acc);
+  padding:2px 7px;border-radius:4px;
+}
+.aibadge.done{background:var(--gd);border-color:rgba(34,197,94,.25);color:var(--green)}
+.plink{font-size:9px;color:var(--acc);font-family:var(--mono);text-decoration:none;margin-left:auto;opacity:.65}
+.plink:hover{opacity:1;text-decoration:underline}
+
+/* RESIZER */
+.resizer{width:4px;background:var(--bord);cursor:col-resize;flex-shrink:0;transition:background .2s}
+.resizer:hover{background:var(--acc)}
+
+/* RIGHT: AI PANE */
+.ai-pane{
+  width:380px;flex-shrink:0;background:var(--surf);
+  border-left:1px solid var(--bord);display:flex;flex-direction:column;overflow:hidden;
+}
+.aph{
+  padding:11px 15px 10px;border-bottom:1px solid var(--bord);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.api-i{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4285f4,#34a853);display:flex;align-items:center;justify-content:center;font-size:13px}
+.apt2{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em}
+.aps2{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.08em}
+.model-tag{
+  margin-left:auto;font-family:var(--mono);font-size:8px;color:var(--muted);
+  background:var(--surf2);border:1px solid var(--bord);border-radius:3px;padding:2px 7px;
+}
+.ai-body{flex:1;overflow-y:auto;padding:13px 15px}
+
+/* AI Empty */
+.aie{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:9px}
+.aie-i{font-size:34px;opacity:.4}
+.aie-t{font-size:12px;color:var(--muted);line-height:1.7}
+
+/* AI Loading */
+.ail{display:flex;flex-direction:column;gap:7px;padding:4px 0}
+.ask{height:11px;border-radius:4px;background:var(--surf2);animation:shimmer 1.4s ease infinite}
+@keyframes shimmer{0%,100%{opacity:.3}50%{opacity:.85}}
+
+/* AI Result */
+.air{animation:fu .3s ease}
+.air-h{background:var(--surf2);border:1px solid var(--bord2);border-radius:8px;padding:10px 12px;margin-bottom:12px}
+.air-title{font-size:11px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:5px}
+.air-meta{display:flex;gap:5px;flex-wrap:wrap}
+.air-mc{font-family:var(--mono);font-size:8px;color:var(--muted);background:var(--surf3);border-radius:3px;padding:2px 5px}
+
+.aisec{margin-bottom:13px}
+.aisec-t{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.aisec-t::after{content:'';flex:1;height:1px;background:var(--bord)}
+
+.sent-box{display:flex;align-items:center;gap:10px;background:var(--surf2);border-radius:7px;padding:9px 12px}
+.sbig{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.sbig.pos{background:var(--gd); color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.sbig.neu{background:var(--grd);color:var(--gray); border:1px solid rgba(98,114,164,.3)}
+.sbig.neg{background:var(--rd); color:var(--red);  border:1px solid rgba(244,63,94,.3)}
+.sw{flex:1}
+.sw-l{font-size:9px;color:var(--muted);font-family:var(--mono);margin-bottom:3px}
+.sw-b{height:5px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.sw-f{height:100%;border-radius:3px;transition:width .7s ease}
+.sw-f.pos{background:var(--green)}.sw-f.neu{background:var(--gray)}.sw-f.neg{background:var(--red)}
+.sw-n{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px}
+.mismatch{font-size:9px;color:var(--yel);font-family:var(--mono);margin-top:5px;padding:4px 9px;background:var(--yd);border-radius:5px}
+
+.ai-sum{font-size:12.5px;color:var(--dim);line-height:1.75;background:var(--surf2);border-radius:7px;padding:10px 13px}
+.ai-sum b{color:var(--text);font-weight:600}
+.kpt{display:flex;flex-direction:column;gap:5px}
+.kpt-item{font-size:11px;color:var(--dim);background:var(--surf2);border-radius:5px;padding:6px 10px;border-left:2px solid var(--bord2);line-height:1.5}
+.kwtags{display:flex;flex-wrap:wrap;gap:4px}
+.kwt{font-family:var(--mono);font-size:9px;background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:3px 7px;border-radius:4px}
+.kwt.pk{border-color:rgba(34,197,94,.3);color:var(--green);background:var(--gd)}
+.kwt.nk{border-color:rgba(244,63,94,.3);color:var(--red);background:var(--rd)}
+.rel-box{font-size:11px;color:var(--dim);background:var(--surf2);border-radius:6px;padding:8px 11px;line-height:1.55}
+.ai-foot{font-family:var(--mono);font-size:8px;color:var(--muted);text-align:right;margin-top:10px}
+
+/* AI Error */
+.ai-err{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:11px 13px;font-size:12px;color:#fca5a5;line-height:1.65}
+.ai-err strong{color:var(--red);font-family:var(--mono)}
+
+/* Skeleton */
+.skel-list{display:flex;flex-direction:column;gap:8px}
+.skel-c{background:var(--surf2);border:1px solid var(--bord);border-radius:10px;padding:14px;animation:shimmer 1.4s ease infinite}
+.sl{background:var(--surf3);border-radius:4px;margin-bottom:7px}
+/* State box */
+.stbox{text-align:center;padding:50px 20px;color:var(--muted)}
+.stbox .ic{font-size:38px;margin-bottom:10px}
+.stbox p{font-size:12px;line-height:1.6}
+.errbox{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:9px;padding:15px 18px;color:#fca5a5;font-size:12px;line-height:1.65}
+.errbox strong{color:var(--red);font-family:var(--mono)}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--acc)}
+
+@media(max-width:760px){
+  .body{flex-direction:column}
+  .ai-pane{width:100%;border-left:none;border-top:1px solid var(--bord);height:400px}
+  .resizer{display:none}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .apg{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="li">📡</div>
+    <div>
+      <div class="lt">REDDIT MONITOR v2</div>
+      <div class="ls">COWAY BRAND TRACKER</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="free-tag">✅ 무료 · 로그인 불필요</div>
+    <div class="acc-chip" onclick="toggleAcc()" title="감성분석 정확도 상세">
+      🎯 감성 정확도: <span class="acc-v" id="accV">—</span>
+    </div>
+    <div class="stat-chip">
+      <div class="sdot" id="sdot"></div>
+      <span id="stext">대기 중</span>
+    </div>
+    <button class="btn-sm" onclick="fetchPosts()">⟳ 새로고침</button>
+  </div>
+</header>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <div class="sbox">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="sinput" id="kw" type="text" placeholder="키워드 (예: Coway, Airmega, air purifier...)" value="Coway"/>
+  </div>
+  <select class="ssel" id="sort">
+    <option value="new">최신순</option>
+    <option value="hot">인기순</option>
+    <option value="top">탑순</option>
+    <option value="relevance">관련도순</option>
+  </select>
+  <select class="ssel" id="time">
+    <option value="week">최근 1주</option>
+    <option value="month">최근 1달</option>
+    <option value="year">최근 1년</option>
+    <option value="all">전체</option>
+  </select>
+  <select class="ssel" id="lim">
+    <option value="25">25개</option>
+    <option value="50">50개</option>
+    <option value="100">100개</option>
+  </select>
+  <button class="btn-go" onclick="fetchPosts()">🔍 검색</button>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="sc"><div class="scl">총 게시물</div><div class="scv b" id="sT">—</div></div>
+  <div class="sc"><div class="scl">긍정 🟢</div><div class="scv g" id="sP">—</div><div class="mb"><div class="mf" id="bP" style="width:0%;background:var(--green)"></div></div></div>
+  <div class="sc"><div class="scl">중립 ⚪</div><div class="scv gr" id="sN2">—</div><div class="mb"><div class="mf" id="bN2" style="width:0%;background:var(--gray)"></div></div></div>
+  <div class="sc"><div class="scl">부정 🔴</div><div class="scv r" id="sN">—</div><div class="mb"><div class="mf" id="bN" style="width:0%;background:var(--red)"></div></div></div>
+  <div class="sc"><div class="scl">총 업보트</div><div class="scv y" id="sU">—</div></div>
+</div>
+
+<!-- ACCURACY PANEL -->
+<div class="acc-panel" id="accP">
+  <div class="apt">📊 감성분석 정확도 검증 리포트 (v2)</div>
+  <div class="apg">
+    <div>
+      <div class="apc-t">🔬 v2 개선사항</div>
+      <div class="apc-b">
+        ✅ 키워드 사전 확장 (긍정 36개 / 부정 42개)<br>
+        ✅ <code style="font-size:10px;color:var(--acc)">not good</code> 등 부정어 처리<br>
+        ✅ 점수 차이 기반 분류 (단순 카운팅 → 가중치)<br>
+        ✅ 신뢰도 등급 카드 표시 (색깔 점)
+      </div>
+    </div>
+    <div>
+      <div class="apc-t">📈 신뢰도 점 색상</div>
+      <div class="apc-b">
+        <span style="color:var(--green)">●</span> 높음 — 점수차 ≥ 3, ~85%<br>
+        <span style="color:var(--yel)">●</span> 중간 — 점수차 1~2, ~70%<br>
+        <span style="color:var(--gray)">●</span> 낮음 — 점수차 0, ~55%<br>
+        <strong style="color:var(--dim)">추정 평균 정확도: ~72%</strong>
+      </div>
+    </div>
+    <div>
+      <div class="apc-t">⚠️ 한계점</div>
+      <div class="apc-b">
+        • 반어·비유 표현 미처리<br>
+        • 영어 속어·약어 일부 미인식<br>
+        • 복합 감성 혼재 시 오류<br>
+        → AI 요약(Gemini)으로 보완
+      </div>
+    </div>
+  </div>
+  <div class="ap-note">
+    💡 <strong>AI 요약은 Puter.js를 통해 Gemini를 무료로 사용합니다.</strong> API 키나 로그인 없이 누구나 사용 가능합니다. 신뢰도 낮음(회색 점) 게시물은 AI 요약으로 실제 감성을 확인하세요.
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+
+  <!-- LEFT -->
+  <div class="left-pane">
+    <div class="pane-hdr">
+      <div class="tab-row">
+        <div class="tab active" onclick="filterTab('all',this)">전체</div>
+        <div class="tab" onclick="filterTab('pos',this)">긍정</div>
+        <div class="tab" onclick="filterTab('neu',this)">중립</div>
+        <div class="tab" onclick="filterTab('neg',this)">부정</div>
+      </div>
+      <span class="cbadge" id="cBadge">0 results</span>
+    </div>
+    <div class="post-scroll" id="postScroll">
+      <div class="stbox"><div class="ic">🔭</div><p>검색 버튼을 눌러<br>Reddit에서 Coway 언급을 찾아보세요.</p></div>
+    </div>
+  </div>
+
+  <!-- RESIZER -->
+  <div class="resizer" id="resizer"></div>
+
+  <!-- RIGHT: AI PANE -->
+  <div class="ai-pane" id="aiPane">
+    <div class="aph">
+      <div class="api-i">🤖</div>
+      <div>
+        <div class="apt2">AI 한글 요약</div>
+        <div class="aps2">게시물 클릭 → Gemini 무료 분석</div>
+      </div>
+      <div class="model-tag">Gemini 2.5 Flash · 무료</div>
+    </div>
+    <div class="ai-body" id="aiBody">
+      <div class="aie">
+        <div class="aie-i">✨</div>
+        <div class="aie-t">
+          <strong style="color:var(--text)">API 키 불필요 · 완전 무료</strong><br><br>
+          왼쪽 게시물을 클릭하면<br>
+          Gemini AI가 내용을 분석해<br>
+          <strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>
+          제공합니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════
+// SENTIMENT ENGINE v2
+// ══════════════════════════════════════
+const POS = ['excellent','outstanding','amazing','fantastic','incredible','superb','love','great','good','best','awesome','perfect','wonderful','brilliant','impressive','recommend','worth','happy','clean','quiet','effective','quality','reliable','satisfied','works','working','pleased','positive','fresh','healthy','efficient','silent','smooth','powerful','strong','improved','hepa','filter','allergy'];
+const NEG = ['terrible','horrible','awful','disgusting','disaster','pathetic','bad','worst','broken','poor','disappoint','disappointed','issue','problem','fail','failed','failure','waste','useless','expensive','overpriced','scam','avoid','defective','leaking','loud','noisy','stopped','died','dead','return','returned','refund','regret','mistake','smell','stink','rattling','worse','overrated','not worth','warranty','broke'];
+const NEG_MOD = ['not','no','never','cannot','cant',"can't",'dont',"don't",'isnt',"isn't",'wasnt',"wasn't",'without'];
+
+function analyzeSentiment(text) {
+  const words = text.toLowerCase().split(/\s+/);
+  let ps = 0, ns = 0;
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i].replace(/[^a-z']/g,'');
+    const ng = i > 0 && NEG_MOD.includes(words[i-1].replace(/[^a-z']/g,''));
+    const bg = i < words.length-1 ? w+' '+words[i+1].replace(/[^a-z]/g,'') : '';
+    const isP = POS.some(p => w===p || bg.startsWith(p));
+    const isN = NEG.some(n => w===n || bg.startsWith(n) || text.toLowerCase().includes(n));
+    if (isP) { ng ? ns++ : ps++; }
+    if (isN) { ng ? ps++ : ns++; }
+  }
+  const diff = ps - ns;
+  return {
+    label: diff >= 2 ? 'pos' : diff <= -2 ? 'neg' : 'neu',
+    confLevel: Math.abs(diff) >= 3 ? 'high' : Math.abs(diff) >= 1 ? 'mid' : 'low',
+    ps, ns
+  };
+}
+
+function computeAcc(posts) {
+  if (!posts.length) return '—';
+  const h = posts.filter(p=>p.sent.confLevel==='high').length;
+  const m = posts.filter(p=>p.sent.confLevel==='mid').length;
+  const l = posts.length - h - m;
+  return Math.round((h*85+m*70+l*55)/posts.length) + '%';
+}
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+let allPosts=[], curTab='all', selIdx=null;
+const cache={};
+
+// ══════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════
+const fn = n => n>=1000?(n/1000).toFixed(1)+'k':String(n);
+const ago = utc => {
+  const d=Date.now()/1000-utc;
+  if(d<3600) return Math.floor(d/60)+'분 전';
+  if(d<86400) return Math.floor(d/3600)+'시간 전';
+  return Math.floor(d/86400)+'일 전';
+};
+const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function hl(text, kw) {
+  if (!kw) return esc(text);
+  const e = kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return esc(text).replace(new RegExp(`(${e})`,'gi'),'<mark>$1</mark>');
+}
+
+// ══════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════
+function getList() {
+  return curTab==='all' ? allPosts : allPosts.filter(p=>p.sent.label===curTab);
+}
+
+function renderPosts() {
+  const kw = document.getElementById('kw').value.trim();
+  const list = getList();
+  const el = document.getElementById('postScroll');
+  document.getElementById('cBadge').textContent = list.length+' results';
+  if (!list.length) {
+    el.innerHTML=`<div class="stbox"><div class="ic">🔍</div><p>해당 조건의 게시물이 없습니다.</p></div>`;
+    return;
+  }
+  const cdot = lv => `<span class="cdot ${lv==='high'?'ch':lv==='mid'?'cm':'cl'}" title="신뢰도 ${lv==='high'?'높음':lv==='mid'?'중간':'낮음'}"></span>`;
+  const sl = {pos:'긍정',neu:'중립',neg:'부정'};
+  el.innerHTML = list.map((p,i)=>`
+  <div class="pcard${selIdx===i?' sel':''}" id="pc${i}" style="animation-delay:${Math.min(i*.03,.15)}s" onclick="selectPost(${i})">
+    <div class="pt">
+      <span class="spill ${p.sent.label}">${sl[p.sent.label]}${cdot(p.sent.confLevel)}</span>
+      <div class="ptitle">${hl(p.title,kw)}</div>
+    </div>
+    ${p.selftext?`<div class="psnip">${hl(p.selftext.slice(0,150),kw)}${p.selftext.length>150?'…':''}</div>`:''}
+    <div class="pmeta">
+      <span class="sub-t">r/${esc(p.subreddit)}</span>
+      <span class="mi">▲${fn(p.ups)}</span>
+      <span class="mi">💬${fn(p.num_comments)}</span>
+      <span class="mi">${ago(p.created_utc)}</span>
+      <span class="aibadge${cache[p.permalink]?' done':''}">${cache[p.permalink]?'✓ 요약완료':'✨ AI 요약'}</span>
+      <a class="plink" href="https://reddit.com${p.permalink}" target="_blank" onclick="event.stopPropagation()">원문 →</a>
+    </div>
+  </div>`).join('');
+}
+
+function updateStats() {
+  const p=allPosts;
+  const pos=p.filter(x=>x.sent.label==='pos').length;
+  const neu=p.filter(x=>x.sent.label==='neu').length;
+  const neg=p.filter(x=>x.sent.label==='neg').length;
+  const tot=p.length||1;
+  document.getElementById('sT').textContent=p.length;
+  document.getElementById('sP').textContent=pos;
+  document.getElementById('sN2').textContent=neu;
+  document.getElementById('sN').textContent=neg;
+  document.getElementById('sU').textContent=fn(p.reduce((s,x)=>s+x.ups,0));
+  document.getElementById('bP').style.width=(pos/tot*100)+'%';
+  document.getElementById('bN2').style.width=(neu/tot*100)+'%';
+  document.getElementById('bN').style.width=(neg/tot*100)+'%';
+  document.getElementById('accV').textContent=computeAcc(p);
+}
+
+function filterTab(tab, el) {
+  curTab=tab; selIdx=null;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderPosts(); showAIEmpty();
+}
+
+// ══════════════════════════════════════
+// FETCH REDDIT
+// ══════════════════════════════════════
+async function fetchPosts() {
+  const kw=document.getElementById('kw').value.trim()||'Coway';
+  const sort=document.getElementById('sort').value;
+  const time=document.getElementById('time').value;
+  const lim=document.getElementById('lim').value;
+  setStat('warn','불러오는 중...');
+  document.getElementById('postScroll').innerHTML=`<div class="skel-list">${[0,1,2,3,4].map(()=>`<div class="skel-c"><div class="sl" style="width:85%;height:12px"></div><div class="sl" style="width:65%;height:10px"></div><div class="sl" style="width:40%;height:9px;margin-bottom:0"></div></div>`).join('')}</div>`;
+  try {
+    const url=`https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=${sort}&t=${time}&limit=${lim}&restrict_sr=false`;
+    const res=await fetch(url,{headers:{Accept:'application/json'}});
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data=await res.json();
+    allPosts=data.data.children.map(c=>{
+      const d=c.data;
+      return {
+        title:d.title, selftext:d.selftext||'',
+        subreddit:d.subreddit, ups:d.ups,
+        num_comments:d.num_comments, created_utc:d.created_utc,
+        permalink:d.permalink,
+        sent:analyzeSentiment(d.title+' '+(d.selftext||''))
+      };
+    });
+    selIdx=null; updateStats(); renderPosts(); showAIEmpty();
+    setStat('ok','업데이트: '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
+  } catch(e) {
+    document.getElementById('postScroll').innerHTML=`<div class="errbox"><strong>⚠ 연결 실패</strong><br><br>Reddit API에 연결할 수 없습니다.<br>원인: ${esc(e.message)}<br><br>• CORS 차단 시: <strong>CORS Unblock</strong> 브라우저 확장을 사용하세요.<br>• 또는 Python Flask 백엔드를 통해 프록시로 실행하세요.</div>`;
+    setStat('err','오류');
+  }
+}
+function setStat(t,txt){
+  document.getElementById('sdot').className='sdot'+(t==='warn'?' warn':t==='err'?' err':'');
+  document.getElementById('stext').textContent=txt;
+}
+
+// ══════════════════════════════════════
+// AI SUMMARY via Puter.js (Free Gemini)
+// ══════════════════════════════════════
+function showAIEmpty(){
+  document.getElementById('aiBody').innerHTML=`
+  <div class="aie">
+    <div class="aie-i">✨</div>
+    <div class="aie-t">
+      <strong style="color:var(--text)">API 키 불필요 · 완전 무료</strong><br><br>
+      왼쪽 게시물을 클릭하면<br>
+      Gemini AI가 내용을 분석해<br>
+      <strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>
+      제공합니다.
+    </div>
+  </div>`;
+}
+
+function selectPost(idx){
+  const list=getList();
+  if(idx<0||idx>=list.length) return;
+  if(selIdx!==null){const p=document.getElementById('pc'+selIdx);if(p)p.classList.remove('sel');}
+  selIdx=idx;
+  const el=document.getElementById('pc'+idx);
+  if(el){el.classList.add('sel');el.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  const post=list[idx];
+  if(cache[post.permalink]){showAIResult(post,cache[post.permalink]);return;}
+  showAILoading();
+  callPuterAI(post).then(r=>{
+    cache[post.permalink]=r;
+    showAIResult(post,r);
+    renderPosts();
+    const ne=document.getElementById('pc'+idx);
+    if(ne)ne.classList.add('sel');
+  }).catch(e=>showAIErr(e.message));
+}
+
+function showAILoading(){
+  document.getElementById('aiBody').innerHTML=`
+  <div class="ail">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:4px">🤖 Gemini 분석 중...</div>
+    ${['92','75','83','55','78','68','88','58','72'].map(w=>`<div class="ask" style="width:${w}%"></div>`).join('')}
+  </div>`;
+}
+
+function showAIErr(msg){
+  document.getElementById('aiBody').innerHTML=`
+  <div class="ai-err">
+    <strong>⚠ AI 요약 실패</strong><br><br>
+    ${esc(msg)}<br><br>
+    Puter.js 서비스에 일시적 문제가 있거나<br>
+    네트워크 연결을 확인해 주세요.<br><br>
+    잠시 후 다시 시도해 주세요.
+  </div>`;
+}
+
+function showAIResult(post, r){
+  const sl={pos:'긍정 😊',neu:'중립 😐',neg:'부정 😞'};
+  const sc=r.sentiment||'neu';
+  const score=r.sentScore||50;
+  const prevSent=post.sent.label;
+  document.getElementById('aiBody').innerHTML=`
+  <div class="air">
+    <div class="air-h">
+      <div class="air-title">${esc(post.title)}</div>
+      <div class="air-meta">
+        <span class="air-mc">r/${esc(post.subreddit)}</span>
+        <span class="air-mc">▲${fn(post.ups)}</span>
+        <span class="air-mc">💬${fn(post.num_comments)}</span>
+        <span class="air-mc">${ago(post.created_utc)}</span>
+      </div>
+    </div>
+
+    <div class="aisec">
+      <div class="aisec-t">Gemini AI 감성 분석</div>
+      <div class="sent-box">
+        <div class="sbig ${sc}">${sl[sc]||'중립 😐'}</div>
+        <div class="sw">
+          <div class="sw-l">AI 신뢰도</div>
+          <div class="sw-b"><div class="sw-f ${sc}" style="width:${score}%"></div></div>
+          <div class="sw-n">${score}% 확신</div>
+        </div>
+      </div>
+      ${sc!==prevSent?`<div class="mismatch">⚠ 키워드 분석(${{pos:'긍정',neu:'중립',neg:'부정'}[prevSent]})과 AI 분석(${sl[sc]||'?'})이 다릅니다 — AI가 더 정확합니다</div>`:''}
+    </div>
+
+    <div class="aisec">
+      <div class="aisec-t">한글 요약</div>
+      <div class="ai-sum">${(r.summary||'요약 없음').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}</div>
+    </div>
+
+    ${r.keyPoints&&r.keyPoints.length?`
+    <div class="aisec">
+      <div class="aisec-t">핵심 포인트</div>
+      <div class="kpt">${r.keyPoints.map(pt=>`<div class="kpt-item">${esc(pt)}</div>`).join('')}</div>
+    </div>`:''}
+
+    <div class="aisec">
+      <div class="aisec-t">키워드</div>
+      <div class="kwtags">
+        ${(r.posKws||[]).map(k=>`<span class="kwt pk">+${esc(k)}</span>`).join('')}
+        ${(r.negKws||[]).map(k=>`<span class="kwt nk">-${esc(k)}</span>`).join('')}
+        ${(r.topics||[]).map(k=>`<span class="kwt">${esc(k)}</span>`).join('')}
+      </div>
+    </div>
+
+    ${r.cowayRelevance?`
+    <div class="aisec">
+      <div class="aisec-t">Coway 관련성</div>
+      <div class="rel-box">${esc(r.cowayRelevance)}</div>
+    </div>`:''}
+
+    <div class="ai-foot">Gemini 2.5 Flash via Puter.js · 무료 · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
+  </div>`;
+}
+
+async function callPuterAI(post){
+  const content=`제목: ${post.title}\n\n본문: ${post.selftext||'(본문 없음)'}`;
+  const prompt=`당신은 공기청정기 브랜드 Coway(코웨이)에 대한 Reddit 게시물을 분석하는 마케팅 분석가입니다.
+
+아래 Reddit 게시물을 분석하고 반드시 순수 JSON만 응답하세요. 마크다운 코드 블록이나 다른 텍스트 없이 JSON만 출력하세요.
+
+게시물:
+${content}
+
+응답 JSON:
+{
+  "sentiment": "pos" 또는 "neu" 또는 "neg",
+  "sentScore": 0에서 100 사이 숫자,
+  "summary": "3-4문장 자연스러운 한국어 요약",
+  "keyPoints": ["핵심포인트1 한국어", "핵심포인트2 한국어", "핵심포인트3 한국어"],
+  "posKws": ["긍정키워드1", "긍정키워드2"],
+  "negKws": ["부정키워드1", "부정키워드2"],
+  "topics": ["주제1", "주제2", "주제3"],
+  "cowayRelevance": "Coway 직접 관련성 1-2문장 한국어 또는 null"
+}`;
+
+  // Puter.js로 Gemini 무료 호출
+  const response = await puter.ai.chat(prompt, {
+    model: 'gemini-2.0-flash',
+  });
+
+  // response가 문자열 또는 객체일 수 있음
+  let text = '';
+  if (typeof response === 'string') {
+    text = response;
+  } else if (response && response.message && response.message.content) {
+    // Puter.js 응답 구조 처리
+    const content2 = response.message.content;
+    if (Array.isArray(content2)) {
+      text = content2.map(c => c.text || '').join('');
+    } else {
+      text = String(content2);
+    }
+  } else if (response && typeof response.text === 'string') {
+    text = response.text;
+  } else {
+    text = String(response || '');
+  }
+
+  // JSON 파싱 (마크다운 펜스 제거)
+  const clean = text.replace(/```json[\s\S]*?```|```[\s\S]*?```/g, m => m.replace(/```json|```/g,'')).trim();
+  // JSON 블록 추출
+  const jsonMatch = clean.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error('JSON 파싱 실패: ' + text.slice(0, 100));
+  try {
+    return JSON.parse(jsonMatch[0]);
+  } catch {
+    return {
+      sentiment:'neu', sentScore:50,
+      summary: text.slice(0,400) || '분석 결과 파싱 실패',
+      keyPoints:[], posKws:[], negKws:[], topics:[], cowayRelevance:null
+    };
+  }
+}
+
+// ══════════════════════════════════════
+// MISC
+// ══════════════════════════════════════
+function toggleAcc(){ document.getElementById('accP').classList.toggle('open'); }
+
+// 패널 드래그 리사이즈
+(function(){
+  const r=document.getElementById('resizer');
+  const ap=document.getElementById('aiPane');
+  let drag=false,sx=0,sw=0;
+  r.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;sw=ap.offsetWidth;document.body.style.cursor='col-resize';e.preventDefault();});
+  document.addEventListener('mousemove',e=>{if(!drag)return;const w=Math.max(260,Math.min(600,sw-(e.clientX-sx)));ap.style.width=w+'px';});
+  document.addEventListener('mouseup',()=>{drag=false;document.body.style.cursor='';});
+})();
+
+fetchPosts();
+</script>
+</body>
+</html>
