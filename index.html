@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coway Reddit Monitor v7.0</title>
+<title>Coway Reddit Monitor v7.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -240,7 +240,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="logo">
     <div class="logo-icon">📡</div>
     <div>
-      <div class="logo-name">REDDIT MONITOR <span class="ver">v7.0</span></div>
+      <div class="logo-name">REDDIT MONITOR <span class="ver">v7.1</span></div>
       <div class="logo-sub">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="#ff6534"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
         출처: Reddit · Coway Brand Tracker
@@ -248,7 +248,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
     </div>
   </div>
   <div class="hdr-r">
-    <span style="font-family:var(--mono);font-size:9px;background:var(--gd);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:4px 10px;border-radius:20px;">✅ 무료 AI · 키 불필요</span>
+    <span style="font-family:var(--mono);font-size:9px;background:var(--gd);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:4px 10px;border-radius:20px;">⚡ Groq AI · 첫 클릭 시 키 입력</span>
     <div class="chip"><div class="dot" id="sdot"></div><span id="stxt">대기 중</span></div>
     <button class="btn-sm" onclick="fetchMonitor()">⟳ 새로고침</button>
   </div>
@@ -262,7 +262,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 </div>
 
 <!-- 검색바 — 모니터 기준, 모든 탭 공유 -->
-<div class="sb">
+<div class="sb" id="SB">
   <div class="sb-box">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input class="sb-in" id="KW" type="text" placeholder="키워드 (예: Coway, Airmega, air purifier...)" value="Coway"/>
@@ -306,30 +306,30 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="aip" id="AP">
     <div class="aih">
       <div class="ai-ico">🤖</div>
-      <div><div class="ait">AI 한글 요약</div><div class="ais">게시물 클릭 → 자동 분석</div></div>
-      <div class="aitag">무료 AI</div>
+      <div><div class="ait">AI 한글 요약</div><div class="ais">Groq AI · 클릭 → 즉시 분석 (1~3초)</div></div>
+      <div class="aitag" id="AITAG">Groq 설정 필요</div>
     </div>
     <div class="aib" id="AIB">
-      <div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>
+      <div class="ae"><div class="ae-i">⚡</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--green)">Groq AI</strong>가<br><strong style="color:var(--text)">1~3초</strong> 안에<br>한글 요약 + 감성 분석을<br>제공합니다.<br><br><span style="font-size:11px;color:var(--muted)">첫 클릭 시 Groq API 키 입력<br>console.groq.com 무료 발급</span></div></div>
     </div>
   </div>
 </div>
 
 <!-- 부정 이슈 탭 -->
 <div class="tview" id="vN">
-  <div class="tv-title">📉 부정 이슈 분석 <span class="ver">v7.0</span></div>
+  <div class="tv-title">📉 부정 이슈 분석 <span class="ver">v7.1</span></div>
   <div id="N_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 부정 이슈를 자동으로 분석합니다.</div></div>
 </div>
 
 <!-- 긍정 이슈 탭 -->
 <div class="tview" id="vP">
-  <div class="tv-title">📈 긍정 이슈 분석 <span class="ver">v7.0</span></div>
+  <div class="tv-title">📈 긍정 이슈 분석 <span class="ver">v7.1</span></div>
   <div id="P_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 긍정 이슈를 자동으로 분석합니다.</div></div>
 </div>
 
 <!-- 브랜드 언급 탭 -->
 <div class="tview" id="vB">
-  <div class="tv-title">🏷️ 브랜드 언급 분석 <span class="ver">v7.0</span></div>
+  <div class="tv-title">🏷️ 브랜드 언급 분석 <span class="ver">v7.1</span></div>
   <div id="B_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 브랜드 언급을 자동으로 분석합니다.</div></div>
 </div>
 
@@ -443,12 +443,12 @@ function goTab(v,btn){
   document.getElementById('vN').classList.toggle('on',v==='N');
   document.getElementById('vP').classList.toggle('on',v==='P');
   document.getElementById('vB').classList.toggle('on',v==='B');
-  // 통계: 모니터 탭에서만 보임
   document.getElementById('STATS').classList.toggle('hidden',v!=='M');
-  // 분석 탭 전환 시 자동 렌더
+  // 브랜드 탭은 전용 데이터 사용 — 공통 검색바 숨김
+  document.getElementById('SB').style.display=(v==='B')?'none':'flex';
   if(v==='N') drawNeg();
   if(v==='P') drawPos();
-  if(v==='B') drawBrand();
+  if(v==='B') fetchBrandStandalone();
 }
 
 // ══════════════════════════════════
@@ -719,10 +719,33 @@ function drawPos(){
 // ══════════════════════════════════
 // 브랜드 언급 렌더
 // ══════════════════════════════════
+let brandPosts=[];
+let isBrandFetched=false;
+
+async function fetchBrandStandalone(){
+  if(isBrandFetched&&brandPosts.length>0){drawBrand();return;}
+  const el=document.getElementById('B_CONTENT');
+  el.innerHTML=`<div class="no-data-msg"><div class="ico">⏳</div>Reddit에서 'Air Purifier' 전체 시장 데이터를 수집 중입니다...<br><span style="font-size:11px;color:var(--muted)">사용자 검색어와 무관하게 객관적인 브랜드 점유율을 분석합니다</span></div>`;
+  try{
+    const url=`https://www.reddit.com/search.json?q=${encodeURIComponent('air purifier')}&sort=top&t=month&limit=100&restrict_sr=false`;
+    const r=await fetch(url,{headers:{Accept:'application/json'}});
+    if(!r.ok)throw new Error('Reddit API 오류');
+    const d=await r.json();
+    brandPosts=d.data.children.map(c=>{
+      const x=c.data;
+      return{title:x.title||'',selftext:x.selftext||'',subreddit:x.subreddit||'',ups:Number(x.ups)||0,created_utc:Number(x.created_utc)||0};
+    }).filter(p=>!isAd(p));
+    isBrandFetched=true;
+    drawBrand();
+  }catch(e){
+    el.innerHTML=`<div class="errb"><strong>⚠ 브랜드 데이터 수집 실패</strong><br><br>${esc(e.message)}</div>`;
+  }
+}
+
 function drawBrand(){
   const el=document.getElementById('B_CONTENT');
-  const vp=validPosts();
-  if(!vp.length){el.innerHTML=`<div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>자동으로 분석합니다.</div>`;return;}
+  const vp=brandPosts;
+  if(!vp.length)return;
 
   const brandCnt={};
   BRANDS.forEach(b=>brandCnt[b.name]=0);
@@ -735,29 +758,18 @@ function drawBrand(){
   const maxC=sorted[0]?.count||1;
 
   if(!sorted.length){
-    el.innerHTML=srcBanner()+`<div class="no-data-msg"><div class="ico">😐</div>브랜드 언급이 감지되지 않았습니다.<br><span style="font-size:11px;color:var(--muted)">다른 키워드로 검색해 보세요 (예: air purifier)</span></div>`;
+    el.innerHTML=`<div class="no-data-msg"><div class="ico">😐</div>브랜드 언급이 감지되지 않았습니다.</div>`;
     return;
   }
 
-  // 상위 5개 브랜드 시간별 추이
-  const {labels,buckets,spanDays}=makeTimeBuckets();
-  const unitL=spanDays<=7?'일별':spanDays<=35?'주별':'월별';
-  const top5=sorted.slice(0,5);
-  const COLORS=['#5b7cf6','#f43f5e','#22c55e','#f59e0b','#8b5cf6'];
-  const datasets=top5.map((b,i)=>({
-    label:b.name,
-    data:buckets.map(bkt=>{
-      const kws=BRANDS.find(x=>x.name===b.name)?.kws||[];
-      return vp.filter(p=>{
-        const t=(p.title+' '+(p.selftext||'')).toLowerCase();
-        return kws.some(k=>t.includes(k))&&p.created_utc>=bkt.s&&p.created_utc<bkt.e;
-      }).length;
-    }),
-    borderColor:COLORS[i],backgroundColor:COLORS[i]+'22',
-    fill:false,tension:0.4,pointRadius:4,borderWidth:2,
-  }));
-
-  el.innerHTML=srcBanner()+`
+  el.innerHTML=`
+  <div class="src-banner">
+    <div class="src-banner-icon">📊</div>
+    <div class="src-banner-text">
+      <strong>분석 기준: 'Air Purifier' 시장 데이터 (최근 1달 · 인기순 100건)</strong><br>
+      사용자 검색어와 무관하게 Reddit 전체에서 공기청정기 관련 게시물을 수집해 객관적인 브랜드 점유율을 분석합니다.
+    </div>
+  </div>
   <div class="sumgrid">
     <div class="sumcard"><div class="sumcard-l">분석 대상</div><div class="sumcard-v c-a">${vp.length}건</div></div>
     <div class="sumcard"><div class="sumcard-l">감지된 브랜드</div><div class="sumcard-v c-a">${sorted.length}개</div></div>
@@ -765,26 +777,28 @@ function drawBrand(){
     <div class="sumcard"><div class="sumcard-l">1위 언급 수</div><div class="sumcard-v c-a">${sorted[0]?.count||0}건</div></div>
   </div>
   <div class="tgrid">
-    <div class="tc full"><div class="tct">${unitL} 브랜드별 언급 추이 (상위 ${top5.length}개)</div><div class="cbox" style="height:240px"><canvas id="brand_line"></canvas></div></div>
-    <div class="tc"><div class="tct">브랜드 언급 비율</div><div class="cbox"><canvas id="brand_donut"></canvas></div></div>
+    <div class="tc"><div class="tct">브랜드 점유율 (${vp.length}건 기준)</div><div class="cbox"><canvas id="brand_donut"></canvas></div></div>
     <div class="tc"><div class="tct">브랜드 순위</div>
-      <div class="il">${sorted.map((x,i)=>`<div class="ir"><div class="in">#${i+1}</div><div class="iname">${x.name}</div><div class="ibw"><div class="ibb"><div class="ibf-brand" style="width:${(x.count/maxC*100).toFixed(1)}%"></div></div></div><div class="ic brand">${x.count}건</div><div class="ipct">${(x.count/total*100).toFixed(0)}%</div></div>`).join('')}</div>
+      <div class="il">${sorted.map((x,i)=>`<div class="ir"><div class="in">#${i+1}</div><div class="iname">${x.name}</div><div class="ibw"><div class="ibb"><div class="ibf-brand" style="width:${(x.count/maxC*100).toFixed(1)}%"></div></div></div><div class="ic brand">${x.count}건</div><div class="ipct">${(x.count/total*100).toFixed(0)}%</div></div>`).join('')}
+      </div>
     </div>
   </div>`;
 
   setTimeout(()=>{
-    destroyChart('brand_line');destroyChart('brand_donut');
-    const lc=document.getElementById('brand_line');
-    if(lc) charts['brand_line']=new Chart(lc,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:8}},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},maxRotation:45}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},stepSize:1},beginAtZero:true,min:0}}}});
+    destroyChart('brand_donut');
     const dc=document.getElementById('brand_donut');
-    if(dc) charts['brand_donut']=new Chart(dc,{type:'doughnut',data:{labels:sorted.map(x=>x.name),datasets:[{data:sorted.map(x=>x.count),backgroundColor:['#5b7cf6','#f43f5e','#22c55e','#f59e0b','#8b5cf6','#06b6d4','#f97316','#6366f1','#ec4899','#14b8a6','#84cc16','#a3e635','#fb923c'],borderColor:'#18181f',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:7}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}건 (${(c.raw/total*100).toFixed(0)}%)`}}},cutout:'58%'}});
+    if(dc) charts['brand_donut']=new Chart(dc,{
+      type:'doughnut',
+      data:{labels:sorted.map(x=>x.name),datasets:[{data:sorted.map(x=>x.count),backgroundColor:['#5b7cf6','#f43f5e','#22c55e','#f59e0b','#8b5cf6','#06b6d4','#f97316','#6366f1','#ec4899','#14b8a6'],borderColor:'#18181f',borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:7}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}건 (${(c.raw/total*100).toFixed(0)}%)`}}},cutout:'58%'}
+    });
   },100);
 }
 
 // ══════════════════════════════════
 // AI 요약 — Pollinations
 // ══════════════════════════════════
-function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>`;}
+function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">⚡</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--green)">Groq AI</strong>가<br><strong style="color:var(--text)">1~3초</strong> 안에<br>한글 요약 + 감성 분석을<br>제공합니다.<br><br><span style="font-size:11px;color:var(--muted)">첫 클릭 시 Groq API 키 입력<br>console.groq.com 무료 발급</span></div></div>`;}
 
 function sel(i){
   const list=getList();if(i<0||i>=list.length)return;
@@ -829,48 +843,61 @@ function showRes(p,r){
     ${r.keyPoints&&r.keyPoints.length?`<div class="sec"><div class="sec-t">핵심 포인트</div><div class="kps">${r.keyPoints.map(x=>`<div class="kp">${esc(x)}</div>`).join('')}</div></div>`:''}
     <div class="sec"><div class="sec-t">키워드</div><div class="kws">${(r.posKws||[]).map(k=>`<span class="kw p">+${esc(k)}</span>`).join('')}${(r.negKws||[]).map(k=>`<span class="kw n">-${esc(k)}</span>`).join('')}${(r.topics||[]).map(k=>`<span class="kw">${esc(k)}</span>`).join('')}</div></div>
     ${r.cowayRelevance?`<div class="sec"><div class="sec-t">Coway 관련성</div><div class="relb">${esc(r.cowayRelevance)}</div></div>`:''}
-    <div class="afoot">Pollinations AI · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div class="afoot">Groq AI (Llama3-70B) · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
   </div>`;
 }
 
 async function callAI(post){
-  const t=post.title.slice(0,80);
-  const b=(post.selftext||'').slice(0,120);
-  const prompt=`Analyze this Reddit post about air purifiers. Reply ONLY with a JSON object, no other text before or after.
-Post: "${t}" / "${b}"
-Required JSON: {"sentiment":"pos or neu or neg","sentScore":75,"summary":"2-3 sentence Korean summary","keyPoints":["Korean point 1","Korean point 2"],"posKws":["kw1"],"negKws":["kw1"],"topics":["t1"],"cowayRelevance":null}`;
-  const encoded=encodeURIComponent(prompt);
-  const attempts=[
-    `https://text.pollinations.ai/${encoded}?json=true&seed=${Date.now()}`,
-    `https://text.pollinations.ai/${encoded}?model=openai&json=true&seed=${Date.now()+1}`,
-    `https://text.pollinations.ai/${encoded}?model=mistral&json=true&seed=${Date.now()+2}`,
-  ];
-  for(let i=0;i<attempts.length;i++){
-    try{
-      const ctrl=new AbortController();
-      const tid=setTimeout(()=>ctrl.abort(),25000);
-      const res=await fetch(attempts[i],{signal:ctrl.signal});
-      clearTimeout(tid);
-      if(!res.ok){console.warn(`try ${i+1}: HTTP ${res.status}`);continue;}
-      const txt=await res.text();
-      if(!txt||txt.length<10){console.warn(`try ${i+1}: empty`);continue;}
-      const m=txt.match(/\{[\s\S]*\}/);
-      if(!m){console.warn(`try ${i+1}: no JSON`);continue;}
-      let parsed;try{parsed=JSON.parse(m[0]);}catch(e){console.warn(`try ${i+1}: parse error`);continue;}
-      if(!parsed.summary||parsed.summary.length<4){console.warn(`try ${i+1}: no summary`);continue;}
-      return{
-        sentiment:['pos','neu','neg'].includes(parsed.sentiment)?parsed.sentiment:'neu',
-        sentScore:Number(parsed.sentScore)||50,
-        summary:parsed.summary,
-        keyPoints:Array.isArray(parsed.keyPoints)?parsed.keyPoints:[],
-        posKws:Array.isArray(parsed.posKws)?parsed.posKws:[],
-        negKws:Array.isArray(parsed.negKws)?parsed.negKws:[],
-        topics:Array.isArray(parsed.topics)?parsed.topics:[],
-        cowayRelevance:parsed.cowayRelevance||null,
-      };
-    }catch(e){console.warn(`try ${i+1}: ${e.name}`);continue;}
+  // Groq API 키 — localStorage에 저장 (한 번만 입력)
+  let apiKey=localStorage.getItem('groq_api_key');
+  if(!apiKey){
+    apiKey=prompt('💡 AI 요약을 위해 Groq API 키를 입력해 주세요.\n\n무료 발급: https://console.groq.com\n(구글 로그인 → API Keys → Create API Key)\n\n한 번 입력하면 브라우저에 저장됩니다.');
+    if(!apiKey) throw new Error('API 키가 입력되지 않았습니다. 다시 클릭해 주세요.');
+    localStorage.setItem('groq_api_key',apiKey.trim());
   }
-  throw new Error('AI 서버가 응답하지 않습니다. 잠시 후 [다시 시도]를 눌러주세요.');
+
+  const t=post.title;
+  const b=(post.selftext||'').slice(0,2000);
+  const promptText=`Analyze this Reddit post about air purifiers. Reply ONLY with a valid JSON object. Do not include markdown.
+Post: "${t}" / "${b}"
+Required JSON: {"sentiment":"pos or neu or neg","sentScore":75,"summary":"2-3 sentence Korean summary","keyPoints":["Korean point 1","Korean point 2"],"posKws":["kw1"],"negKws":["kw1"],"topics":["t1"],"cowayRelevance":"short comment or null"}`;
+
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Authorization':`Bearer ${apiKey}`,'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'llama3-70b-8192',
+        response_format:{type:'json_object'},
+        messages:[
+          {role:'system',content:'You are an expert data analyst. Always output strictly valid JSON.'},
+          {role:'user',content:promptText}
+        ]
+      })
+    });
+    if(!res.ok){
+      if(res.status===401){
+        localStorage.removeItem('groq_api_key');
+        throw new Error('API 키가 유효하지 않습니다. 다시 클릭하면 새로 입력할 수 있습니다.');
+      }
+      throw new Error(`Groq 서버 오류: ${res.status}`);
+    }
+    const data=await res.json();
+    const parsed=JSON.parse(data.choices[0].message.content);
+    return{
+      sentiment:['pos','neu','neg'].includes(parsed.sentiment)?parsed.sentiment:'neu',
+      sentScore:Number(parsed.sentScore)||50,
+      summary:parsed.summary||'요약 내용이 없습니다.',
+      keyPoints:Array.isArray(parsed.keyPoints)?parsed.keyPoints:[],
+      posKws:Array.isArray(parsed.posKws)?parsed.posKws:[],
+      negKws:Array.isArray(parsed.negKws)?parsed.negKws:[],
+      topics:Array.isArray(parsed.topics)?parsed.topics:[],
+      cowayRelevance:parsed.cowayRelevance||null,
+    };
+  }catch(e){
+    console.error('Groq AI Error:',e);
+    throw new Error(e.message||'AI 분석 중 오류가 발생했습니다.');
+  }
 }
 
 // 패널 리사이즈
