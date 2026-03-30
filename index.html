@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coway Reddit Monitor v6.2</title>
+<title>Coway Reddit Monitor v7.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -43,7 +43,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 .nb.active{color:var(--acc);border-bottom-color:var(--acc)}
 .nb:hover:not(.active){color:var(--dim)}
 
-/* SEARCH */
+/* SEARCH BAR — 모니터 전용 */
 .sb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 22px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
 .sb-box{flex:1;min-width:160px;position:relative}
 .sb-box svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
@@ -52,11 +52,11 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 .sb-in::placeholder{color:var(--muted)}
 .sb-sel{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:9px 10px;border-radius:7px;font-family:var(--sans);font-size:12px;outline:none;cursor:pointer}
 .btn-go{background:var(--acc);border:none;color:#fff;padding:9px 20px;border-radius:7px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s}
-.sb-hint{font-family:var(--mono);font-size:9px;color:var(--muted);padding:0 4px;line-height:1.5;flex:1;min-width:200px}
 .btn-go:hover{opacity:.88}
+.sb-hint{font-family:var(--mono);font-size:9px;color:var(--muted);line-height:1.5;flex-basis:100%;padding:2px 0 0 0}
 
-/* STATS — 모니터 전용, 탭에 따라 보임/숨김 */
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:10px 22px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0;transition:all .2s}
+/* STATS — 모니터 탭에서만 표시 */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:10px 22px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
 .stats.hidden{display:none}
 .sc{background:var(--surf2);border:1px solid var(--bord);border-radius:8px;padding:10px 13px}
 .sc-l{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
@@ -111,7 +111,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 /* AI PANE */
 .aip{width:390px;flex-shrink:0;background:var(--surf);border-left:1px solid var(--bord);display:flex;flex-direction:column;overflow:hidden}
 .aih{padding:11px 15px 10px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:8px;flex-shrink:0}
-.ai-ico{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#e86e4a,#9b5cf6);display:flex;align-items:center;justify-content:center;font-size:13px}
+.ai-ico{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:13px}
 .ait{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.05em}
 .ais{font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:1px}
 .aitag{margin-left:auto;font-family:var(--mono);font-size:8px;color:var(--green);background:var(--gd);border:1px solid rgba(34,197,94,.25);border-radius:4px;padding:2px 8px}
@@ -119,8 +119,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 .ae{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:10px}
 .ae-i{font-size:36px;opacity:.4}
 .ae-t{font-size:13px;color:var(--muted);line-height:1.75}
-
-/* AI loading */
 .al{display:flex;flex-direction:column;gap:7px}
 .alh{display:flex;align-items:center;gap:8px;margin-bottom:5px}
 .spin{width:13px;height:13px;border:2px solid var(--bord2);border-top-color:var(--acc);border-radius:50%;animation:sp .9s linear infinite;flex-shrink:0}
@@ -132,8 +130,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 @keyframes pg{0%{width:0}90%{width:88%}100%{width:90%}}
 .sk{height:11px;border-radius:4px;background:var(--surf2);animation:sh 1.3s ease infinite;margin-bottom:6px}
 @keyframes sh{0%,100%{opacity:.3}50%{opacity:.85}}
-
-/* AI result */
 .ar{animation:fu .3s ease}
 .arh{background:var(--surf2);border:1px solid var(--bord2);border-radius:8px;padding:11px 13px;margin-bottom:12px}
 .artit{font-size:12px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:5px}
@@ -168,28 +164,32 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 .rbtn{margin-top:10px;background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:7px 14px;border-radius:6px;font-family:var(--mono);font-size:10px;cursor:pointer;width:100%;transition:all .2s}
 .rbtn:hover{border-color:var(--acc);color:var(--acc)}
 
-/* ── TREND / BRAND SHARED ── */
+/* ── 분석 탭 공통 ── */
 .tview{display:none;flex:1;flex-direction:column;overflow-y:auto;padding:20px 22px 30px}
 .tview.on{display:flex}
-.tv-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:8px}
-.tv-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:14px}
-.tctrl{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.pb{font-family:var(--mono);font-size:10px;padding:6px 13px;border-radius:6px;border:1px solid var(--bord2);background:var(--surf2);color:var(--muted);cursor:pointer;transition:all .18s}
-.pb:hover{border-color:var(--acc);color:var(--acc)}
-.pb.active{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
-.pb.neg-active{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}
-.pb.pos-active{background:var(--green);border-color:var(--green);color:#fff;font-weight:700}
-.run-btn{border:none;color:#fff;padding:7px 16px;border-radius:7px;font-family:var(--mono);font-size:10px;cursor:pointer;transition:opacity .2s;font-weight:600}
-.run-btn:hover{opacity:.85}
-.run-btn:disabled{opacity:.5;cursor:not-allowed}
-.tinfo{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:auto}
 
-/* trend stats row */
-.t-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.t-sc{background:var(--surf);border:1px solid var(--bord);border-radius:8px;padding:10px 14px}
-.t-scl{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
-.t-scv{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1}
+/* 데이터 출처 배너 */
+.src-banner{
+  background:var(--surf2);border:1px solid var(--bord2);border-radius:8px;
+  padding:11px 15px;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.src-banner-icon{font-size:16px;flex-shrink:0}
+.src-banner-text{font-family:var(--mono);font-size:10px;color:var(--dim);line-height:1.6;flex:1}
+.src-banner-text strong{color:var(--text)}
+.src-banner-kw{font-family:var(--mono);font-size:10px;background:rgba(91,124,246,.15);color:var(--acc);border:1px solid rgba(91,124,246,.3);border-radius:4px;padding:3px 9px;white-space:nowrap}
+.no-data-msg{text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;line-height:1.8}
+.no-data-msg .ico{font-size:36px;margin-bottom:12px}
 
+.tv-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* 요약 통계 4개 */
+.sumgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.sumcard{background:var(--surf);border:1px solid var(--bord);border-radius:8px;padding:10px 14px}
+.sumcard-l{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.sumcard-v{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1}
+
+/* 차트 그리드 */
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .tc{background:var(--surf);border:1px solid var(--bord);border-radius:11px;padding:18px}
 .tc.full{grid-column:1/-1}
@@ -198,23 +198,18 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 .cbox{position:relative;height:220px}
 .il{display:flex;flex-direction:column;gap:7px}
 .ir{display:flex;align-items:center;gap:11px;padding:9px 13px;background:var(--surf2);border:1px solid var(--bord);border-radius:7px}
-.ir:hover{border-color:var(--acc)}
 .in{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted);width:22px;flex-shrink:0}
 .iname{flex:1;font-size:13px;font-weight:600;color:var(--text)}
-.ibw{width:130px;flex-shrink:0}.ibb{height:6px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.ibw{width:140px;flex-shrink:0}.ibb{height:6px;background:var(--surf3);border-radius:3px;overflow:hidden}
 .ibf-neg{height:100%;background:linear-gradient(90deg,#f43f5e,#f59e0b);border-radius:3px}
 .ibf-pos{height:100%;background:linear-gradient(90deg,#22c55e,#06b6d4);border-radius:3px}
 .ibf-brand{height:100%;background:linear-gradient(90deg,#5b7cf6,#9b5cf6);border-radius:3px}
-.ic-neg{font-family:var(--mono);font-size:11px;color:var(--red);width:32px;text-align:right;flex-shrink:0;font-weight:700}
-.ic-pos{font-family:var(--mono);font-size:11px;color:var(--green);width:32px;text-align:right;flex-shrink:0;font-weight:700}
-.ic-brand{font-family:var(--mono);font-size:11px;color:var(--acc);width:32px;text-align:right;flex-shrink:0;font-weight:700}
-.ipct{font-family:var(--mono);font-size:10px;color:var(--muted);width:32px;text-align:right;flex-shrink:0}
+.ic{font-family:var(--mono);font-size:11px;width:34px;text-align:right;flex-shrink:0;font-weight:700}
+.ic.neg{color:var(--red)}.ic.pos{color:var(--green)}.ic.brand{color:var(--acc)}
+.ipct{font-family:var(--mono);font-size:10px;color:var(--muted);width:34px;text-align:right;flex-shrink:0}
 .tnote{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:12px;padding:9px 13px;background:var(--surf2);border-radius:6px;border-left:2px solid var(--bord2);line-height:1.6}
-.tempty{text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;line-height:1.7}
-.tloading{display:flex;align-items:center;justify-content:center;gap:12px;padding:50px 20px;color:var(--muted)}
-.tloading span{font-family:var(--mono);font-size:12px}
 
-/* Common */
+/* 공통 */
 .skelw{display:flex;flex-direction:column;gap:8px}
 .skelc{background:var(--surf2);border:1px solid var(--bord);border-radius:10px;padding:14px;animation:sh 1.4s ease infinite}
 .skl{background:var(--surf3);border-radius:4px;margin-bottom:7px}
@@ -235,7 +230,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   .stats{grid-template-columns:repeat(3,1fr)}
   .tgrid{grid-template-columns:1fr}
   .tc.full{grid-column:1}
-  .t-stats{grid-template-columns:repeat(2,1fr)}
+  .sumgrid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -245,7 +240,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="logo">
     <div class="logo-icon">📡</div>
     <div>
-      <div class="logo-name">REDDIT MONITOR <span class="ver">v6.2</span></div>
+      <div class="logo-name">REDDIT MONITOR <span class="ver">v7.0</span></div>
       <div class="logo-sub">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="#ff6534"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
         출처: Reddit · Coway Brand Tracker
@@ -261,22 +256,28 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 
 <div class="nav">
   <button class="nb active" onclick="goTab('M',this)">📋 모니터</button>
-  <button class="nb" onclick="goTab('N',this)">📉 부정 이슈 트렌드</button>
-  <button class="nb" onclick="goTab('P',this)">📈 긍정 이슈 트렌드</button>
-  <button class="nb" onclick="goTab('B',this)">🏷️ 브랜드 언급 분석</button>
+  <button class="nb" onclick="goTab('N',this)">📉 부정 이슈</button>
+  <button class="nb" onclick="goTab('P',this)">📈 긍정 이슈</button>
+  <button class="nb" onclick="goTab('B',this)">🏷️ 브랜드 언급</button>
 </div>
 
+<!-- 검색바 — 모니터 기준, 모든 탭 공유 -->
 <div class="sb">
   <div class="sb-box">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input class="sb-in" id="KW" type="text" placeholder="키워드 (예: Coway, Airmega, air purifier...)" value="Coway"/>
   </div>
-  <select class="sb-sel" id="TIME"><option value="week">최근 1주</option><option value="month">최근 1달</option><option value="year">최근 1년</option><option value="all">전체</option></select>
+  <select class="sb-sel" id="TIME">
+    <option value="week">최근 1주</option>
+    <option value="month">최근 1달</option>
+    <option value="year" selected>최근 1년</option>
+    <option value="all">전체</option>
+  </select>
   <button class="btn-go" onclick="fetchMonitor()">🔍 검색</button>
-  <div class="sb-hint">📌 선택 기간 내 최신 100건 자동 수집 · Reddit 검색 한계로 최근 게시물 위주로 표시됩니다</div>
+  <div class="sb-hint">📌 최신 100건 자동 수집 · 모든 탭(부정/긍정 이슈, 브랜드)이 이 검색 결과를 기준으로 분석합니다 · Reddit 특성상 최근 게시물 위주로 표시됩니다</div>
 </div>
 
-<!-- 모니터 전용 통계 (모니터 탭에서만 표시) -->
+<!-- 모니터 전용 통계 -->
 <div class="stats" id="STATS">
   <div class="sc"><div class="sc-l">총 게시물</div><div class="sc-v c-a" id="mT">—</div></div>
   <div class="sc"><div class="sc-l">긍정 🟢</div><div class="sc-v c-g" id="mP">—</div><div class="sc-bar"><div class="sc-fill" id="bP" style="width:0%;background:var(--green)"></div></div></div>
@@ -305,81 +306,39 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="aip" id="AP">
     <div class="aih">
       <div class="ai-ico">🤖</div>
-      <div><div class="ait">AI 한글 요약</div><div class="ais">AI 분석 · 게시물 클릭 → 자동 시작</div></div>
+      <div><div class="ait">AI 한글 요약</div><div class="ais">게시물 클릭 → 자동 분석</div></div>
       <div class="aitag">무료 AI</div>
     </div>
     <div class="aib" id="AIB">
-      <div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">무료 AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>
+      <div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>
     </div>
   </div>
 </div>
 
-<!-- 부정 이슈 트렌드 -->
+<!-- 부정 이슈 탭 -->
 <div class="tview" id="vN">
-  <div class="tv-title">📉 부정 이슈 트렌드 분석 <span class="ver">v6.2</span></div>
-  <div class="tv-sub">Reddit 독립 검색 · 최대 100건 · 광고 제외 · 트렌드 전용 통계</div>
-  <div class="t-stats">
-    <div class="t-sc"><div class="t-scl">수집 게시물</div><div class="t-scv c-a" id="nT">—</div></div>
-    <div class="t-sc"><div class="t-scl">긍정</div><div class="t-scv c-g" id="nP">—</div></div>
-    <div class="t-sc"><div class="t-scl">중립</div><div class="t-scv c-gr" id="nN2">—</div></div>
-    <div class="t-sc"><div class="t-scl">부정</div><div class="t-scv c-r" id="nN">—</div></div>
-  </div>
-  <div class="tctrl">
-    <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">기간</span>
-    <button class="pb" onclick="setPeriod('neg','week',this)">최근 1주</button>
-    <button class="pb" onclick="setPeriod('neg','month',this)">최근 1달</button>
-    <button class="pb neg-active" onclick="setPeriod('neg','year',this)">최근 1년</button>
-    <button class="pb" onclick="setPeriod('neg','all',this)">전체</button>
-    <button class="run-btn" id="NBTN" onclick="runAnalysis('neg')" style="background:var(--red)">📉 분석 실행</button>
-    <span class="tinfo" id="NINFO"></span>
-  </div>
-  <div id="NBODY"><div class="tempty">📉 "분석 실행"을 눌러 부정 이슈를 분석해 주세요.</div></div>
+  <div class="tv-title">📉 부정 이슈 분석 <span class="ver">v7.0</span></div>
+  <div id="N_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 부정 이슈를 자동으로 분석합니다.</div></div>
 </div>
 
-<!-- 긍정 이슈 트렌드 -->
+<!-- 긍정 이슈 탭 -->
 <div class="tview" id="vP">
-  <div class="tv-title">📈 긍정 이슈 트렌드 분석 <span class="ver">v6.2</span></div>
-  <div class="tv-sub">Reddit 독립 검색 · 최대 100건 · 광고 제외 · 트렌드 전용 통계</div>
-  <div class="t-stats">
-    <div class="t-sc"><div class="t-scl">수집 게시물</div><div class="t-scv c-a" id="pT">—</div></div>
-    <div class="t-sc"><div class="t-scl">긍정</div><div class="t-scv c-g" id="pP">—</div></div>
-    <div class="t-sc"><div class="t-scl">중립</div><div class="t-scv c-gr" id="pN2">—</div></div>
-    <div class="t-sc"><div class="t-scl">부정</div><div class="t-scv c-r" id="pN">—</div></div>
-  </div>
-  <div class="tctrl">
-    <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">기간</span>
-    <button class="pb" onclick="setPeriod('pos','week',this)">최근 1주</button>
-    <button class="pb" onclick="setPeriod('pos','month',this)">최근 1달</button>
-    <button class="pb pos-active" onclick="setPeriod('pos','year',this)">최근 1년</button>
-    <button class="pb" onclick="setPeriod('pos','all',this)">전체</button>
-    <button class="run-btn" id="PBTN" onclick="runAnalysis('pos')" style="background:var(--green)">📈 분석 실행</button>
-    <span class="tinfo" id="PINFO"></span>
-  </div>
-  <div id="PBODY"><div class="tempty">📈 "분석 실행"을 눌러 긍정 이슈를 분석해 주세요.</div></div>
+  <div class="tv-title">📈 긍정 이슈 분석 <span class="ver">v7.0</span></div>
+  <div id="P_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 긍정 이슈를 자동으로 분석합니다.</div></div>
 </div>
 
-<!-- 브랜드 언급 분석 -->
+<!-- 브랜드 언급 탭 -->
 <div class="tview" id="vB">
-  <div class="tv-title">🏷️ 브랜드 · 모델 언급 분석 <span class="ver">v6.2</span></div>
-  <div class="tv-sub">공기청정기 브랜드 및 모델명 Reddit 언급 빈도 분석 · 최대 100건</div>
-  <div class="tctrl">
-    <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">기간</span>
-    <button class="pb" onclick="setPeriod('brand','week',this)">최근 1주</button>
-    <button class="pb" onclick="setPeriod('brand','month',this)">최근 1달</button>
-    <button class="pb active" onclick="setPeriod('brand','year',this)">최근 1년</button>
-    <button class="pb" onclick="setPeriod('brand','all',this)">전체</button>
-    <button class="run-btn" id="BBTN" onclick="runAnalysis('brand')" style="background:var(--acc)">🏷️ 분석 실행</button>
-    <span class="tinfo" id="BINFO"></span>
-  </div>
-  <div id="BBODY"><div class="tempty">🏷️ "분석 실행"을 눌러 브랜드 언급을 분석해 주세요.<br><span style="font-size:11px;color:var(--muted)">검색어와 관계없이 주요 공기청정기 브랜드를 모두 집계합니다.</span></div></div>
+  <div class="tv-title">🏷️ 브랜드 언급 분석 <span class="ver">v7.0</span></div>
+  <div id="B_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 브랜드 언급을 자동으로 분석합니다.</div></div>
 </div>
 
 <script>
 'use strict';
 
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
 // 광고 감지
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
 const AD_SUBS=['topdealsusa','dealsinamerica','deals','buildapcsales','hotdeals','blackfriday','coupons','slickdeals','frugal'];
 const AD_KWS=['deal finder','deals today','handpicked','amazon deals','best deals','shop now','limited time','flash sale','daily deals','price drop','coupon','promo code','sponsored','affiliate'];
 const isAd=p=>{
@@ -388,9 +347,9 @@ const isAd=p=>{
   return AD_KWS.filter(k=>t.includes(k)).length>=2;
 };
 
-// ═══════════════════════════════════════════
-// 초기 감성 (키워드 기반 임시 — AI가 덮어씀)
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
+// 초기 감성 (AI가 나중에 덮어씀)
+// ══════════════════════════════════
 const PW=['love','great','good','best','awesome','perfect','recommend','worth','happy','clean','quiet','effective','quality','reliable','satisfied','works','excellent','amazing','fantastic','wonderful','impressive','pleased','helpful','efficient','silent','powerful'];
 const NW=['bad','terrible','horrible','worst','broken','poor','disappoint','issue','problem','fail','waste','useless','expensive','scam','avoid','defective','loud','noisy','stopped','dead','return','refund','regret','smell','sick','weird','leaking','rattling','overpriced','worse','chemical','pesticide','toxic'];
 const NM=['not','no','never','cannot','cant',"can't",'dont',"don't",'isnt',"isn't",'wasnt',"wasn't",'without','hardly','barely'];
@@ -408,111 +367,101 @@ function initSent(text){
   return d>=3?'pos':d<=-3?'neg':d>=1?'pos':d<=-1?'neg':'neu';
 }
 
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
 // 이슈 분류
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
 const NEG_ISSUES=[
   {key:'smell',    label:'냄새/화학물질', kws:['smell','chemical','odor','stink','pesticide','toxic','fume','gas']},
   {key:'noise',    label:'소음/진동',     kws:['noise','loud','noisy','vibration','rattling','sound','motor','grinding']},
   {key:'filter',   label:'필터 문제',     kws:['filter','hepa','replacement','clog','filtration']},
   {key:'broken',   label:'고장/결함',     kws:['broken','broke','dead','stopped','defective','malfunction','died','not working','stopped working']},
   {key:'customer', label:'고객서비스',    kws:['customer service','support','warranty','refund','return','replacement']},
-  {key:'price',    label:'가격/가성비',   kws:['expensive','overpriced','not worth','overcharge','price']},
+  {key:'price',    label:'가격/가성비',   kws:['expensive','overpriced','not worth','overcharge']},
   {key:'health',   label:'건강/안전',     kws:['sick','health','allergy','allergic','headache','dizzy','cancer','toxic','irritat']},
   {key:'app',      label:'앱/연결',       kws:['app','wifi','connect','bluetooth','iocare','alexa','google home']},
   {key:'mislead',  label:'과장광고',      kws:['mislead','false','lie','fake','scam','exaggerat']},
   {key:'other',    label:'기타',          kws:[]},
 ];
 const POS_ISSUES=[
-  {key:'performance',label:'성능/효과',  kws:['clean','effective','works','quiet','silent','powerful','efficient','fresh','filter','hepa','allergy']},
-  {key:'design',   label:'디자인/크기', kws:['design','look','size','compact','sleek','beautiful','aesthetic','small','large']},
-  {key:'value',    label:'가격 대비 가치',kws:['worth','value','affordable','cheap','budget','price','deal','cost']},
-  {key:'ease',     label:'사용 편의성', kws:['easy','simple','setup','install','use','convenient','user friendly','intuitive']},
-  {key:'app',      label:'앱/스마트 기능',kws:['app','smart','wifi','alexa','google','iocare','auto','schedule']},
-  {key:'recommend',label:'추천/재구매', kws:['recommend','love','best','amazing','perfect','buy again','repurchase','happy','satisfied']},
-  {key:'other',    label:'기타 긍정',   kws:[]},
+  {key:'performance',label:'성능/효과',     kws:['clean','effective','works','quiet','silent','powerful','efficient','fresh','hepa','allergy']},
+  {key:'design',     label:'디자인/크기',   kws:['design','look','size','compact','sleek','beautiful','aesthetic','small']},
+  {key:'value',      label:'가격 대비 가치',kws:['worth','value','affordable','cheap','budget','deal','cost']},
+  {key:'ease',       label:'사용 편의성',   kws:['easy','simple','setup','install','convenient','user friendly','intuitive']},
+  {key:'smart',      label:'앱/스마트',     kws:['app','smart','wifi','alexa','google','iocare','auto','schedule']},
+  {key:'recommend',  label:'추천/재구매',   kws:['recommend','love','best','amazing','perfect','buy again','repurchase','happy','satisfied']},
+  {key:'other',      label:'기타 긍정',     kws:[]},
 ];
+const BRANDS=[
+  {name:'Coway',       kws:['coway','airmega','ap1512','ap-1512','mighty','conway']},
+  {name:'Dyson',       kws:['dyson','pure cool','purifier cool']},
+  {name:'Blueair',     kws:['blueair','blue air','blue pure']},
+  {name:'Winix',       kws:['winix']},
+  {name:'Levoit',      kws:['levoit']},
+  {name:'Honeywell',   kws:['honeywell','hpa']},
+  {name:'IQAir',       kws:['iqair','healthpro']},
+  {name:'Austin Air',  kws:['austin air','healthmate']},
+  {name:'RabbitAir',   kws:['rabbit air','rabbitair','minusa2']},
+  {name:'Molekule',    kws:['molekule']},
+  {name:'LG PuriCare', kws:['lg puricare','puricare']},
+  {name:'Philips',     kws:['philips air','ac2889','ac3829']},
+  {name:'Airdog',      kws:['airdog']},
+];
+
 function classIssue(text,issues){
   const t=text.toLowerCase();
   for(const x of issues.slice(0,-1)){if(x.kws.some(k=>t.includes(k)))return x.key;}
   return 'other';
 }
 
-// ═══════════════════════════════════════════
-// 브랜드 목록
-// ═══════════════════════════════════════════
-const BRANDS=[
-  {name:'Coway',       kws:['coway','airmega','ap-','ap1512']},
-  {name:'Dyson',       kws:['dyson','pure cool','purifier cool']},
-  {name:'Blueair',     kws:['blueair','blue air','blue pure']},
-  {name:'Winix',       kws:['winix']},
-  {name:'Levoit',      kws:['levoit']},
-  {name:'Honeywell',   kws:['honeywell','hpa']},
-  {name:'IQAir',       kws:['iqair','iq air','healthpro']},
-  {name:'Austin Air',  kws:['austin air','healthmate']},
-  {name:'RabbitAir',   kws:['rabbit air','rabbitair','minusa2']},
-  {name:'Molekule',    kws:['molekule']},
-  {name:'Sharp',       kws:['sharp plasmacluster','sharp air']},
-  {name:'LG PuriCare', kws:['lg puricare','puricare']},
-  {name:'Samsung',     kws:['samsung bespoke','bespoke air']},
-  {name:'Philips',     kws:['philips series','ac2889','ac3829']},
-  {name:'Airdog',      kws:['airdog']},
-];
-function countBrands(posts){
-  const res={};
-  BRANDS.forEach(b=>res[b.name]=0);
-  posts.forEach(p=>{
-    const t=(p.title+' '+(p.selftext||'')).toLowerCase();
-    BRANDS.forEach(b=>{
-      if(b.kws.some(k=>t.includes(k)))res[b.name]++;
-    });
-  });
-  return res;
-}
-
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-let mPosts=[], aiSent={}, aiCache={};
+// ══════════════════════════════════
+// STATE — 단일 데이터 소스
+// ══════════════════════════════════
+let posts=[];        // 모든 탭이 공유하는 유일한 데이터
+let aiSent={};       // AI 확정 감성
+let aiCache={};      // AI 결과 캐시
 let curTab='all', selIdx=null, retP=null, tmrID=null;
-let periods={neg:'year', pos:'year', brand:'year'};
 let charts={};
+let lastSearch={kw:'',time:''};
 
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
 // 유틸
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
 const fmt=n=>n>=1000?(n/1000).toFixed(1)+'k':String(n);
 const ago=u=>{const d=Date.now()/1000-u;if(d<3600)return Math.floor(d/60)+'분 전';if(d<86400)return Math.floor(d/3600)+'시간 전';return Math.floor(d/86400)+'일 전';};
 const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function hl(t,k){if(!k)return esc(t);const e=k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');return esc(t).replace(new RegExp(`(${e})`,'gi'),'<mark>$1</mark>');}
 const getSent=p=>aiSent[p.permalink]||p.iSent;
+const validPosts=()=>posts.filter(p=>!p.isAd);
 
-// ═══════════════════════════════════════════
-// 탭 전환 — 모니터에서만 통계 보임
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
+// 탭 전환
+// ══════════════════════════════════
 function goTab(v,btn){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  // 뷰 전환
   document.getElementById('vM').classList.toggle('on',v==='M');
-  ['vN','vP','vB'].forEach(id=>document.getElementById(id).classList.toggle('on',false));
-  if(v==='N') document.getElementById('vN').classList.add('on');
-  if(v==='P') document.getElementById('vP').classList.add('on');
-  if(v==='B') document.getElementById('vB').classList.add('on');
-  // 통계 패널: 모니터 탭에서만 표시
-  document.getElementById('STATS').classList.toggle('hidden', v !== 'M');
+  document.getElementById('vN').classList.toggle('on',v==='N');
+  document.getElementById('vP').classList.toggle('on',v==='P');
+  document.getElementById('vB').classList.toggle('on',v==='B');
+  // 통계: 모니터 탭에서만 보임
+  document.getElementById('STATS').classList.toggle('hidden',v!=='M');
+  // 분석 탭 전환 시 자동 렌더
+  if(v==='N') drawNeg();
+  if(v==='P') drawPos();
+  if(v==='B') drawBrand();
 }
 
-// ═══════════════════════════════════════════
-// 모니터 통계 (AI 보정 반영)
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
+// 모니터 통계
+// ══════════════════════════════════
 function updStats(){
-  const pos=mPosts.filter(p=>getSent(p)==='pos').length;
-  const neu=mPosts.filter(p=>getSent(p)==='neu').length;
-  const neg=mPosts.filter(p=>getSent(p)==='neg').length;
-  const tot=mPosts.length||1;
-  const ups=mPosts.reduce((s,p)=>s+p.ups,0);
-  document.getElementById('mT').textContent=mPosts.length;
+  const vp=validPosts();
+  const pos=vp.filter(p=>getSent(p)==='pos').length;
+  const neu=vp.filter(p=>getSent(p)==='neu').length;
+  const neg=vp.filter(p=>getSent(p)==='neg').length;
+  const tot=vp.length||1;
+  const ups=vp.reduce((s,p)=>s+p.ups,0);
+  document.getElementById('mT').textContent=vp.length;
   document.getElementById('mP').textContent=pos;
   document.getElementById('mN2').textContent=neu;
   document.getElementById('mN').textContent=neg;
@@ -522,10 +471,14 @@ function updStats(){
   document.getElementById('bN').style.width=(neg/tot*100)+'%';
 }
 
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
 // 게시물 렌더
-// ═══════════════════════════════════════════
-function getList(){return curTab==='all'?mPosts:mPosts.filter(p=>getSent(p)===curTab);}
+// ══════════════════════════════════
+function getList(){
+  const vp=validPosts();
+  if(curTab==='all')return vp;
+  return vp.filter(p=>getSent(p)===curTab);
+}
 function render(){
   const kw=document.getElementById('KW').value.trim();
   const list=getList();
@@ -550,37 +503,288 @@ function render(){
 }
 function setTab(t,btn){curTab=t;selIdx=null;document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();showEmpty();}
 
-// ═══════════════════════════════════════════
-// 모니터 Reddit fetch
-// ═══════════════════════════════════════════
+// ══════════════════════════════════
+// Reddit fetch — 단일 fetch, 모든 탭 공유
+// ══════════════════════════════════
 async function fetchMonitor(){
   const kw=document.getElementById('KW').value.trim()||'Coway';
   const time=document.getElementById('TIME').value;
+  lastSearch={kw,time};
   setSt('warn','불러오는 중...');
   document.getElementById('PS').innerHTML=`<div class="skelw">${Array(5).fill(0).map(()=>`<div class="skelc"><div class="skl" style="width:85%;height:12px"></div><div class="skl" style="width:65%;height:10px"></div><div class="skl" style="width:40%;height:9px;margin-bottom:0"></div></div>`).join('')}</div>`;
+  // 분석 탭들 초기화
+  ['N_CONTENT','P_CONTENT','B_CONTENT'].forEach(id=>{
+    document.getElementById(id).innerHTML=`<div class="no-data-msg"><div class="ico">⏳</div>데이터 수집 중...</div>`;
+  });
   try{
-    const r=await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=new&t=${time}&limit=100&restrict_sr=false`,{headers:{Accept:'application/json'}});
+    const url=`https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=new&t=${time}&limit=100&restrict_sr=false`;
+    const r=await fetch(url,{headers:{Accept:'application/json'}});
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const d=await r.json();
-    mPosts=d.data.children.map(c=>{
+    posts=d.data.children.map(c=>{
       const x=c.data;
       const p={title:x.title||'',selftext:x.selftext||'',subreddit:x.subreddit||'',ups:Number(x.ups)||0,num_comments:Number(x.num_comments)||0,created_utc:Number(x.created_utc)||0,permalink:x.permalink||''};
-      p.isAd=isAd(p); p.iSent=initSent(p.title+' '+p.selftext);
+      p.isAd=isAd(p);
+      p.iSent=initSent(p.title+' '+p.selftext);
       return p;
     });
-    selIdx=null; updStats(); render(); showEmpty();
-    setSt('ok','업데이트: '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
+    selIdx=null;
+    updStats();
+    render();
+    showEmpty();
+    // 분석 탭들 자동 갱신
+    const activeTab=document.querySelector('.nb.active')?.textContent;
+    if(activeTab?.includes('부정')) drawNeg();
+    else if(activeTab?.includes('긍정')) drawPos();
+    else if(activeTab?.includes('브랜드')) drawBrand();
+    else{
+      // 모니터 탭 — 분석탭은 탭 전환 시 자동 렌더
+      drawNeg();drawPos();drawBrand();
+    }
+    setSt('ok',`"${kw}" ${time==='week'?'1주':time==='month'?'1달':time==='year'?'1년':'전체'} · ${validPosts().length}건`);
   }catch(e){
     document.getElementById('PS').innerHTML=`<div class="errb"><strong>⚠ 연결 실패</strong><br><br>${esc(e.message)}<br><br>GitHub Pages 환경 또는 CORS Unblock 확장 필요</div>`;
     setSt('err','오류');
   }
 }
-function setSt(t,tx){document.getElementById('sdot').className='dot'+(t==='warn'?' warn':t==='err'?' err':'');document.getElementById('stxt').textContent=tx;}
+function setSt(t,tx){
+  document.getElementById('sdot').className='dot'+(t==='warn'?' warn':t==='err'?' err':'');
+  document.getElementById('stxt').textContent=tx;
+}
 
-// ═══════════════════════════════════════════
-// AI 요약 — Claude API (Artifact 내장)
-// ═══════════════════════════════════════════
-function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">무료 AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>`;}
+// ══════════════════════════════════
+// 출처 배너 HTML 생성
+// ══════════════════════════════════
+function srcBanner(){
+  const vp=validPosts();
+  const kw=lastSearch.kw||'Coway';
+  const timeLabel={'week':'최근 1주','month':'최근 1달','year':'최근 1년','all':'전체'}[lastSearch.time]||'';
+  return `<div class="src-banner">
+    <div class="src-banner-icon">📊</div>
+    <div class="src-banner-text">
+      <strong>분석 기준: 모니터 검색 결과</strong><br>
+      키워드 <span class="src-banner-kw">${esc(kw)}</span> · ${timeLabel} · 광고 제외 <strong>${vp.length}건</strong>을 분석합니다.<br>
+      <span style="color:var(--muted);font-size:9px">※ Reddit API 특성상 최신 게시물 위주입니다. 더 많은 데이터를 보려면 모니터에서 기간을 바꿔 재검색하세요.</span>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════
+// 공통 차트 유틸
+// ══════════════════════════════════
+function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+function makeTimeBuckets(){
+  // 수집된 데이터의 실제 날짜 범위 기반으로 버킷 생성
+  const vp=validPosts();
+  if(!vp.length)return{labels:[],buckets:[]};
+  const timestamps=vp.map(p=>p.created_utc).sort((a,b)=>a-b);
+  const oldest=timestamps[0], newest=timestamps[timestamps.length-1];
+  const spanDays=Math.ceil((newest-oldest)/86400)||1;
+
+  let labels=[],buckets=[];
+  if(spanDays<=7){
+    // 일별
+    for(let i=6;i>=0;i--){
+      const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);
+      const nd=new Date(d);nd.setDate(nd.getDate()+1);
+      labels.push(`${d.getMonth()+1}/${d.getDate()}`);
+      buckets.push({s:d.getTime()/1000,e:nd.getTime()/1000});
+    }
+  }else if(spanDays<=35){
+    // 주별 5슬롯
+    for(let i=4;i>=0;i--){
+      const end=new Date();end.setHours(23,59,59,999);end.setDate(end.getDate()-i*7);
+      const start=new Date(end);start.setDate(start.getDate()-6);start.setHours(0,0,0,0);
+      labels.push(`${start.getMonth()+1}/${start.getDate()}`);
+      buckets.push({s:start.getTime()/1000,e:end.getTime()/1000+1});
+    }
+  }else{
+    // 월별 12슬롯
+    for(let i=11;i>=0;i--){
+      const d=new Date();d.setDate(1);d.setHours(0,0,0,0);d.setMonth(d.getMonth()-i);
+      const nd=new Date(d);nd.setMonth(nd.getMonth()+1);
+      labels.push(`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}`);
+      buckets.push({s:d.getTime()/1000,e:nd.getTime()/1000});
+    }
+  }
+  return{labels,buckets,spanDays};
+}
+
+function renderIssueChart(canvasId,data,color,colorBg,barClass,cntClass,label,total){
+  destroyChart(canvasId+'_line');destroyChart(canvasId+'_donut');
+  const {labels,buckets,spanDays}=makeTimeBuckets();
+  const unitL=spanDays<=7?'일별':spanDays<=35?'주별':'월별';
+  const tCnt=buckets.map(b=>data.filter(p=>p.created_utc>=b.s&&p.created_utc<b.e).length);
+  const lc=document.getElementById(canvasId+'_line');
+  if(lc) charts[canvasId+'_line']=new Chart(lc,{
+    type:'line',
+    data:{labels,datasets:[{label,data:tCnt,borderColor:color,backgroundColor:colorBg,fill:true,tension:0.4,pointBackgroundColor:color,pointRadius:4,borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${label} ${c.raw}건`}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},maxRotation:45}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},stepSize:1},beginAtZero:true,min:0}}},
+  });
+  return unitL;
+}
+
+// ══════════════════════════════════
+// 부정 이슈 렌더
+// ══════════════════════════════════
+function drawNeg(){
+  const el=document.getElementById('N_CONTENT');
+  const vp=validPosts();
+  if(!vp.length){el.innerHTML=`<div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>자동으로 분석합니다.</div>`;return;}
+  const neg=vp.filter(p=>getSent(p)==='neg');
+  neg.forEach(p=>p.issueN=classIssue(p.title+' '+p.selftext,NEG_ISSUES));
+
+  const cnt={};NEG_ISSUES.forEach(x=>cnt[x.key]=0);
+  neg.forEach(p=>cnt[p.issueN]=(cnt[p.issueN]||0)+1);
+  const sorted=NEG_ISSUES.map(x=>({...x,count:cnt[x.key]||0})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count);
+  const maxC=sorted[0]?.count||1;
+
+  el.innerHTML=srcBanner()+`
+  <div class="sumgrid">
+    <div class="sumcard"><div class="sumcard-l">분석 대상</div><div class="sumcard-v c-a">${vp.length}건</div></div>
+    <div class="sumcard"><div class="sumcard-l">부정 게시물</div><div class="sumcard-v c-r">${neg.length}건</div></div>
+    <div class="sumcard"><div class="sumcard-l">부정 비율</div><div class="sumcard-v c-r">${vp.length?((neg.length/vp.length)*100).toFixed(1):0}%</div></div>
+    <div class="sumcard"><div class="sumcard-l">주요 이슈</div><div class="sumcard-v" style="font-size:13px;color:var(--text)">${sorted[0]?.label||'—'}</div></div>
+  </div>
+  ${!neg.length?`<div class="no-data-msg"><div class="ico">😊</div>부정 게시물이 없습니다!</div>`:`
+  <div class="tgrid">
+    <div class="tc"><div class="tct" id="neg-unit-label">부정 게시물 추이</div><div class="cbox"><canvas id="neg_line"></canvas></div></div>
+    <div class="tc"><div class="tct">이슈 유형별 분포</div><div class="cbox"><canvas id="neg_donut"></canvas></div></div>
+    <div class="tc full">
+      <div class="tct">이슈 순위 — 부정 ${neg.length}건</div>
+      <div class="il">${sorted.map((x,i)=>`<div class="ir"><div class="in">#${i+1}</div><div class="iname">${x.label}</div><div class="ibw"><div class="ibb"><div class="ibf-neg" style="width:${(x.count/maxC*100).toFixed(1)}%"></div></div></div><div class="ic neg">${x.count}건</div><div class="ipct">${(x.count/neg.length*100).toFixed(0)}%</div></div>`).join('')}</div>
+      <div class="tnote">📌 키워드 기반 자동 분류 · 긍정: ${vp.filter(p=>getSent(p)==='pos').length}건 · 중립: ${vp.filter(p=>getSent(p)==='neu').length}건 · 부정: ${neg.length}건</div>
+    </div>
+  </div>`}`;
+
+  if(neg.length) setTimeout(()=>{
+    const unitL=renderIssueChart('neg',neg,'#f43f5e','rgba(244,63,94,.1)','ibf-neg','ic neg','부정',neg.length);
+    const lbl=document.getElementById('neg-unit-label');
+    if(lbl)lbl.textContent=`${unitL} 부정 게시물 추이`;
+    const dc=document.getElementById('neg_donut');
+    if(dc&&sorted.length){
+      destroyChart('neg_donut');
+      const CL=['#f43f5e','#f59e0b','#8b5cf6','#06b6d4','#10b981','#f97316','#6366f1','#ec4899','#14b8a6','#84cc16'];
+      charts['neg_donut']=new Chart(dc,{type:'doughnut',data:{labels:sorted.map(x=>x.label),datasets:[{data:sorted.map(x=>x.count),backgroundColor:CL.slice(0,sorted.length),borderColor:'#18181f',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:7}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}건 (${(c.raw/neg.length*100).toFixed(0)}%)`}}},cutout:'58%'}});
+    }
+  },100);
+}
+
+// ══════════════════════════════════
+// 긍정 이슈 렌더
+// ══════════════════════════════════
+function drawPos(){
+  const el=document.getElementById('P_CONTENT');
+  const vp=validPosts();
+  if(!vp.length){el.innerHTML=`<div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>자동으로 분석합니다.</div>`;return;}
+  const pos=vp.filter(p=>getSent(p)==='pos');
+  pos.forEach(p=>p.issueP=classIssue(p.title+' '+p.selftext,POS_ISSUES));
+
+  const cnt={};POS_ISSUES.forEach(x=>cnt[x.key]=0);
+  pos.forEach(p=>cnt[p.issueP]=(cnt[p.issueP]||0)+1);
+  const sorted=POS_ISSUES.map(x=>({...x,count:cnt[x.key]||0})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count);
+  const maxC=sorted[0]?.count||1;
+
+  el.innerHTML=srcBanner()+`
+  <div class="sumgrid">
+    <div class="sumcard"><div class="sumcard-l">분석 대상</div><div class="sumcard-v c-a">${vp.length}건</div></div>
+    <div class="sumcard"><div class="sumcard-l">긍정 게시물</div><div class="sumcard-v c-g">${pos.length}건</div></div>
+    <div class="sumcard"><div class="sumcard-l">긍정 비율</div><div class="sumcard-v c-g">${vp.length?((pos.length/vp.length)*100).toFixed(1):0}%</div></div>
+    <div class="sumcard"><div class="sumcard-l">주요 강점</div><div class="sumcard-v" style="font-size:13px;color:var(--text)">${sorted[0]?.label||'—'}</div></div>
+  </div>
+  ${!pos.length?`<div class="no-data-msg"><div class="ico">😐</div>긍정 게시물이 없습니다.</div>`:`
+  <div class="tgrid">
+    <div class="tc"><div class="tct" id="pos-unit-label">긍정 게시물 추이</div><div class="cbox"><canvas id="pos_line"></canvas></div></div>
+    <div class="tc"><div class="tct">이슈 유형별 분포</div><div class="cbox"><canvas id="pos_donut"></canvas></div></div>
+    <div class="tc full">
+      <div class="tct">강점 순위 — 긍정 ${pos.length}건</div>
+      <div class="il">${sorted.map((x,i)=>`<div class="ir"><div class="in">#${i+1}</div><div class="iname">${x.label}</div><div class="ibw"><div class="ibb"><div class="ibf-pos" style="width:${(x.count/maxC*100).toFixed(1)}%"></div></div></div><div class="ic pos">${x.count}건</div><div class="ipct">${(x.count/pos.length*100).toFixed(0)}%</div></div>`).join('')}</div>
+      <div class="tnote">📌 키워드 기반 자동 분류 · 긍정: ${pos.length}건 · 중립: ${vp.filter(p=>getSent(p)==='neu').length}건 · 부정: ${vp.filter(p=>getSent(p)==='neg').length}건</div>
+    </div>
+  </div>`}`;
+
+  if(pos.length) setTimeout(()=>{
+    const unitL=renderIssueChart('pos',pos,'#22c55e','rgba(34,197,94,.1)','ibf-pos','ic pos','긍정',pos.length);
+    const lbl=document.getElementById('pos-unit-label');
+    if(lbl)lbl.textContent=`${unitL} 긍정 게시물 추이`;
+    const dc=document.getElementById('pos_donut');
+    if(dc&&sorted.length){
+      destroyChart('pos_donut');
+      const CL=['#22c55e','#06b6d4','#8b5cf6','#f59e0b','#f43f5e','#f97316','#6366f1','#ec4899'];
+      charts['pos_donut']=new Chart(dc,{type:'doughnut',data:{labels:sorted.map(x=>x.label),datasets:[{data:sorted.map(x=>x.count),backgroundColor:CL.slice(0,sorted.length),borderColor:'#18181f',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:7}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}건 (${(c.raw/pos.length*100).toFixed(0)}%)`}}},cutout:'58%'}});
+    }
+  },100);
+}
+
+// ══════════════════════════════════
+// 브랜드 언급 렌더
+// ══════════════════════════════════
+function drawBrand(){
+  const el=document.getElementById('B_CONTENT');
+  const vp=validPosts();
+  if(!vp.length){el.innerHTML=`<div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>자동으로 분석합니다.</div>`;return;}
+
+  const brandCnt={};
+  BRANDS.forEach(b=>brandCnt[b.name]=0);
+  vp.forEach(p=>{
+    const t=(p.title+' '+(p.selftext||'')).toLowerCase();
+    BRANDS.forEach(b=>{if(b.kws.some(k=>t.includes(k)))brandCnt[b.name]++;});
+  });
+  const sorted=Object.entries(brandCnt).map(([name,count])=>({name,count})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count);
+  const total=sorted.reduce((s,x)=>s+x.count,0)||1;
+  const maxC=sorted[0]?.count||1;
+
+  if(!sorted.length){
+    el.innerHTML=srcBanner()+`<div class="no-data-msg"><div class="ico">😐</div>브랜드 언급이 감지되지 않았습니다.<br><span style="font-size:11px;color:var(--muted)">다른 키워드로 검색해 보세요 (예: air purifier)</span></div>`;
+    return;
+  }
+
+  // 상위 5개 브랜드 시간별 추이
+  const {labels,buckets,spanDays}=makeTimeBuckets();
+  const unitL=spanDays<=7?'일별':spanDays<=35?'주별':'월별';
+  const top5=sorted.slice(0,5);
+  const COLORS=['#5b7cf6','#f43f5e','#22c55e','#f59e0b','#8b5cf6'];
+  const datasets=top5.map((b,i)=>({
+    label:b.name,
+    data:buckets.map(bkt=>{
+      const kws=BRANDS.find(x=>x.name===b.name)?.kws||[];
+      return vp.filter(p=>{
+        const t=(p.title+' '+(p.selftext||'')).toLowerCase();
+        return kws.some(k=>t.includes(k))&&p.created_utc>=bkt.s&&p.created_utc<bkt.e;
+      }).length;
+    }),
+    borderColor:COLORS[i],backgroundColor:COLORS[i]+'22',
+    fill:false,tension:0.4,pointRadius:4,borderWidth:2,
+  }));
+
+  el.innerHTML=srcBanner()+`
+  <div class="sumgrid">
+    <div class="sumcard"><div class="sumcard-l">분석 대상</div><div class="sumcard-v c-a">${vp.length}건</div></div>
+    <div class="sumcard"><div class="sumcard-l">감지된 브랜드</div><div class="sumcard-v c-a">${sorted.length}개</div></div>
+    <div class="sumcard"><div class="sumcard-l">1위 브랜드</div><div class="sumcard-v" style="font-size:13px;color:var(--text)">${sorted[0]?.name||'—'}</div></div>
+    <div class="sumcard"><div class="sumcard-l">1위 언급 수</div><div class="sumcard-v c-a">${sorted[0]?.count||0}건</div></div>
+  </div>
+  <div class="tgrid">
+    <div class="tc full"><div class="tct">${unitL} 브랜드별 언급 추이 (상위 ${top5.length}개)</div><div class="cbox" style="height:240px"><canvas id="brand_line"></canvas></div></div>
+    <div class="tc"><div class="tct">브랜드 언급 비율</div><div class="cbox"><canvas id="brand_donut"></canvas></div></div>
+    <div class="tc"><div class="tct">브랜드 순위</div>
+      <div class="il">${sorted.map((x,i)=>`<div class="ir"><div class="in">#${i+1}</div><div class="iname">${x.name}</div><div class="ibw"><div class="ibb"><div class="ibf-brand" style="width:${(x.count/maxC*100).toFixed(1)}%"></div></div></div><div class="ic brand">${x.count}건</div><div class="ipct">${(x.count/total*100).toFixed(0)}%</div></div>`).join('')}</div>
+    </div>
+  </div>`;
+
+  setTimeout(()=>{
+    destroyChart('brand_line');destroyChart('brand_donut');
+    const lc=document.getElementById('brand_line');
+    if(lc) charts['brand_line']=new Chart(lc,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:8}},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},maxRotation:45}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},stepSize:1},beginAtZero:true,min:0}}}});
+    const dc=document.getElementById('brand_donut');
+    if(dc) charts['brand_donut']=new Chart(dc,{type:'doughnut',data:{labels:sorted.map(x=>x.name),datasets:[{data:sorted.map(x=>x.count),backgroundColor:['#5b7cf6','#f43f5e','#22c55e','#f59e0b','#8b5cf6','#06b6d4','#f97316','#6366f1','#ec4899','#14b8a6','#84cc16','#a3e635','#fb923c'],borderColor:'#18181f',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:7}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}건 (${(c.raw/total*100).toFixed(0)}%)`}}},cutout:'58%'}});
+  },100);
+}
+
+// ══════════════════════════════════
+// AI 요약 — Pollinations
+// ══════════════════════════════════
+function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>`;}
 
 function sel(i){
   const list=getList();if(i<0||i>=list.length)return;
@@ -592,18 +796,18 @@ function sel(i){
   doAI(p,i);
 }
 function retry(){if(retP)doAI(retP,selIdx);}
-
 function doAI(p,i){
   showLoad();
-  callClaudeAI(p).then(r=>{
+  callAI(p).then(r=>{
     aiCache[p.permalink]=r;
-    if(r.sentiment&&['pos','neu','neg'].includes(r.sentiment))aiSent[p.permalink]=r.sentiment;
+    if(r.sentiment&&['pos','neu','neg'].includes(r.sentiment)){
+      const prev=getSent(p);
+      aiSent[p.permalink]=r.sentiment;
+      if(r.sentiment!==prev){updStats();render();const e=document.getElementById('pc'+(i!==null?i:selIdx));if(e)e.classList.add('sel');}
+    }
     showRes(p,r);
-    updStats(); render();
-    const e=document.getElementById('pc'+(i!==null?i:selIdx));if(e)e.classList.add('sel');
   }).catch(e=>showErr(e.message));
 }
-
 function showLoad(){
   if(tmrID){clearInterval(tmrID);tmrID=null;}
   let s=0;
@@ -612,14 +816,14 @@ function showLoad(){
 }
 function showErr(msg){
   if(tmrID){clearInterval(tmrID);tmrID=null;}
-  document.getElementById('AIB').innerHTML=`<div class="aerr"><strong>⚠ AI 분석 실패</strong><br><br>${esc(msg)}<br><br>• 잠시 후 다시 시도해 주세요.<button class="rbtn" onclick="retry()">🔄 다시 시도</button></div>`;
+  document.getElementById('AIB').innerHTML=`<div class="aerr"><strong>⚠ AI 분석 실패</strong><br><br>${esc(msg)}<br><br>• AI 서버가 일시적으로 바쁩니다.<button class="rbtn" onclick="retry()">🔄 다시 시도</button></div>`;
 }
 function showRes(p,r){
   if(tmrID){clearInterval(tmrID);tmrID=null;}
   const SL={pos:'긍정 😊',neu:'중립 😐',neg:'부정 😞'};
   const s=r.sentiment||'neu',sc=r.sentScore||50,corr=s!==p.iSent;
   document.getElementById('AIB').innerHTML=`<div class="ar">
-    <div class="arh"><div class="artit">${esc(p.title)}</div><div class="armeta"><span>r/${esc(p.subreddit)}</span><span>▲${fmt(p.ups)}</span><span>💬${fmt(p.num_comments)}</span><span>${ago(p.created_utc)}</span>${p.isAd?'<span style="color:var(--yel)">⚠ 광고</span>':''}</div></div>
+    <div class="arh"><div class="artit">${esc(p.title)}</div><div class="armeta"><span>r/${esc(p.subreddit)}</span><span>▲${fmt(p.ups)}</span><span>💬${fmt(p.num_comments)}</span><span>${ago(p.created_utc)}</span></div></div>
     <div class="sec"><div class="sec-t">AI 감성 분석</div><div class="srow"><div class="slbl ${s}">${SL[s]}</div><div class="sscore"><div class="ssl">AI 신뢰도</div><div class="ssb"><div class="ssf ${s}" style="width:${sc}%"></div></div><div class="ssn">${sc}% 확신</div></div></div>${corr?`<div class="corr">✅ 키워드(${{pos:'긍정',neu:'중립',neg:'부정'}[p.iSent]||'?'}) → AI(${SL[s]}) 보정됨</div>`:''}</div>
     <div class="sec"><div class="sec-t">한글 요약</div><div class="asum">${(r.summary||'요약 없음').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}</div></div>
     ${r.keyPoints&&r.keyPoints.length?`<div class="sec"><div class="sec-t">핵심 포인트</div><div class="kps">${r.keyPoints.map(x=>`<div class="kp">${esc(x)}</div>`).join('')}</div></div>`:''}
@@ -629,262 +833,44 @@ function showRes(p,r){
   </div>`;
 }
 
-// ═══════════════════════════════════════════
-// Claude API 호출 (Anthropic API — Artifact 내장)
-// ═══════════════════════════════════════════
-// Pollinations AI — GET 방식, 짧은 프롬프트, 5회 재시도, 4개 모델 순환
-const _MODELS = ['openai','mistral','llama','openai','mistral'];
-let _mIdx = 0;
-async function callClaudeAI(post){
-  // 프롬프트를 최대한 짧게 유지 (URL 길이 < 4000자)
-  const t = post.title.slice(0,100);
-  const b = (post.selftext||'').slice(0,150);
-  const prompt = `Analyze this Reddit post about air purifiers. Reply ONLY with JSON, no other text.
-Title: ${t}
-Body: ${b}
-JSON: {"sentiment":"pos/neu/neg","sentScore":70,"summary":"Korean 3-sentence summary","keyPoints":["KR point1","KR point2","KR point3"],"posKws":["kw1"],"negKws":["kw1"],"topics":["t1"],"cowayRelevance":null}`;
-
-  const encoded = encodeURIComponent(prompt);
-  // URL 길이 체크 — 너무 길면 더 줄임
-  if(encoded.length > 4000){
-    const shortPrompt = `Air purifier Reddit post. JSON only: {"sentiment":"pos/neu/neg","sentScore":70,"summary":"Korean 2-sentence summary","keyPoints":["KR point1","KR point2"],"posKws":[],"negKws":[],"topics":[],"cowayRelevance":null}\nTitle: ${t}`;
-    return callPollinationsShort(encodeURIComponent(shortPrompt));
-  }
-
-  for(let i=0;i<5;i++){
-    const model = _MODELS[(_mIdx+i)%_MODELS.length];
-    const url = `https://text.pollinations.ai/${encoded}?model=${model}&json=true&seed=${Date.now()+i}`;
+async function callAI(post){
+  const t=post.title.slice(0,80);
+  const b=(post.selftext||'').slice(0,120);
+  const prompt=`Analyze this Reddit post about air purifiers. Reply ONLY with a JSON object, no other text before or after.
+Post: "${t}" / "${b}"
+Required JSON: {"sentiment":"pos or neu or neg","sentScore":75,"summary":"2-3 sentence Korean summary","keyPoints":["Korean point 1","Korean point 2"],"posKws":["kw1"],"negKws":["kw1"],"topics":["t1"],"cowayRelevance":null}`;
+  const encoded=encodeURIComponent(prompt);
+  const attempts=[
+    `https://text.pollinations.ai/${encoded}?json=true&seed=${Date.now()}`,
+    `https://text.pollinations.ai/${encoded}?model=openai&json=true&seed=${Date.now()+1}`,
+    `https://text.pollinations.ai/${encoded}?model=mistral&json=true&seed=${Date.now()+2}`,
+  ];
+  for(let i=0;i<attempts.length;i++){
     try{
-      const ctrl = new AbortController();
-      const tid = setTimeout(()=>ctrl.abort(), 22000);
-      const res = await fetch(url, {signal:ctrl.signal});
+      const ctrl=new AbortController();
+      const tid=setTimeout(()=>ctrl.abort(),25000);
+      const res=await fetch(attempts[i],{signal:ctrl.signal});
       clearTimeout(tid);
-      if(!res.ok){ console.warn(`pollinations try ${i+1}: HTTP ${res.status}`); continue; }
-      const txt = await res.text();
-      if(!txt || txt.length < 10){ console.warn(`pollinations try ${i+1}: empty`); continue; }
-      // JSON 추출 — 유연하게
-      const clean = txt.replace(/```json|```/g,'').trim();
-      const m = clean.match(/\{[\s\S]*?\}/s) || clean.match(/\{[\s\S]*\}/);
-      if(!m){ console.warn(`pollinations try ${i+1}: no json, got: ${txt.slice(0,60)}`); continue; }
-      let parsed;
-      try { parsed = JSON.parse(m[0]); } catch(e){ console.warn(`parse err: ${e.message}`); continue; }
-      // 검증 완화 — summary 있으면 OK
-      if(!parsed.sentiment) parsed.sentiment = 'neu';
-      if(!parsed.sentScore) parsed.sentScore = 50;
-      if(!parsed.summary) { console.warn(`try ${i+1}: no summary`); continue; }
-      _mIdx = (_mIdx+i+1) % _MODELS.length;
-      return parsed;
-    }catch(e){
-      if(e.name==='AbortError'){ console.warn(`pollinations try ${i+1}: timeout`); }
-      else { console.warn(`pollinations try ${i+1}: ${e.message}`); }
-      continue;
-    }
+      if(!res.ok){console.warn(`try ${i+1}: HTTP ${res.status}`);continue;}
+      const txt=await res.text();
+      if(!txt||txt.length<10){console.warn(`try ${i+1}: empty`);continue;}
+      const m=txt.match(/\{[\s\S]*\}/);
+      if(!m){console.warn(`try ${i+1}: no JSON`);continue;}
+      let parsed;try{parsed=JSON.parse(m[0]);}catch(e){console.warn(`try ${i+1}: parse error`);continue;}
+      if(!parsed.summary||parsed.summary.length<4){console.warn(`try ${i+1}: no summary`);continue;}
+      return{
+        sentiment:['pos','neu','neg'].includes(parsed.sentiment)?parsed.sentiment:'neu',
+        sentScore:Number(parsed.sentScore)||50,
+        summary:parsed.summary,
+        keyPoints:Array.isArray(parsed.keyPoints)?parsed.keyPoints:[],
+        posKws:Array.isArray(parsed.posKws)?parsed.posKws:[],
+        negKws:Array.isArray(parsed.negKws)?parsed.negKws:[],
+        topics:Array.isArray(parsed.topics)?parsed.topics:[],
+        cowayRelevance:parsed.cowayRelevance||null,
+      };
+    }catch(e){console.warn(`try ${i+1}: ${e.name}`);continue;}
   }
   throw new Error('AI 서버가 응답하지 않습니다. 잠시 후 [다시 시도]를 눌러주세요.');
-}
-async function callPollinationsShort(encoded){
-  for(let i=0;i<3;i++){
-    const model = _MODELS[i%_MODELS.length];
-    try{
-      const ctrl = new AbortController();
-      const tid = setTimeout(()=>ctrl.abort(),20000);
-      const res = await fetch(`https://text.pollinations.ai/${encoded}?model=${model}&json=true&seed=${Date.now()+i}`,{signal:ctrl.signal});
-      clearTimeout(tid);
-      if(!res.ok) continue;
-      const txt = await res.text();
-      const m = txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
-      if(!m) continue;
-      let p; try{p=JSON.parse(m[0]);}catch{continue;}
-      if(!p.summary) continue;
-      return p;
-    }catch(e){continue;}
-  }
-  throw new Error('AI 서버 응답 없음. 다시 시도해 주세요.');
-}
-
-// ═══════════════════════════════════════════
-// 트렌드 공통 fetch
-// ═══════════════════════════════════════════
-function setPeriod(type,p,btn){
-  periods[type]=p;
-  const prefix=type==='neg'?'N':type==='pos'?'P':'B';
-  document.querySelectorAll(`#v${prefix} .pb`).forEach(b=>b.classList.remove('active','neg-active','pos-active'));
-  btn.classList.add(type==='neg'?'neg-active':type==='pos'?'pos-active':'active');
-}
-
-async function fetchTrend(type){
-  const kw=document.getElementById('KW').value.trim()||'Coway';
-  const period=periods[type];
-  const tSort=(period==='year'||period==='all')?'top':'new';
-  // 브랜드 분석은 공기청정기 전반 검색
-  const searchKw=type==='brand'?'air purifier':kw;
-  const url=`https://www.reddit.com/search.json?q=${encodeURIComponent(searchKw)}&sort=${tSort}&t=${period}&limit=100&restrict_sr=false`;
-  const r=await fetch(url,{headers:{Accept:'application/json'}});
-  if(!r.ok)throw new Error(`HTTP ${r.status}`);
-  const d=await r.json();
-  return d.data.children.map(c=>{
-    const x=c.data;
-    const p={title:x.title||'',selftext:x.selftext||'',subreddit:x.subreddit||'',ups:Number(x.ups)||0,created_utc:Number(x.created_utc)||0,permalink:x.permalink||''};
-    p.isAd=isAd(p);
-    p.sent=initSent(p.title+' '+p.selftext);
-    return p;
-  });
-}
-
-// 버킷 생성
-function makeBuckets(period){
-  let labels=[],buckets=[];
-  if(period==='week'){
-    for(let i=6;i>=0;i--){
-      const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);
-      const nd=new Date(d);nd.setDate(nd.getDate()+1);
-      labels.push(`${d.getMonth()+1}/${d.getDate()}`);
-      buckets.push({s:d.getTime()/1000,e:nd.getTime()/1000});
-    }
-  }else if(period==='month'){
-    for(let i=4;i>=0;i--){
-      const end=new Date();end.setHours(23,59,59,999);end.setDate(end.getDate()-i*7);
-      const start=new Date(end);start.setDate(start.getDate()-6);start.setHours(0,0,0,0);
-      labels.push(`${start.getMonth()+1}/${start.getDate()}`);
-      buckets.push({s:start.getTime()/1000,e:end.getTime()/1000+1});
-    }
-  }else{
-    for(let i=11;i>=0;i--){
-      const d=new Date();d.setDate(1);d.setHours(0,0,0,0);d.setMonth(d.getMonth()-i);
-      const nd=new Date(d);nd.setMonth(nd.getMonth()+1);
-      labels.push(`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}`);
-      buckets.push({s:d.getTime()/1000,e:nd.getTime()/1000});
-    }
-  }
-  return {labels,buckets};
-}
-
-// ═══════════════════════════════════════════
-// 트렌드 분석 실행
-// ═══════════════════════════════════════════
-async function runAnalysis(type){
-  const prefix=type==='neg'?'N':type==='pos'?'P':'B';
-  const btn=document.getElementById(`${prefix}BTN`);
-  btn.disabled=true; btn.textContent='분석 중...';
-  document.getElementById(`${prefix}BODY`).innerHTML=`<div class="tloading"><div class="spin"></div><span>Reddit 데이터 수집 중... (최대 100건)</span></div>`;
-  document.getElementById(`${prefix}INFO`).textContent='';
-
-  try{
-    const raw=await fetchTrend(type);
-    const valid=raw.filter(p=>!p.isAd);
-
-    if(type==='brand'){
-      drawBrand(valid);
-      document.getElementById('BINFO').textContent=`수집 ${raw.length}건 · 유효 ${valid.length}건`;
-    }else{
-      const pos=valid.filter(p=>p.sent==='pos').length;
-      const neu=valid.filter(p=>p.sent==='neu').length;
-      const neg=valid.filter(p=>p.sent==='neg').length;
-      // 트렌드 전용 통계
-      document.getElementById(`${prefix}T`).textContent=valid.length;
-      document.getElementById(`${prefix}P`).textContent=pos;
-      document.getElementById(`${prefix}N2`).textContent=neu;
-      document.getElementById(`${prefix}N`).textContent=neg;
-      document.getElementById(`${prefix}INFO`).textContent=`수집 ${raw.length}건 · 광고제외 ${valid.length}건`;
-
-      const target=type==='neg'?valid.filter(p=>p.sent==='neg'):valid.filter(p=>p.sent==='pos');
-      const issues=type==='neg'?NEG_ISSUES:POS_ISSUES;
-      target.forEach(p=>p.issue=classIssue(p.title+' '+p.selftext,issues));
-      drawTrend(type,valid,target,issues,periods[type]);
-    }
-  }catch(e){
-    document.getElementById(`${prefix}BODY`).innerHTML=`<div class="errb"><strong>⚠ 데이터 로드 실패</strong><br><br>${esc(e.message)}</div>`;
-  }finally{btn.disabled=false;btn.textContent=type==='neg'?'📉 분석 실행':type==='pos'?'📈 분석 실행':'🏷️ 분석 실행';}
-}
-
-function drawTrend(type,valid,target,issues,period){
-  const prefix=type==='neg'?'N':'P';
-  const el=document.getElementById(`${prefix}BODY`);
-  const color=type==='neg'?'#f43f5e':'#22c55e';
-  const colorB=type==='neg'?'rgba(244,63,94,.1)':'rgba(34,197,94,.1)';
-  const barClass=type==='neg'?'ibf-neg':'ibf-pos';
-  const cntClass=type==='neg'?'ic-neg':'ic-pos';
-  const label=type==='neg'?'부정':'긍정';
-
-  if(!target.length){
-    el.innerHTML=`<div class="tempty">해당 기간에 ${label} 게시물이 없습니다!<br><span style="font-size:11px;color:var(--muted)">전체 ${valid.length}건 수집 · ${label} 0건</span></div>`;
-    return;
-  }
-
-  // 이슈 집계
-  const cnt={};issues.forEach(x=>cnt[x.key]=0);
-  target.forEach(p=>cnt[p.issue]=(cnt[p.issue]||0)+1);
-  const sorted=issues.map(x=>({...x,count:cnt[x.key]||0})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count);
-  const maxC=sorted[0]?.count||1;
-
-  // 시간 버킷
-  const {labels,buckets}=makeBuckets(period);
-  const tCnt=buckets.map(b=>target.filter(p=>p.created_utc>=b.s&&p.created_utc<b.e).length);
-  const unmatched=target.length-tCnt.reduce((a,b)=>a+b,0);
-  const unitL=period==='week'?'일별':period==='month'?'주별':'월별';
-
-  el.innerHTML=`<div class="tgrid">
-    <div class="tc"><div class="tct">${unitL} ${label} 게시물 추이</div><div class="cbox"><canvas id="LC_${prefix}"></canvas></div></div>
-    <div class="tc"><div class="tct">이슈 유형별 분포</div><div class="cbox"><canvas id="DC_${prefix}"></canvas></div></div>
-    <div class="tc full">
-      <div class="tct">이슈 순위 — ${label} ${target.length}건 / 전체(광고제외) ${valid.length}건</div>
-      <div class="il">${sorted.map((x,i)=>`<div class="ir"><div class="in">#${i+1}</div><div class="iname">${x.label}</div><div class="ibw"><div class="ibb"><div class="${barClass}" style="width:${(x.count/maxC*100).toFixed(1)}%"></div></div></div><div class="${cntClass}">${x.count}건</div><div class="ipct">${(x.count/target.length*100).toFixed(0)}%</div></div>`).join('')}</div>
-      <div class="tnote">📌 이슈 분류는 키워드 기반 자동 분류 · 긍정: ${valid.filter(p=>p.sent==='pos').length}건 · 중립: ${valid.filter(p=>p.sent==='neu').length}건 · 부정: ${valid.filter(p=>p.sent==='neg').length}건${unmatched>0?` · 차트 범위 밖 ${unmatched}건 제외`:''}</div>
-    </div>
-  </div>`;
-
-  setTimeout(()=>{
-    const cid=`LC_${prefix}`,did=`DC_${prefix}`;
-    if(charts[cid]){charts[cid].destroy();delete charts[cid];}
-    if(charts[did]){charts[did].destroy();delete charts[did];}
-    const lc=document.getElementById(cid);
-    if(lc) charts[cid]=new Chart(lc,{type:'line',data:{labels,datasets:[{label,data:tCnt,borderColor:color,backgroundColor:colorB,fill:true,tension:0.4,pointBackgroundColor:color,pointRadius:5,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${label} ${c.raw}건`}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},maxRotation:45}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},stepSize:1},beginAtZero:true,min:0}}}});
-    const dc=document.getElementById(did);
-    if(dc&&sorted.length){
-      const CL=type==='neg'?['#f43f5e','#f59e0b','#8b5cf6','#06b6d4','#10b981','#f97316','#6366f1','#ec4899','#14b8a6','#84cc16']:['#22c55e','#06b6d4','#8b5cf6','#f59e0b','#f43f5e','#f97316','#6366f1','#ec4899','#14b8a6','#84cc16'];
-      charts[did]=new Chart(dc,{type:'doughnut',data:{labels:sorted.map(x=>x.label),datasets:[{data:sorted.map(x=>x.count),backgroundColor:CL.slice(0,sorted.length),borderColor:'#18181f',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:7}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}건 (${(c.raw/target.length*100).toFixed(0)}%)`}}},cutout:'58%'}});
-    }
-  },100);
-}
-
-function drawBrand(valid){
-  const el=document.getElementById('BBODY');
-  const period=periods.brand;
-  const brandCounts=countBrands(valid);
-  const sorted=Object.entries(brandCounts).map(([name,count])=>({name,count})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count);
-  if(!sorted.length){el.innerHTML=`<div class="tempty">해당 기간에 브랜드 언급이 없습니다.<br><span style="font-size:11px;color:var(--muted)">전체 ${valid.length}건 수집</span></div>`;return;}
-  const maxC=sorted[0].count;
-  const total=sorted.reduce((s,x)=>s+x.count,0);
-
-  // 시간 버킷 (상위 5개 브랜드 추이)
-  const {labels,buckets}=makeBuckets(period);
-  const top5=sorted.slice(0,5);
-  const COLORS=['#5b7cf6','#f43f5e','#22c55e','#f59e0b','#8b5cf6'];
-  const datasets=top5.map((b,i)=>({
-    label:b.name,
-    data:buckets.map(bkt=>valid.filter(p=>{const t=(p.title+' '+(p.selftext||'')).toLowerCase();return BRANDS.find(x=>x.name===b.name)?.kws.some(k=>t.includes(k))&&p.created_utc>=bkt.s&&p.created_utc<bkt.e;}).length),
-    borderColor:COLORS[i],backgroundColor:COLORS[i]+'22',fill:false,tension:0.4,pointRadius:4,borderWidth:2,
-  }));
-
-  const unitL=period==='week'?'일별':period==='month'?'주별':'월별';
-  el.innerHTML=`<div class="tgrid">
-    <div class="tc full"><div class="tct">${unitL} 브랜드별 언급 추이 (상위 5개)</div><div class="cbox" style="height:260px"><canvas id="BC_LINE"></canvas></div></div>
-    <div class="tc"><div class="tct">브랜드 언급 비율</div><div class="cbox"><canvas id="BC_DONUT"></canvas></div></div>
-    <div class="tc"><div class="tct">브랜드 순위 — 전체 ${valid.length}건</div>
-      <div class="il">${sorted.map((x,i)=>`<div class="ir"><div class="in">#${i+1}</div><div class="iname">${x.name}</div><div class="ibw"><div class="ibb"><div class="ibf-brand" style="width:${(x.count/maxC*100).toFixed(1)}%"></div></div></div><div class="ic-brand">${x.count}건</div><div class="ipct">${(x.count/total*100).toFixed(0)}%</div></div>`).join('')}
-      </div>
-    </div>
-  </div>`;
-
-  setTimeout(()=>{
-    ['BC_LINE','BC_DONUT'].forEach(id=>{if(charts[id]){charts[id].destroy();delete charts[id];}});
-    const lc=document.getElementById('BC_LINE');
-    if(lc) charts['BC_LINE']=new Chart(lc,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:8}},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},maxRotation:45}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6272a4',font:{size:10},stepSize:1},beginAtZero:true,min:0}}}});
-    const dc=document.getElementById('BC_DONUT');
-    if(dc&&sorted.length){
-      charts['BC_DONUT']=new Chart(dc,{type:'doughnut',data:{labels:sorted.map(x=>x.name),datasets:[{data:sorted.map(x=>x.count),backgroundColor:['#5b7cf6','#f43f5e','#22c55e','#f59e0b','#8b5cf6','#06b6d4','#f97316','#6366f1','#ec4899','#14b8a6','#84cc16','#a3e635','#fb923c','#e879f9','#38bdf8'],borderColor:'#18181f',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:11,padding:7}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}건 (${(c.raw/total*100).toFixed(0)}%)`}}},cutout:'58%'}});
-    }
-  },100);
 }
 
 // 패널 리사이즈
