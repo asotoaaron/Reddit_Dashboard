@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coway Reddit Monitor v6.0</title>
+<title>Coway Reddit Monitor v6.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -244,7 +244,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="logo">
     <div class="logo-icon">📡</div>
     <div>
-      <div class="logo-name">REDDIT MONITOR <span class="ver">v6.0</span></div>
+      <div class="logo-name">REDDIT MONITOR <span class="ver">v6.1</span></div>
       <div class="logo-sub">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="#ff6534"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
         출처: Reddit · Coway Brand Tracker
@@ -252,7 +252,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
     </div>
   </div>
   <div class="hdr-r">
-    <span style="font-family:var(--mono);font-size:9px;background:var(--gd);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:4px 10px;border-radius:20px;">✅ Claude AI · 무료</span>
+    <span style="font-family:var(--mono);font-size:9px;background:var(--gd);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:4px 10px;border-radius:20px;">✅ 무료 AI · 키 불필요</span>
     <div class="chip"><div class="dot" id="sdot"></div><span id="stxt">대기 중</span></div>
     <button class="btn-sm" onclick="fetchMonitor()">⟳ 새로고침</button>
   </div>
@@ -305,18 +305,18 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="aip" id="AP">
     <div class="aih">
       <div class="ai-ico">🤖</div>
-      <div><div class="ait">AI 한글 요약</div><div class="ais">Claude AI · 게시물 클릭 → 즉시 분석</div></div>
-      <div class="aitag">Claude AI</div>
+      <div><div class="ait">AI 한글 요약</div><div class="ais">AI 분석 · 게시물 클릭 → 자동 시작</div></div>
+      <div class="aitag">무료 AI</div>
     </div>
     <div class="aib" id="AIB">
-      <div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">Claude AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>
+      <div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">무료 AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>
     </div>
   </div>
 </div>
 
 <!-- 부정 이슈 트렌드 -->
 <div class="tview" id="vN">
-  <div class="tv-title">📉 부정 이슈 트렌드 분석 <span class="ver">v6.0</span></div>
+  <div class="tv-title">📉 부정 이슈 트렌드 분석 <span class="ver">v6.1</span></div>
   <div class="tv-sub">Reddit 독립 검색 · 최대 100건 · 광고 제외 · 트렌드 전용 통계</div>
   <div class="t-stats">
     <div class="t-sc"><div class="t-scl">수집 게시물</div><div class="t-scv c-a" id="nT">—</div></div>
@@ -338,7 +338,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 
 <!-- 긍정 이슈 트렌드 -->
 <div class="tview" id="vP">
-  <div class="tv-title">📈 긍정 이슈 트렌드 분석 <span class="ver">v6.0</span></div>
+  <div class="tv-title">📈 긍정 이슈 트렌드 분석 <span class="ver">v6.1</span></div>
   <div class="tv-sub">Reddit 독립 검색 · 최대 100건 · 광고 제외 · 트렌드 전용 통계</div>
   <div class="t-stats">
     <div class="t-sc"><div class="t-scl">수집 게시물</div><div class="t-scv c-a" id="pT">—</div></div>
@@ -360,7 +360,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 
 <!-- 브랜드 언급 분석 -->
 <div class="tview" id="vB">
-  <div class="tv-title">🏷️ 브랜드 · 모델 언급 분석 <span class="ver">v6.0</span></div>
+  <div class="tv-title">🏷️ 브랜드 · 모델 언급 분석 <span class="ver">v6.1</span></div>
   <div class="tv-sub">공기청정기 브랜드 및 모델명 Reddit 언급 빈도 분석 · 최대 100건</div>
   <div class="tctrl">
     <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">기간</span>
@@ -582,7 +582,7 @@ function setSt(t,tx){document.getElementById('sdot').className='dot'+(t==='warn'
 // ═══════════════════════════════════════════
 // AI 요약 — Claude API (Artifact 내장)
 // ═══════════════════════════════════════════
-function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">Claude AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>`;}
+function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">무료 AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.</div></div>`;}
 
 function sel(i){
   const list=getList();if(i<0||i>=list.length)return;
@@ -609,7 +609,7 @@ function doAI(p,i){
 function showLoad(){
   if(tmrID){clearInterval(tmrID);tmrID=null;}
   let s=0;
-  document.getElementById('AIB').innerHTML=`<div class="al"><div class="alh"><div class="spin"></div><div class="altxt">Claude AI 분석 중...</div><div class="alsec" id="SEC">0초</div></div><div class="albar"><div class="alfill"></div></div>${[88,70,80,50,74,62,84,54,68,58].map(w=>`<div class="sk" style="width:${w}%"></div>`).join('')}</div>`;
+  document.getElementById('AIB').innerHTML=`<div class="al"><div class="alh"><div class="spin"></div><div class="altxt">AI 분석 중...</div><div class="alsec" id="SEC">0초</div></div><div class="albar"><div class="alfill"></div></div>${[88,70,80,50,74,62,84,54,68,58].map(w=>`<div class="sk" style="width:${w}%"></div>`).join('')}</div>`;
   tmrID=setInterval(()=>{s++;const e=document.getElementById('SEC');if(e)e.textContent=s+'초';},1000);
 }
 function showErr(msg){
@@ -627,53 +627,81 @@ function showRes(p,r){
     ${r.keyPoints&&r.keyPoints.length?`<div class="sec"><div class="sec-t">핵심 포인트</div><div class="kps">${r.keyPoints.map(x=>`<div class="kp">${esc(x)}</div>`).join('')}</div></div>`:''}
     <div class="sec"><div class="sec-t">키워드</div><div class="kws">${(r.posKws||[]).map(k=>`<span class="kw p">+${esc(k)}</span>`).join('')}${(r.negKws||[]).map(k=>`<span class="kw n">-${esc(k)}</span>`).join('')}${(r.topics||[]).map(k=>`<span class="kw">${esc(k)}</span>`).join('')}</div></div>
     ${r.cowayRelevance?`<div class="sec"><div class="sec-t">Coway 관련성</div><div class="relb">${esc(r.cowayRelevance)}</div></div>`:''}
-    <div class="afoot">Claude AI · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div class="afoot">Pollinations AI · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
   </div>`;
 }
 
 // ═══════════════════════════════════════════
 // Claude API 호출 (Anthropic API — Artifact 내장)
 // ═══════════════════════════════════════════
+// Pollinations AI — GET 방식, 짧은 프롬프트, 5회 재시도, 4개 모델 순환
+const _MODELS = ['openai','mistral','llama','openai','mistral'];
+let _mIdx = 0;
 async function callClaudeAI(post){
-  const prompt=`당신은 Coway 공기청정기 브랜드의 마케팅 분석가입니다. 아래 Reddit 게시물을 분석하고 반드시 순수 JSON만 반환하세요. 설명이나 마크다운 없이 JSON만 출력하세요.
+  // 프롬프트를 최대한 짧게 유지 (URL 길이 < 4000자)
+  const t = post.title.slice(0,100);
+  const b = (post.selftext||'').slice(0,150);
+  const prompt = `Analyze this Reddit post about air purifiers. Reply ONLY with JSON, no other text.
+Title: ${t}
+Body: ${b}
+JSON: {"sentiment":"pos/neu/neg","sentScore":70,"summary":"Korean 3-sentence summary","keyPoints":["KR point1","KR point2","KR point3"],"posKws":["kw1"],"negKws":["kw1"],"topics":["t1"],"cowayRelevance":null}`;
 
-제목: ${post.title}
-본문: ${(post.selftext||'').slice(0,600)}
-
-반환 JSON 형식:
-{
-  "sentiment": "pos 또는 neu 또는 neg",
-  "sentScore": 75,
-  "summary": "3~4문장 자연스러운 한국어 요약",
-  "keyPoints": ["핵심 포인트1", "핵심 포인트2", "핵심 포인트3"],
-  "posKws": ["긍정 키워드1", "긍정 키워드2"],
-  "negKws": ["부정 키워드1", "부정 키워드2"],
-  "topics": ["주제1", "주제2"],
-  "cowayRelevance": "Coway 관련성 한 문장 또는 null"
-}`;
-
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{role: 'user', content: prompt}]
-    })
-  });
-
-  if (!response.ok) {
-    const err = await response.json().catch(()=>({}));
-    throw new Error(err?.error?.message || `API 오류 ${response.status}`);
+  const encoded = encodeURIComponent(prompt);
+  // URL 길이 체크 — 너무 길면 더 줄임
+  if(encoded.length > 4000){
+    const shortPrompt = `Air purifier Reddit post. JSON only: {"sentiment":"pos/neu/neg","sentScore":70,"summary":"Korean 2-sentence summary","keyPoints":["KR point1","KR point2"],"posKws":[],"negKws":[],"topics":[],"cowayRelevance":null}\nTitle: ${t}`;
+    return callPollinationsShort(encodeURIComponent(shortPrompt));
   }
 
-  const data = await response.json();
-  const text = data.content?.map(c=>c.text||'').join('') || '';
-  const clean = text.replace(/```json|```/g,'').trim();
-  const m = clean.match(/\{[\s\S]*\}/);
-  if(!m) throw new Error('응답 파싱 실패');
-  try { return JSON.parse(m[0]); }
-  catch(e) { throw new Error('JSON 파싱 오류: '+e.message); }
+  for(let i=0;i<5;i++){
+    const model = _MODELS[(_mIdx+i)%_MODELS.length];
+    const url = `https://text.pollinations.ai/${encoded}?model=${model}&json=true&seed=${Date.now()+i}`;
+    try{
+      const ctrl = new AbortController();
+      const tid = setTimeout(()=>ctrl.abort(), 22000);
+      const res = await fetch(url, {signal:ctrl.signal});
+      clearTimeout(tid);
+      if(!res.ok){ console.warn(`pollinations try ${i+1}: HTTP ${res.status}`); continue; }
+      const txt = await res.text();
+      if(!txt || txt.length < 10){ console.warn(`pollinations try ${i+1}: empty`); continue; }
+      // JSON 추출 — 유연하게
+      const clean = txt.replace(/```json|```/g,'').trim();
+      const m = clean.match(/\{[\s\S]*?\}/s) || clean.match(/\{[\s\S]*\}/);
+      if(!m){ console.warn(`pollinations try ${i+1}: no json, got: ${txt.slice(0,60)}`); continue; }
+      let parsed;
+      try { parsed = JSON.parse(m[0]); } catch(e){ console.warn(`parse err: ${e.message}`); continue; }
+      // 검증 완화 — summary 있으면 OK
+      if(!parsed.sentiment) parsed.sentiment = 'neu';
+      if(!parsed.sentScore) parsed.sentScore = 50;
+      if(!parsed.summary) { console.warn(`try ${i+1}: no summary`); continue; }
+      _mIdx = (_mIdx+i+1) % _MODELS.length;
+      return parsed;
+    }catch(e){
+      if(e.name==='AbortError'){ console.warn(`pollinations try ${i+1}: timeout`); }
+      else { console.warn(`pollinations try ${i+1}: ${e.message}`); }
+      continue;
+    }
+  }
+  throw new Error('AI 서버가 응답하지 않습니다. 잠시 후 [다시 시도]를 눌러주세요.');
+}
+async function callPollinationsShort(encoded){
+  for(let i=0;i<3;i++){
+    const model = _MODELS[i%_MODELS.length];
+    try{
+      const ctrl = new AbortController();
+      const tid = setTimeout(()=>ctrl.abort(),20000);
+      const res = await fetch(`https://text.pollinations.ai/${encoded}?model=${model}&json=true&seed=${Date.now()+i}`,{signal:ctrl.signal});
+      clearTimeout(tid);
+      if(!res.ok) continue;
+      const txt = await res.text();
+      const m = txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
+      if(!m) continue;
+      let p; try{p=JSON.parse(m[0]);}catch{continue;}
+      if(!p.summary) continue;
+      return p;
+    }catch(e){continue;}
+  }
+  throw new Error('AI 서버 응답 없음. 다시 시도해 주세요.');
 }
 
 // ═══════════════════════════════════════════
