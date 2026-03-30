@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coway Reddit Monitor v6.1</title>
+<title>Coway Reddit Monitor v6.2</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -52,6 +52,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 .sb-in::placeholder{color:var(--muted)}
 .sb-sel{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:9px 10px;border-radius:7px;font-family:var(--sans);font-size:12px;outline:none;cursor:pointer}
 .btn-go{background:var(--acc);border:none;color:#fff;padding:9px 20px;border-radius:7px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.sb-hint{font-family:var(--mono);font-size:9px;color:var(--muted);padding:0 4px;line-height:1.5;flex:1;min-width:200px}
 .btn-go:hover{opacity:.88}
 
 /* STATS — 모니터 전용, 탭에 따라 보임/숨김 */
@@ -244,7 +245,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="logo">
     <div class="logo-icon">📡</div>
     <div>
-      <div class="logo-name">REDDIT MONITOR <span class="ver">v6.1</span></div>
+      <div class="logo-name">REDDIT MONITOR <span class="ver">v6.2</span></div>
       <div class="logo-sub">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="#ff6534"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
         출처: Reddit · Coway Brand Tracker
@@ -270,10 +271,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input class="sb-in" id="KW" type="text" placeholder="키워드 (예: Coway, Airmega, air purifier...)" value="Coway"/>
   </div>
-  <select class="sb-sel" id="SORT"><option value="new">최신순</option><option value="hot">인기순</option><option value="top">탑순</option><option value="relevance">관련도순</option></select>
   <select class="sb-sel" id="TIME"><option value="week">최근 1주</option><option value="month">최근 1달</option><option value="year">최근 1년</option><option value="all">전체</option></select>
-  <select class="sb-sel" id="LIM"><option value="25">25개</option><option value="50">50개</option><option value="100">100개</option></select>
   <button class="btn-go" onclick="fetchMonitor()">🔍 검색</button>
+  <div class="sb-hint">📌 선택 기간 내 최신 100건 자동 수집 · Reddit 검색 한계로 최근 게시물 위주로 표시됩니다</div>
 </div>
 
 <!-- 모니터 전용 통계 (모니터 탭에서만 표시) -->
@@ -316,7 +316,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 
 <!-- 부정 이슈 트렌드 -->
 <div class="tview" id="vN">
-  <div class="tv-title">📉 부정 이슈 트렌드 분석 <span class="ver">v6.1</span></div>
+  <div class="tv-title">📉 부정 이슈 트렌드 분석 <span class="ver">v6.2</span></div>
   <div class="tv-sub">Reddit 독립 검색 · 최대 100건 · 광고 제외 · 트렌드 전용 통계</div>
   <div class="t-stats">
     <div class="t-sc"><div class="t-scl">수집 게시물</div><div class="t-scv c-a" id="nT">—</div></div>
@@ -338,7 +338,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 
 <!-- 긍정 이슈 트렌드 -->
 <div class="tview" id="vP">
-  <div class="tv-title">📈 긍정 이슈 트렌드 분석 <span class="ver">v6.1</span></div>
+  <div class="tv-title">📈 긍정 이슈 트렌드 분석 <span class="ver">v6.2</span></div>
   <div class="tv-sub">Reddit 독립 검색 · 최대 100건 · 광고 제외 · 트렌드 전용 통계</div>
   <div class="t-stats">
     <div class="t-sc"><div class="t-scl">수집 게시물</div><div class="t-scv c-a" id="pT">—</div></div>
@@ -360,7 +360,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 
 <!-- 브랜드 언급 분석 -->
 <div class="tview" id="vB">
-  <div class="tv-title">🏷️ 브랜드 · 모델 언급 분석 <span class="ver">v6.1</span></div>
+  <div class="tv-title">🏷️ 브랜드 · 모델 언급 분석 <span class="ver">v6.2</span></div>
   <div class="tv-sub">공기청정기 브랜드 및 모델명 Reddit 언급 빈도 분석 · 최대 100건</div>
   <div class="tctrl">
     <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">기간</span>
@@ -555,13 +555,11 @@ function setTab(t,btn){curTab=t;selIdx=null;document.querySelectorAll('.tb').for
 // ═══════════════════════════════════════════
 async function fetchMonitor(){
   const kw=document.getElementById('KW').value.trim()||'Coway';
-  const sort=document.getElementById('SORT').value;
   const time=document.getElementById('TIME').value;
-  const lim=document.getElementById('LIM').value;
   setSt('warn','불러오는 중...');
   document.getElementById('PS').innerHTML=`<div class="skelw">${Array(5).fill(0).map(()=>`<div class="skelc"><div class="skl" style="width:85%;height:12px"></div><div class="skl" style="width:65%;height:10px"></div><div class="skl" style="width:40%;height:9px;margin-bottom:0"></div></div>`).join('')}</div>`;
   try{
-    const r=await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=${sort}&t=${time}&limit=${lim}&restrict_sr=false`,{headers:{Accept:'application/json'}});
+    const r=await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=new&t=${time}&limit=100&restrict_sr=false`,{headers:{Accept:'application/json'}});
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const d=await r.json();
     mPosts=d.data.children.map(c=>{
