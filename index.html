@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coway Reddit Monitor v7.4</title>
+<title>Coway Reddit Monitor v8.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -240,7 +240,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="logo">
     <div class="logo-icon">📡</div>
     <div>
-      <div class="logo-name">REDDIT MONITOR <span class="ver">v7.4</span></div>
+      <div class="logo-name">REDDIT MONITOR <span class="ver">v8.1</span></div>
       <div class="logo-sub">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="#ff6534"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
         출처: Reddit · Coway Brand Tracker
@@ -248,7 +248,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
     </div>
   </div>
   <div class="hdr-r">
-    <span style="font-family:var(--mono);font-size:9px;background:var(--gd);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:4px 10px;border-radius:20px;">✅ 무료 AI · 키 불필요</span>
+    <span style="font-family:var(--mono);font-size:9px;background:var(--gd);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:4px 10px;border-radius:20px;">⚡ Cohere AI · 첫 클릭 시 키 입력</span>
     <div class="chip"><div class="dot" id="sdot"></div><span id="stxt">대기 중</span></div>
     <button class="btn-sm" onclick="fetchMonitor()">⟳ 새로고침</button>
   </div>
@@ -306,30 +306,30 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
   <div class="aip" id="AP">
     <div class="aih">
       <div class="ai-ico">🤖</div>
-      <div><div class="ait">AI 한글 요약</div><div class="ais">AI 분석 · 게시물 클릭 → 자동 시작</div></div>
-      <div class="aitag">무료 AI</div>
+      <div><div class="ait">AI 한글 요약</div><div class="ais">Cohere AI · 클릭 → 즉시 분석</div></div>
+      <div class="aitag">Cohere AI</div>
     </div>
     <div class="aib" id="AIB">
-      <div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.<br><br><span style="font-size:11px;color:var(--muted)">※ 10~20초 소요될 수 있습니다.</span></div></div>
+      <div class="ae"><div class="ae-i">⚡</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--green)">Cohere AI</strong>가<br>즉시 한글 요약 + 감성 분석을<br>제공합니다.<br><br><span style="font-size:11px;color:var(--muted)">첫 클릭 시 API 키 입력<br>dashboard.cohere.com 무료 발급</span></div></div>
     </div>
   </div>
 </div>
 
 <!-- 부정 이슈 탭 -->
 <div class="tview" id="vN">
-  <div class="tv-title">📉 부정 이슈 분석 <span class="ver">v7.4</span></div>
+  <div class="tv-title">📉 부정 이슈 분석 <span class="ver">v8.1</span></div>
   <div id="N_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 부정 이슈를 자동으로 분석합니다.</div></div>
 </div>
 
 <!-- 긍정 이슈 탭 -->
 <div class="tview" id="vP">
-  <div class="tv-title">📈 긍정 이슈 분석 <span class="ver">v7.4</span></div>
+  <div class="tv-title">📈 긍정 이슈 분석 <span class="ver">v8.1</span></div>
   <div id="P_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 긍정 이슈를 자동으로 분석합니다.</div></div>
 </div>
 
 <!-- 브랜드 언급 탭 -->
 <div class="tview" id="vB">
-  <div class="tv-title">🏷️ 브랜드 언급 분석 <span class="ver">v7.4</span></div>
+  <div class="tv-title">🏷️ 브랜드 언급 분석 <span class="ver">v8.1</span></div>
   <div id="B_CONTENT"><div class="no-data-msg"><div class="ico">🔍</div>모니터 탭에서 검색하면<br>이 탭에서 브랜드 언급을 자동으로 분석합니다.</div></div>
 </div>
 
@@ -784,9 +784,9 @@ function drawBrand(){
 }
 
 // ══════════════════════════════════
-// AI 요약 — Pollinations
+// AI 요약 — Cohere API
 // ══════════════════════════════════
-function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">✨</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--text)">AI</strong>가 자동으로<br>한글 요약 + 감성 분석을<br>제공합니다.<br><br><span style="font-size:11px;color:var(--muted)">※ 10~20초 소요될 수 있습니다.</span></div></div>`;}
+function showEmpty(){document.getElementById('AIB').innerHTML=`<div class="ae"><div class="ae-i">⚡</div><div class="ae-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--green)">Cohere AI</strong>가<br>즉시 한글 요약 + 감성 분석을<br>제공합니다.<br><br><span style="font-size:11px;color:var(--muted)">첫 클릭 시 API 키 입력<br>dashboard.cohere.com 무료 발급</span></div></div>`;}
 
 function sel(i){
   const list=getList();if(i<0||i>=list.length)return;
@@ -831,37 +831,49 @@ function showRes(p,r){
     ${r.keyPoints&&r.keyPoints.length?`<div class="sec"><div class="sec-t">핵심 포인트</div><div class="kps">${r.keyPoints.map(x=>`<div class="kp">${esc(x)}</div>`).join('')}</div></div>`:''}
     <div class="sec"><div class="sec-t">키워드</div><div class="kws">${(r.posKws||[]).map(k=>`<span class="kw p">+${esc(k)}</span>`).join('')}${(r.negKws||[]).map(k=>`<span class="kw n">-${esc(k)}</span>`).join('')}${(r.topics||[]).map(k=>`<span class="kw">${esc(k)}</span>`).join('')}</div></div>
     ${r.cowayRelevance?`<div class="sec"><div class="sec-t">Coway 관련성</div><div class="relb">${esc(r.cowayRelevance)}</div></div>`:''}
-    <div class="afoot">Pollinations AI · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div class="afoot">Cohere AI (Command-R) · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
   </div>`;
 }
 
 async function callAI(post){
+  let apiKey=localStorage.getItem('cohere_api_key');
+  if(!apiKey){
+    apiKey=prompt('💡 무료 Cohere API 키를 입력하세요:\n(dashboard.cohere.com 에서 구글 로그인으로 발급 가능)\n\n한 번 입력하면 브라우저에 저장됩니다.');
+    if(!apiKey) throw new Error('API 키가 입력되지 않았습니다. 다시 클릭해 주세요.');
+    localStorage.setItem('cohere_api_key',apiKey.trim());
+  }
   const t=post.title;
   const b=(post.selftext||'').slice(0,1500);
-  const promptText=`Analyze this Reddit post about air purifiers. Reply ONLY with a valid JSON object. Do not output any markdown, HTML, or conversational text. Just the JSON.
+  const promptText=`Analyze this Reddit post about air purifiers. Reply ONLY with a valid JSON object.
 Post: "${t}" / "${b}"
 Required JSON structure:
 {"sentiment":"pos or neu or neg","sentScore":75,"summary":"2-3 sentence Korean summary","keyPoints":["Korean point 1","Korean point 2"],"posKws":["kw1"],"negKws":["kw1"],"topics":["t1"],"cowayRelevance":"short comment or null"}`;
-
   try{
-    const res=await fetch('https://text.pollinations.ai/',{
+    const res=await fetch('https://api.cohere.com/v1/chat',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${apiKey}`
+      },
       body:JSON.stringify({
-        messages:[
-          {role:'system',content:'You are a helpful data analyst. You output strictly valid JSON.'},
-          {role:'user',content:promptText}
-        ],
-        model:'openai',
-        jsonMode:true,
+        model:'command-r-08-2024',
+        message:promptText,
+        preamble:'You are a helpful data analyst. You must output strictly valid JSON.',
+        response_format:{type:'json_object'},
+        temperature:0.1
       })
     });
-    if(!res.ok)throw new Error(`서버 오류: ${res.status}`);
-    let content=await res.text();
-    if(content.startsWith('```')){
-      content=content.replace(/^```(json)?\n?/i,'').replace(/\n?```$/i,'');
+    if(!res.ok){
+      if(res.status===401){
+        localStorage.removeItem('cohere_api_key');
+        throw new Error('API 키가 유효하지 않습니다. 다시 클릭하면 새로 입력할 수 있습니다.');
+      }
+      const errData=await res.json().catch(()=>({}));
+      throw new Error(`Cohere 서버 오류 ${res.status}: ${errData.message||'요청 실패'}`);
     }
-    const parsed=JSON.parse(content.trim());
+    const data=await res.json();
+    const parsed=JSON.parse(data.text.trim());
     return{
       sentiment:['pos','neu','neg'].includes(parsed.sentiment)?parsed.sentiment:'neu',
       sentScore:Number(parsed.sentScore)||50,
@@ -873,8 +885,8 @@ Required JSON structure:
       cowayRelevance:parsed.cowayRelevance||null,
     };
   }catch(e){
-    console.error('AI Error:',e);
-    throw new Error('AI 분석 중 오류가 발생했습니다. (네트워크 지연 또는 형식 오류)');
+    console.error('Cohere Error:',e);
+    throw new Error(e.message||'AI 분석 중 오류가 발생했습니다.');
   }
 }
 
