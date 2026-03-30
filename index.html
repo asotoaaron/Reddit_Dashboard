@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coway Reddit Monitor v4.0</title>
+<title>Coway Reddit Monitor v5.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -248,7 +248,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
     <div class="logo-info">
       <div class="lt">
         REDDIT MONITOR
-        <span class="ver-badge">v4.0</span>
+        <span class="ver-badge">v5.0</span>
       </div>
       <div class="ls">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="#ff6534"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
@@ -331,7 +331,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:11p
 <!-- TREND VIEW -->
 <div class="view-panel" id="viewTrend">
   <div class="trend-header">
-    <div class="trend-title">📊 부정 이슈 트렌드 분석 <span class="ver-badge">v4.0</span></div>
+    <div class="trend-title">📊 부정 이슈 트렌드 분석 <span class="ver-badge">v5.0</span></div>
     <div class="trend-sub">검색된 게시물 기준 · 키워드 기반 이슈 분류</div>
   </div>
   <div id="trendContent"><div class="trend-empty">🔍 먼저 모니터 탭에서 검색해 주세요.</div></div>
@@ -653,14 +653,21 @@ function drawTrendCharts(){
       if(idx>=0&&idx<5) timeCounts[idx]++;
     });
   } else {
-    // year / all — 월별 12개월
+    // year / all — 월별 12개월 (실제 Date 기반, 정확한 월 매핑)
     timeUnit='월별';
-    for(let i=11;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);timeLabels.push(`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}`);}
+    const monthKeys=[];
+    for(let i=11;i>=0;i--){
+      const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-i);
+      const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      monthKeys.push(key);
+      timeLabels.push(`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}`);
+    }
     timeCounts=Array(12).fill(0);
     negPosts.forEach(p=>{
-      const monthsAgo=Math.floor((now-p.created_utc)/2592000);
-      const idx=11-monthsAgo;
-      if(idx>=0&&idx<12) timeCounts[idx]++;
+      const pd=new Date(p.created_utc*1000);
+      const pk=`${pd.getFullYear()}-${String(pd.getMonth()+1).padStart(2,'0')}`;
+      const idx=monthKeys.indexOf(pk);
+      if(idx>=0) timeCounts[idx]++;
     });
   }
 
@@ -863,43 +870,45 @@ function showAIResult(post,r){
   </div>`;
 }
 
-// 3개 모델 순환 + 최대 3회 재시도
+// AI 호출 — POST 방식 (URL 길이 제한 없음, 안정적)
 async function callPollinationsWithRetry(post){
-  const prompt=`당신은 Coway 마케팅 분석가입니다. Reddit 게시물을 분석하고 JSON만 반환하세요. 코드블록 없이 순수 JSON만 출력하세요.
+  const MAX_TRIES = 4;
+  const MODELS = ['openai','mistral','llama','openai'];
 
-제목: ${post.title}
-본문: ${(post.selftext||'').slice(0,600)}
+  const sysMsg = '당신은 Coway 마케팅 분석가입니다. Reddit 게시물을 분석하고 JSON만 반환하세요. 코드블록 없이 순수 JSON만 출력하세요.';
+  const userMsg = `제목: ${post.title}\n본문: ${(post.selftext||'').slice(0,400)}\n\n아래 JSON 형식으로만 응답:\n{"sentiment":"pos 또는 neu 또는 neg","sentScore":50,"summary":"한국어 3문장 요약","keyPoints":["포인트1","포인트2","포인트3"],"posKws":["긍정1"],"negKws":["부정1"],"topics":["주제1"],"cowayRelevance":null}`;
 
-{"sentiment":"pos또는neu또는neg","sentScore":0~100,"summary":"3~4문장 한국어 요약","keyPoints":["포인트1","포인트2","포인트3"],"posKws":["긍정1","긍정2"],"negKws":["부정1","부정2"],"topics":["주제1","주제2"],"cowayRelevance":"Coway 관련성 또는 null"}`;
-
-  const encoded=encodeURIComponent(prompt);
-  const MAX_TRIES=3;
-
-  for(let attempt=0;attempt<MAX_TRIES;attempt++){
-    const model=AI_MODELS[(modelIdx+attempt)%AI_MODELS.length];
-    const url=`https://text.pollinations.ai/${encoded}?model=${model}&json=true&seed=${Date.now()}`;
+  for(let attempt=0; attempt<MAX_TRIES; attempt++){
+    const model = MODELS[(modelIdx+attempt)%MODELS.length];
     try{
-      const controller=new AbortController();
-      const timeout=setTimeout(()=>controller.abort(),20000);
-      const res=await fetch(url,{signal:controller.signal});
-      clearTimeout(timeout);
+      const ctrl = new AbortController();
+      const tid  = setTimeout(()=>ctrl.abort(), 22000);
+      const res  = await fetch('https://text.pollinations.ai/', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          messages:[{role:'system',content:sysMsg},{role:'user',content:userMsg}],
+          model, jsonMode:true, seed: Date.now()+attempt
+        }),
+        signal: ctrl.signal
+      });
+      clearTimeout(tid);
       if(!res.ok) continue;
-      const text=await res.text();
-      if(!text||text.length<20) continue;
-      const clean=text.replace(/```json|```/g,'').trim();
-      const match=clean.match(/\{[\s\S]*\}/);
-      if(!match) continue;
-      const parsed=JSON.parse(match[0]);
-      // 유효성 검사
-      if(!parsed.summary||parsed.summary.length<10) continue;
-      modelIdx=(modelIdx+attempt+1)%AI_MODELS.length; // 성공한 모델 다음부터 시작
+      const text = await res.text();
+      if(!text||text.length<15) continue;
+      const clean = text.replace(/```json|```/g,'').trim();
+      const m = clean.match(/\{[\s\S]*\}/);
+      if(!m) continue;
+      let parsed; try{parsed=JSON.parse(m[0]);}catch{continue;}
+      if(!parsed.summary||parsed.summary.length<8) continue;
+      modelIdx=(modelIdx+attempt+1)%MODELS.length;
       return parsed;
     }catch(e){
-      if(e.name==='AbortError') continue;
-      continue;
+      if(e.name==='AbortError'){console.warn('timeout attempt',attempt+1); continue;}
+      console.warn('error attempt',attempt+1,e.message); continue;
     }
   }
-  throw new Error('3회 시도 모두 실패했습니다. 잠시 후 다시 시도해 주세요.');
+  throw new Error('AI 서버가 응답하지 않습니다. 잠시 후 [다시 시도] 버튼을 눌러주세요.');
 }
 
 // RESIZER
