@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coway Reddit Monitor — AI 한글 요약</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
   --bg:    #09090f;
@@ -26,176 +27,238 @@
   --sans:  'Pretendard', -apple-system, sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;height:100vh}
 
-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:13px 24px;background:var(--surf);border-bottom:1px solid var(--bord);
-  flex-shrink:0;gap:12px;flex-wrap:wrap;
+/* ── API KEY BANNER ── */
+.key-banner{
+  background:linear-gradient(90deg,rgba(91,124,246,.15),rgba(34,197,94,.1));
+  border-bottom:1px solid var(--bord2);
+  padding:10px 24px;
+  display:flex;align-items:center;gap:12px;
+  flex-shrink:0;flex-wrap:wrap;
 }
+.key-banner.hidden{display:none}
+.key-banner-text{font-family:var(--mono);font-size:11px;color:var(--dim);flex:1;min-width:200px}
+.key-banner-text a{color:var(--acc);text-decoration:none}
+.key-banner-text a:hover{text-decoration:underline}
+.key-input{
+  background:var(--surf2);border:1px solid var(--bord2);color:var(--text);
+  padding:7px 12px;border-radius:7px;font-family:var(--mono);font-size:11px;
+  outline:none;width:340px;transition:border-color .2s;
+}
+.key-input:focus{border-color:var(--acc)}
+.key-input::placeholder{color:var(--muted)}
+.btn-key{background:var(--acc);border:none;color:#fff;padding:7px 16px;border-radius:7px;font-family:var(--mono);font-size:11px;cursor:pointer;white-space:nowrap;transition:opacity .2s}
+.btn-key:hover{opacity:.85}
+.btn-key-clear{background:transparent;border:1px solid var(--bord2);color:var(--muted);padding:7px 12px;border-radius:7px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s}
+.btn-key-clear:hover{border-color:var(--red);color:var(--red)}
+.key-status{font-family:var(--mono);font-size:11px;display:flex;align-items:center;gap:6px}
+.key-ok{color:var(--green)}
+.key-none{color:var(--yel)}
+
+/* ── HEADER ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0;gap:12px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:11px}
-.li{width:36px;height:36px;background:linear-gradient(135deg,var(--acc),#9b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.li{width:34px;height:34px;background:linear-gradient(135deg,var(--acc),#9b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .lt{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.05em}
 .ls{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.06em;margin-top:2px;display:flex;align-items:center;gap:4px}
-.ls svg{opacity:.6}
-.hdr-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.stat-chip{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:6px 13px}
-.sdot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stat-chip{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:5px 12px}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
 .sdot.warn{background:var(--yel);animation:blink 1.4s infinite}
 .sdot.err{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.btn-refresh{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:8px 16px;border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
-.btn-refresh:hover{border-color:var(--acc);color:var(--acc)}
 
-.search-bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:12px 24px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
-.sbox{flex:1;min-width:180px;position:relative}
-.sbox svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.sinput{width:100%;background:var(--surf2);border:1px solid var(--bord2);color:var(--text);padding:10px 14px 10px 36px;border-radius:8px;font-family:var(--sans);font-size:14px;outline:none;transition:border-color .2s}
+/* Tab nav for main views */
+.main-nav{display:flex;background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;flex-shrink:0}
+.nav-tab{padding:10px 20px;font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.04em;white-space:nowrap}
+.nav-tab.active{color:var(--acc);border-bottom-color:var(--acc)}
+.nav-tab:hover:not(.active){color:var(--dim)}
+
+.btn-go{background:var(--acc);border:none;color:#fff;padding:9px 20px;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;white-space:nowrap}
+.btn-go:hover{opacity:.88;transform:translateY(-1px)}
+.btn-sm2{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:8px 14px;border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.btn-sm2:hover{border-color:var(--acc);color:var(--acc)}
+
+/* ── SEARCH BAR ── */
+.search-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 24px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
+.sbox{flex:1;min-width:160px;position:relative}
+.sbox svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.sinput{width:100%;background:var(--surf2);border:1px solid var(--bord2);color:var(--text);padding:9px 12px 9px 34px;border-radius:8px;font-family:var(--sans);font-size:13px;outline:none;transition:border-color .2s}
 .sinput:focus{border-color:var(--acc)}
 .sinput::placeholder{color:var(--muted)}
-.ssel{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:10px 12px;border-radius:8px;font-family:var(--sans);font-size:13px;outline:none;cursor:pointer}
-.ssel:focus{border-color:var(--acc)}
-.btn-go{background:var(--acc);border:none;color:#fff;padding:10px 22px;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;white-space:nowrap}
-.btn-go:hover{opacity:.88;transform:translateY(-1px)}
+.ssel{background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:9px 10px;border-radius:8px;font-family:var(--sans);font-size:12px;outline:none;cursor:pointer}
 
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:12px 24px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
-.sc{background:var(--surf2);border:1px solid var(--bord);border-radius:8px;padding:11px 14px;transition:border-color .2s}
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:10px 24px;background:var(--surf);border-bottom:1px solid var(--bord);flex-shrink:0}
+.sc{background:var(--surf2);border:1px solid var(--bord);border-radius:8px;padding:10px 13px;transition:border-color .2s}
 .sc:hover{border-color:var(--acc)}
-.scl{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.scv{font-family:var(--mono);font-size:22px;font-weight:700;line-height:1}
+.scl{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.scv{font-family:var(--mono);font-size:21px;font-weight:700;line-height:1}
 .scv.b{color:var(--acc)}.scv.g{color:var(--green)}.scv.r{color:var(--red)}.scv.y{color:var(--yel)}.scv.gr{color:var(--gray)}
-.mb{height:3px;border-radius:2px;background:var(--surf3);margin-top:5px;overflow:hidden}
+.mb{height:3px;border-radius:2px;background:var(--surf3);margin-top:4px;overflow:hidden}
 .mf{height:100%;border-radius:2px;transition:width .6s ease}
 
-.body{display:flex;flex:1;overflow:hidden;min-height:0}
+/* ── MAIN PANELS ── */
+.view-panel{display:none;flex:1;overflow:hidden;min-height:0}
+.view-panel.active{display:flex}
 
+/* ── MONITOR VIEW ── */
+#viewMonitor{flex-direction:row}
 .left-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.pane-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 16px 9px 24px;flex-shrink:0}
-.tab-row{display:flex;gap:5px}
-.tab{padding:7px 16px;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .18s;letter-spacing:.03em}
+.pane-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px 7px 24px;flex-shrink:0}
+.tab-row{display:flex;gap:4px}
+.tab{padding:6px 14px;border-radius:6px;font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .18s}
 .tab.active{background:var(--surf2);border-color:var(--bord2);color:var(--text)}
 .tab:hover:not(.active){color:var(--dim)}
-.cbadge{font-family:var(--mono);font-size:11px;background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:4px 12px;color:var(--muted)}
-.post-scroll{flex:1;overflow-y:auto;padding:4px 16px 24px 24px}
+.cbadge{font-family:var(--mono);font-size:10px;background:var(--surf2);border:1px solid var(--bord);border-radius:20px;padding:3px 10px;color:var(--muted)}
+.post-scroll{flex:1;overflow-y:auto;padding:4px 14px 20px 24px}
 
 /* Post card */
-.pcard{
-  background:var(--surf2);border:1px solid var(--bord);border-radius:11px;
-  padding:15px 17px;margin-bottom:10px;cursor:pointer;
-  transition:border-color .18s,transform .13s,box-shadow .18s;
-  animation:fu .3s ease both;position:relative;
-}
+.pcard{background:var(--surf2);border:1px solid var(--bord);border-radius:10px;padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:border-color .18s,transform .13s,box-shadow .18s;animation:fu .3s ease both;position:relative}
 @keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-.pcard:hover{border-color:var(--acc);transform:translateY(-1px);box-shadow:0 4px 16px rgba(91,124,246,.1)}
+.pcard:hover{border-color:var(--acc);transform:translateY(-1px);box-shadow:0 4px 14px rgba(91,124,246,.1)}
 .pcard.sel{border-color:var(--acc);background:var(--surf3);box-shadow:0 0 0 2px var(--aglow)}
-.pcard.sel::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;background:var(--acc);border-radius:3px 0 0 3px}
-
-/* 감성 태그 — AI 확인 후 업데이트됨 */
-.spill{flex-shrink:0;font-size:10px;font-family:var(--mono);font-weight:700;letter-spacing:.06em;padding:4px 9px;border-radius:5px;text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:5px}
+.pcard.sel::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--acc);border-radius:3px 0 0 3px}
+.spill{flex-shrink:0;font-size:9px;font-family:var(--mono);font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:4px;text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:4px}
 .spill.pos{background:var(--gd);color:var(--green);border:1px solid rgba(34,197,94,.3)}
 .spill.neu{background:var(--grd);color:var(--gray);border:1px solid rgba(98,114,164,.3)}
 .spill.neg{background:var(--rd);color:var(--red);border:1px solid rgba(244,63,94,.3)}
-/* AI 확인 완료 표시 */
-.ai-verified{font-size:8px;background:rgba(91,124,246,.15);color:var(--acc);border:1px solid rgba(91,124,246,.25);border-radius:3px;padding:1px 5px;letter-spacing:.04em;white-space:nowrap}
-
-.pt{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
-.ptitle{font-size:14px;font-weight:600;color:var(--text);line-height:1.5;flex:1}
+.ai-v{font-size:8px;background:rgba(91,124,246,.15);color:var(--acc);border:1px solid rgba(91,124,246,.25);border-radius:3px;padding:1px 5px;white-space:nowrap}
+.pt{display:flex;align-items:flex-start;gap:9px;margin-bottom:7px}
+.ptitle{font-size:13px;font-weight:600;color:var(--text);line-height:1.5;flex:1}
 .ptitle mark{background:rgba(91,124,246,.22);color:#9ab4ff;border-radius:2px;padding:0 2px}
-.psnip{font-size:13px;color:var(--dim);line-height:1.65;background:var(--surf3);border-left:2px solid var(--bord2);border-radius:0 6px 6px 0;padding:7px 12px;margin:7px 0}
+.psnip{font-size:12px;color:var(--dim);line-height:1.6;background:var(--surf3);border-left:2px solid var(--bord2);border-radius:0 5px 5px 0;padding:6px 11px;margin:6px 0}
 .psnip mark{background:rgba(91,124,246,.18);color:#9ab4ff;border-radius:2px;padding:0 2px}
-.pmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.sub-t{font-size:11px;font-family:var(--mono);color:var(--acc);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);padding:3px 9px;border-radius:4px}
-.mi{font-size:11px;color:var(--muted);font-family:var(--mono)}
-.aibadge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-family:var(--mono);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);color:var(--acc);padding:3px 9px;border-radius:4px}
+.pmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sub-t{font-size:10px;font-family:var(--mono);color:var(--acc);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);padding:2px 8px;border-radius:4px}
+.mi{font-size:10px;color:var(--muted);font-family:var(--mono)}
+.aibadge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-family:var(--mono);background:rgba(91,124,246,.1);border:1px solid rgba(91,124,246,.2);color:var(--acc);padding:2px 8px;border-radius:4px}
 .aibadge.done{background:var(--gd);border-color:rgba(34,197,94,.25);color:var(--green)}
-.plink{font-size:11px;color:var(--acc);font-family:var(--mono);text-decoration:none;margin-left:auto;opacity:.65}
+.plink{font-size:10px;color:var(--acc);font-family:var(--mono);text-decoration:none;margin-left:auto;opacity:.65}
 .plink:hover{opacity:1;text-decoration:underline}
-.ad-badge{font-size:9px;font-family:var(--mono);background:var(--yd);border:1px solid rgba(245,158,11,.3);color:var(--yel);padding:2px 7px;border-radius:4px}
+.ad-badge{font-size:9px;font-family:var(--mono);background:var(--yd);border:1px solid rgba(245,158,11,.3);color:var(--yel);padding:2px 6px;border-radius:4px}
 
 /* RESIZER */
 .resizer{width:4px;background:var(--bord);cursor:col-resize;flex-shrink:0;transition:background .2s}
 .resizer:hover{background:var(--acc)}
 
 /* AI PANE */
-.ai-pane{width:400px;flex-shrink:0;background:var(--surf);border-left:1px solid var(--bord);display:flex;flex-direction:column;overflow:hidden}
-.aph{padding:13px 17px 12px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:9px;flex-shrink:0}
-.api-i{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#4285f4,#34a853);display:flex;align-items:center;justify-content:center;font-size:14px}
-.apt2{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.05em}
-.aps2{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.07em;margin-top:1px}
-.model-tag{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--muted);background:var(--surf2);border:1px solid var(--bord);border-radius:4px;padding:3px 8px}
-.ai-body{flex:1;overflow-y:auto;padding:16px 17px}
-
+.ai-pane{width:390px;flex-shrink:0;background:var(--surf);border-left:1px solid var(--bord);display:flex;flex-direction:column;overflow:hidden}
+.aph{padding:11px 16px 10px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.api-i{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#4285f4,#34a853);display:flex;align-items:center;justify-content:center;font-size:13px}
+.apt2{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.05em}
+.aps2{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.07em;margin-top:1px}
+.model-tag{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--green);background:var(--gd);border:1px solid rgba(34,197,94,.25);border-radius:4px;padding:2px 8px}
+.model-tag.no-key{color:var(--yel);background:var(--yd);border-color:rgba(245,158,11,.25)}
+.ai-body{flex:1;overflow-y:auto;padding:14px 16px}
 .aie{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:10px}
-.aie-i{font-size:40px;opacity:.4}
-.aie-t{font-size:14px;color:var(--muted);line-height:1.75}
-
-/* Loading */
-.ail{display:flex;flex-direction:column;gap:8px;padding:4px 0}
-.ail-label{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.ail-spinner{width:13px;height:13px;border:2px solid var(--bord2);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0}
+.aie-i{font-size:38px;opacity:.4}
+.aie-t{font-size:13px;color:var(--muted);line-height:1.75}
+.ail{display:flex;flex-direction:column;gap:7px}
+.ail-label{font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.ail-sp{width:12px;height:12px;border:2px solid var(--bord2);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ail-eta{font-size:10px;color:var(--muted);font-family:var(--mono);margin-left:auto}
-.ask{height:12px;border-radius:5px;background:var(--surf2);animation:shimmer 1.4s ease infinite}
+.ask{height:11px;border-radius:4px;background:var(--surf2);animation:shimmer 1.2s ease infinite}
 @keyframes shimmer{0%,100%{opacity:.3}50%{opacity:.85}}
-
-/* AI Result */
 .air{animation:fu .3s ease}
-.air-h{background:var(--surf2);border:1px solid var(--bord2);border-radius:9px;padding:12px 14px;margin-bottom:14px}
-.air-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.45;margin-bottom:6px}
-.air-meta{display:flex;gap:6px;flex-wrap:wrap}
-.air-mc{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--surf3);border-radius:4px;padding:2px 7px}
-.aisec{margin-bottom:15px}
-.aisec-t{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.air-h{background:var(--surf2);border:1px solid var(--bord2);border-radius:8px;padding:11px 13px;margin-bottom:12px}
+.air-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:5px}
+.air-meta{display:flex;gap:5px;flex-wrap:wrap}
+.air-mc{font-family:var(--mono);font-size:9px;color:var(--muted);background:var(--surf3);border-radius:3px;padding:2px 6px}
+.aisec{margin-bottom:13px}
+.aisec-t{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:6px}
 .aisec-t::after{content:'';flex:1;height:1px;background:var(--bord)}
-.sent-box{display:flex;align-items:center;gap:11px;background:var(--surf2);border-radius:8px;padding:11px 14px}
-.sbig{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 13px;border-radius:7px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.sent-box{display:flex;align-items:center;gap:10px;background:var(--surf2);border-radius:7px;padding:10px 13px}
+.sbig{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 .sbig.pos{background:var(--gd);color:var(--green);border:1px solid rgba(34,197,94,.3)}
 .sbig.neu{background:var(--grd);color:var(--gray);border:1px solid rgba(98,114,164,.3)}
 .sbig.neg{background:var(--rd);color:var(--red);border:1px solid rgba(244,63,94,.3)}
-.sw{flex:1}
-.sw-l{font-size:10px;color:var(--muted);font-family:var(--mono);margin-bottom:4px}
-.sw-b{height:6px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.sw{flex:1}.sw-l{font-size:9px;color:var(--muted);font-family:var(--mono);margin-bottom:3px}
+.sw-b{height:5px;background:var(--surf3);border-radius:3px;overflow:hidden}
 .sw-f{height:100%;border-radius:3px;transition:width .7s ease}
 .sw-f.pos{background:var(--green)}.sw-f.neu{background:var(--gray)}.sw-f.neg{background:var(--red)}
-.sw-n{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px}
-.updated-note{font-size:10px;color:var(--green);font-family:var(--mono);margin-top:6px;padding:4px 10px;background:var(--gd);border-radius:6px}
-.ai-sum{font-size:13.5px;color:var(--dim);line-height:1.8;background:var(--surf2);border-radius:8px;padding:12px 14px}
+.sw-n{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px}
+.upd-note{font-size:9px;color:var(--green);font-family:var(--mono);margin-top:5px;padding:4px 9px;background:var(--gd);border-radius:5px}
+.ai-sum{font-size:12.5px;color:var(--dim);line-height:1.78;background:var(--surf2);border-radius:7px;padding:11px 13px}
 .ai-sum b{color:var(--text);font-weight:600}
-.kpt{display:flex;flex-direction:column;gap:6px}
-.kpt-item{font-size:13px;color:var(--dim);background:var(--surf2);border-radius:6px;padding:8px 12px;border-left:2px solid var(--bord2);line-height:1.55}
-.kwtags{display:flex;flex-wrap:wrap;gap:5px}
-.kwt{font-family:var(--mono);font-size:10px;background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:3px 9px;border-radius:5px}
+.kpt{display:flex;flex-direction:column;gap:5px}
+.kpt-item{font-size:12px;color:var(--dim);background:var(--surf2);border-radius:5px;padding:7px 11px;border-left:2px solid var(--bord2);line-height:1.5}
+.kwtags{display:flex;flex-wrap:wrap;gap:4px}
+.kwt{font-family:var(--mono);font-size:9px;background:var(--surf2);border:1px solid var(--bord2);color:var(--dim);padding:3px 8px;border-radius:4px}
 .kwt.pk{border-color:rgba(34,197,94,.3);color:var(--green);background:var(--gd)}
 .kwt.nk{border-color:rgba(244,63,94,.3);color:var(--red);background:var(--rd)}
-.rel-box{font-size:13px;color:var(--dim);background:var(--surf2);border-radius:7px;padding:10px 13px;line-height:1.6}
-.ai-foot{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right;margin-top:12px}
-.ai-err{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:8px;padding:13px 15px;font-size:13px;color:#fca5a5;line-height:1.7}
+.rel-box{font-size:12px;color:var(--dim);background:var(--surf2);border-radius:6px;padding:9px 12px;line-height:1.6}
+.ai-foot{font-family:var(--mono);font-size:8px;color:var(--muted);text-align:right;margin-top:10px}
+.ai-err{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:12px 14px;font-size:12px;color:#fca5a5;line-height:1.65}
 .ai-err strong{color:var(--red);font-family:var(--mono)}
+.no-key-msg{background:var(--yd);border:1px solid rgba(245,158,11,.25);border-radius:7px;padding:14px 16px;font-size:12px;color:#fde68a;line-height:1.7}
+.no-key-msg strong{color:var(--yel);font-family:var(--mono)}
 
-.skel-list{display:flex;flex-direction:column;gap:9px}
-.skel-c{background:var(--surf2);border:1px solid var(--bord);border-radius:11px;padding:16px;animation:shimmer 1.4s ease infinite}
-.sl{background:var(--surf3);border-radius:5px;margin-bottom:8px}
-.stbox{text-align:center;padding:60px 24px;color:var(--muted)}
-.stbox .ic{font-size:44px;margin-bottom:12px}
-.stbox p{font-size:14px;line-height:1.65}
-.errbox{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:10px;padding:17px 20px;color:#fca5a5;font-size:13px;line-height:1.7}
+/* ── TREND VIEW ── */
+#viewTrend{flex-direction:column;overflow-y:auto;padding:24px}
+.trend-header{margin-bottom:20px}
+.trend-title{font-family:var(--mono);font-size:16px;font-weight:700;letter-spacing:.04em;color:var(--text);margin-bottom:4px}
+.trend-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em}
+.trend-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.trend-card{background:var(--surf);border:1px solid var(--bord);border-radius:12px;padding:20px}
+.trend-card.full{grid-column:1/-1}
+.tc-title{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tc-title::after{content:'';flex:1;height:1px;background:var(--bord)}
+.chart-wrap{position:relative;height:240px}
+.issue-list{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto}
+.issue-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surf2);border:1px solid var(--bord);border-radius:8px;cursor:pointer;transition:border-color .2s}
+.issue-row:hover{border-color:var(--red)}
+.issue-rank{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--muted);width:24px;flex-shrink:0}
+.issue-name{flex:1;font-size:13px;font-weight:600;color:var(--text)}
+.issue-bar-wrap{width:140px;flex-shrink:0}
+.issue-bar-bg{height:6px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.issue-bar-fill{height:100%;background:var(--red);border-radius:3px;transition:width .6s ease}
+.issue-count{font-family:var(--mono);font-size:12px;color:var(--red);width:36px;text-align:right;flex-shrink:0}
+.issue-pct{font-family:var(--mono);font-size:10px;color:var(--muted);width:36px;text-align:right;flex-shrink:0}
+.trend-empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:13px}
+.trend-note{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:12px;padding:10px 14px;background:var(--surf2);border-radius:6px;border-left:2px solid var(--bord2)}
+
+/* Common */
+.skel-list{display:flex;flex-direction:column;gap:8px}
+.skel-c{background:var(--surf2);border:1px solid var(--bord);border-radius:10px;padding:14px;animation:shimmer 1.4s ease infinite}
+.sl{background:var(--surf3);border-radius:4px;margin-bottom:7px}
+.stbox{text-align:center;padding:50px 20px;color:var(--muted)}
+.stbox .ic{font-size:40px;margin-bottom:10px}
+.stbox p{font-size:13px;line-height:1.6}
+.errbox{background:var(--rd);border:1px solid rgba(244,63,94,.25);border-radius:9px;padding:15px 18px;color:#fca5a5;font-size:12px;line-height:1.65}
 .errbox strong{color:var(--red);font-family:var(--mono)}
 
-::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--acc)}
+
 @media(max-width:760px){
-  .body{flex-direction:column}
-  .ai-pane{width:100%;border-left:none;border-top:1px solid var(--bord);height:420px}
+  #viewMonitor{flex-direction:column}
+  .ai-pane{width:100%;border-left:none;border-top:1px solid var(--bord);height:380px}
   .resizer{display:none}
   .stats{grid-template-columns:repeat(3,1fr)}
+  .trend-grid{grid-template-columns:1fr}
+  .trend-card.full{grid-column:1}
 }
 </style>
 </head>
 <body>
 
+<!-- API KEY BANNER -->
+<div class="key-banner" id="keyBanner">
+  <div class="key-banner-text">
+    ⚡ <strong>Gemini API 키</strong> 입력 시 AI 요약 활성화 —
+    <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>에서 무료 발급 (구글 로그인만 필요)
+  </div>
+  <input class="key-input" id="keyInput" type="password" placeholder="AIza... (Gemini API Key)"/>
+  <button class="btn-key" onclick="saveKey()">저장</button>
+  <div class="key-status" id="keyStatus"><span class="key-none">⚠ 키 없음</span></div>
+</div>
+
+<!-- HEADER -->
 <header>
   <div class="logo">
     <div class="li">📡</div>
@@ -209,17 +272,24 @@ header{
   </div>
   <div class="hdr-r">
     <div class="stat-chip"><div class="sdot" id="sdot"></div><span id="stext">대기 중</span></div>
-    <button class="btn-refresh" onclick="fetchPosts()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    <button class="btn-sm2" onclick="fetchPosts()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
       새로고침
     </button>
   </div>
 </header>
 
+<!-- MAIN NAV -->
+<div class="main-nav">
+  <div class="nav-tab active" onclick="switchView('monitor',this)">📋 모니터</div>
+  <div class="nav-tab" onclick="switchView('trend',this)">📊 부정 이슈 트렌드</div>
+</div>
+
+<!-- SEARCH BAR -->
 <div class="search-bar">
   <div class="sbox">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input class="sinput" id="kw" type="text" placeholder="키워드 (예: Coway, Airmega, air purifier...)" value="Coway"/>
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="sinput" id="kw" type="text" placeholder="키워드 (예: Coway, Airmega...)" value="Coway"/>
   </div>
   <select class="ssel" id="sort"><option value="new">최신순</option><option value="hot">인기순</option><option value="top">탑순</option><option value="relevance">관련도순</option></select>
   <select class="ssel" id="time"><option value="week">최근 1주</option><option value="month">최근 1달</option><option value="year">최근 1년</option><option value="all">전체</option></select>
@@ -227,6 +297,7 @@ header{
   <button class="btn-go" onclick="fetchPosts()">🔍 검색</button>
 </div>
 
+<!-- STATS -->
 <div class="stats">
   <div class="sc"><div class="scl">총 게시물</div><div class="scv b" id="sT">—</div></div>
   <div class="sc"><div class="scl">긍정 🟢</div><div class="scv g" id="sP">—</div><div class="mb"><div class="mf" id="bP" style="width:0%;background:var(--green)"></div></div></div>
@@ -235,7 +306,8 @@ header{
   <div class="sc"><div class="scl">총 업보트</div><div class="scv y" id="sU">—</div></div>
 </div>
 
-<div class="body">
+<!-- MONITOR VIEW -->
+<div class="view-panel active" id="viewMonitor">
   <div class="left-pane">
     <div class="pane-hdr">
       <div class="tab-row">
@@ -250,126 +322,178 @@ header{
       <div class="stbox"><div class="ic">🔭</div><p>검색 버튼을 눌러<br>Reddit에서 Coway 언급을 찾아보세요.</p></div>
     </div>
   </div>
-
   <div class="resizer" id="resizer"></div>
-
   <div class="ai-pane" id="aiPane">
     <div class="aph">
       <div class="api-i">🤖</div>
       <div>
         <div class="apt2">AI 한글 요약</div>
-        <div class="aps2">게시물 클릭 → AI 분석 · 감성 자동 보정</div>
+        <div class="aps2">Gemini · 게시물 클릭 → 즉시 분석</div>
       </div>
-      <div class="model-tag">AI · 무료</div>
+      <div class="model-tag no-key" id="modelTag">키 없음</div>
     </div>
     <div class="ai-body" id="aiBody">
       <div class="aie">
-        <div class="aie-i">✨</div>
-        <div class="aie-t">왼쪽 게시물을 클릭하면<br>AI가 내용을 분석해<br><strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>제공합니다.<br><br><span style="font-size:12px;color:var(--muted)">※ AI 분석 후 카드의 감성 태그가<br>자동으로 정확한 값으로 업데이트됩니다.</span></div>
+        <div class="aie-i">🔑</div>
+        <div class="aie-t">상단 배너에서<br><strong style="color:var(--yel)">Gemini API 키</strong>를 입력하면<br>AI 한글 요약이 활성화됩니다.<br><br><span style="font-size:11px;color:var(--muted)">aistudio.google.com에서<br>무료 발급 (구글 계정 필요)</span></div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- TREND VIEW -->
+<div class="view-panel" id="viewTrend">
+  <div class="trend-header">
+    <div class="trend-title">📊 부정 이슈 트렌드 분석</div>
+    <div class="trend-sub">검색된 게시물 기준 · 부정 반응 패턴 분석</div>
+  </div>
+  <div id="trendContent">
+    <div class="trend-empty">🔍 먼저 모니터 탭에서 검색해 주세요.</div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════
-// 광고 필터링
+// API KEY 관리 (localStorage)
+// ══════════════════════════════════════
+let GEMINI_KEY = localStorage.getItem('gemini_key') || '';
+
+function saveKey() {
+  const val = document.getElementById('keyInput').value.trim();
+  if (!val) { alert('API 키를 입력해 주세요.'); return; }
+  GEMINI_KEY = val;
+  localStorage.setItem('gemini_key', val);
+  updateKeyUI();
+}
+
+function updateKeyUI() {
+  const hasBanner = document.getElementById('keyBanner');
+  const statusEl  = document.getElementById('keyStatus');
+  const tagEl     = document.getElementById('modelTag');
+  if (GEMINI_KEY) {
+    statusEl.innerHTML = '<span class="key-ok">✅ 키 저장됨</span>';
+    document.getElementById('keyInput').value = '••••••••••••••••';
+    tagEl.textContent = '⚡ Gemini Flash';
+    tagEl.className = 'model-tag';
+    showAIEmpty();
+  } else {
+    statusEl.innerHTML = '<span class="key-none">⚠ 키 없음</span>';
+    tagEl.textContent = '키 없음';
+    tagEl.className = 'model-tag no-key';
+  }
+}
+
+// 초기 키 상태
+if (GEMINI_KEY) updateKeyUI();
+
+// ══════════════════════════════════════
+// 광고 필터
 // ══════════════════════════════════════
 const AD_SUBS = ['topdealsusa','dealsinamerica','deals','buildapcsales','hotdeals','blackfriday','coupons','frugal','slickdeals'];
-const AD_KWS  = ['deal finder','deals today','handpicked','amazon deals','best deals','shop now','limited time','flash sale','hot deals','daily deals','price drop','coupon','promo code','discount code','sponsored','[ad]','#ad','affiliate link'];
-
-function isAd(post) {
-  if (AD_SUBS.some(s => post.subreddit.toLowerCase().includes(s))) return true;
-  const t = (post.title + ' ' + (post.selftext||'')).toLowerCase();
-  return AD_KWS.filter(k => t.includes(k)).length >= 2;
+const AD_KWS  = ['deal finder','deals today','handpicked','amazon deals','best deals','shop now','limited time','flash sale','daily deals','price drop','coupon','promo code','discount code','sponsored','affiliate'];
+function isAd(p) {
+  if (AD_SUBS.some(s=>p.subreddit.toLowerCase().includes(s))) return true;
+  const t=(p.title+' '+(p.selftext||'')).toLowerCase();
+  return AD_KWS.filter(k=>t.includes(k)).length>=2;
 }
 
 // ══════════════════════════════════════
-// 초기 감성 분석 (임시 — AI 분석 후 덮어씀)
-// 역할: 빠른 첫 표시용. 정확도보다 속도 우선.
+// 초기 감성 분석 (AI 보정 전 임시)
 // ══════════════════════════════════════
-const POS_W = ['love','great','good','best','awesome','perfect','recommend','worth','happy','clean','quiet','effective','quality','reliable','satisfied','works','excellent','amazing','fantastic','wonderful','impressive','pleased','helpful','efficient'];
-const NEG_W = ['bad','terrible','horrible','worst','broken','poor','disappoint','issue','problem','fail','waste','useless','expensive','scam','avoid','defective','loud','noisy','stopped','dead','return','refund','regret','smell','sick','weird','leaking','rattling','overpriced','not worth','worse'];
-const NEG_MOD = ['not','no','never','cannot','cant',"can't",'dont',"don't",'isnt',"isn't",'wasnt',"wasn't",'without','hardly','barely'];
+const POS_W=['love','great','good','best','awesome','perfect','recommend','worth','happy','clean','quiet','effective','quality','reliable','satisfied','works','excellent','amazing','fantastic','wonderful','impressive','pleased','helpful','efficient'];
+const NEG_W=['bad','terrible','horrible','worst','broken','poor','disappoint','issue','problem','fail','waste','useless','expensive','scam','avoid','defective','loud','noisy','stopped','dead','return','refund','regret','smell','sick','weird','leaking','rattling','overpriced','worse','chemical','pesticide','misleading','cancer','toxic'];
+const NEG_MOD=['not','no','never','cannot','cant',"can't",'dont',"don't",'isnt',"isn't",'wasnt',"wasn't",'without','hardly','barely'];
 
-function quickSentiment(text) {
-  const words = text.toLowerCase().split(/\s+/);
-  let ps = 0, ns = 0;
-  for (let i = 0; i < words.length; i++) {
-    const w = words[i].replace(/[^a-z']/g,'');
-    const ng = i > 0 && NEG_MOD.includes(words[i-1].replace(/[^a-z']/g,''));
-    // 2단어 구문도 체크
-    const bg = i < words.length-1 ? w+' '+words[i+1].replace(/[^a-z]/g,'') : '';
-    if (POS_W.some(p => w===p || bg===p)) { ng ? ns++ : ps++; }
-    if (NEG_W.some(n => w===n || bg===n)) { ng ? ps++ : ns++; }
+function quickSent(text) {
+  const words=text.toLowerCase().split(/\s+/);
+  let ps=0,ns=0;
+  for(let i=0;i<words.length;i++){
+    const w=words[i].replace(/[^a-z']/g,'');
+    const ng=i>0&&NEG_MOD.includes(words[i-1].replace(/[^a-z']/g,''));
+    const bg=i<words.length-1?w+' '+words[i+1].replace(/[^a-z]/g,''):'';
+    if(POS_W.some(p=>w===p||bg===p)){ng?ns++:ps++;}
+    if(NEG_W.some(n=>w===n||bg===n)){ng?ps++:ns++;}
   }
-  const diff = ps - ns;
-  // 더 보수적으로: 차이가 3 이상일 때만 강한 방향 결정
-  return diff >= 3 ? 'pos' : diff <= -3 ? 'neg' : diff >= 1 ? 'pos' : diff <= -1 ? 'neg' : 'neu';
+  const d=ps-ns;
+  return d>=3?'pos':d<=-3?'neg':d>=1?'pos':d<=-1?'neg':'neu';
+}
+
+// ══════════════════════════════════════
+// 이슈 분류 (부정 트렌드용)
+// ══════════════════════════════════════
+const ISSUE_MAP = [
+  { key:'smell',      label:'냄새/화학물질',  kws:['smell','chemical','odor','stink','pesticide','toxic','fume'] },
+  { key:'noise',      label:'소음/진동',       kws:['noise','loud','noisy','vibration','rattling','rattles','sound','motor'] },
+  { key:'filter',     label:'필터 문제',       kws:['filter','hepa','replacement','clog','leak'] },
+  { key:'broken',     label:'고장/결함',       kws:['broken','broke','dead','stopped','defective','malfunction','died'] },
+  { key:'customer',   label:'고객서비스',      kws:['customer service','support','warranty','refund','return','replacement'] },
+  { key:'price',      label:'가격/가성비',     kws:['expensive','overpriced','price','cost','worth','value'] },
+  { key:'health',     label:'건강/안전',       kws:['sick','health','allergy','allergic','headache','dizzy','cancer','toxic'] },
+  { key:'app',        label:'앱/연결 문제',    kws:['app','wifi','connect','bluetooth','smart','iocare'] },
+  { key:'misleading', label:'과장광고',        kws:['mislead','false','lie','claim','advertis','exaggerat'] },
+  { key:'other',      label:'기타 부정',       kws:[] },
+];
+
+function classifyIssue(text) {
+  const t = text.toLowerCase();
+  for (const issue of ISSUE_MAP.slice(0,-1)) {
+    if (issue.kws.some(k=>t.includes(k))) return issue.key;
+  }
+  return 'other';
 }
 
 // ══════════════════════════════════════
 // STATE
 // ══════════════════════════════════════
 let allPosts=[], curTab='all', selIdx=null;
-const cache={};   // permalink → AI 결과
-const aiSent={};  // permalink → AI가 확정한 감성
+const cache={}, aiSent={};
+let trendChart=null, issueChart=null;
 
 // ══════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════
 const fn  = n => n>=1000?(n/1000).toFixed(1)+'k':String(n);
-const ago = utc => {
+const ago = utc=>{
   const d=Date.now()/1000-utc;
   if(d<3600) return Math.floor(d/60)+'분 전';
   if(d<86400) return Math.floor(d/3600)+'시간 전';
   return Math.floor(d/86400)+'일 전';
 };
-const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const esc = s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function hl(text,kw){
   if(!kw) return esc(text);
   const e=kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
   return esc(text).replace(new RegExp(`(${e})`,'gi'),'<mark>$1</mark>');
 }
-
-// 게시물의 실제 감성 반환 (AI 확인됐으면 AI 우선)
-function getEffectiveSent(post) {
-  return aiSent[post.permalink] || post.quickSent;
-}
+function getEff(p){ return aiSent[p.permalink]||p.quickSent; }
 
 // ══════════════════════════════════════
 // RENDER
 // ══════════════════════════════════════
 function getList(){
-  const tab = curTab;
-  if (tab === 'all') return allPosts;
-  return allPosts.filter(p => getEffectiveSent(p) === tab);
+  if(curTab==='all') return allPosts;
+  return allPosts.filter(p=>getEff(p)===curTab);
 }
 
 function renderPosts(){
-  const kw  = document.getElementById('kw').value.trim();
-  const list = getList();
-  const el  = document.getElementById('postScroll');
-  document.getElementById('cBadge').textContent = list.length+' results';
-  if(!list.length){
-    el.innerHTML=`<div class="stbox"><div class="ic">🔍</div><p>해당 조건의 게시물이 없습니다.</p></div>`;
-    return;
-  }
-  const sl = {pos:'긍정',neu:'중립',neg:'부정'};
-  el.innerHTML = list.map((p,i)=>{
-    const sent     = getEffectiveSent(p);
-    const aiDone   = !!aiSent[p.permalink];
-    const verified = aiDone ? '<span class="ai-verified">AI확인</span>' : '';
+  const kw=document.getElementById('kw').value.trim();
+  const list=getList();
+  const el=document.getElementById('postScroll');
+  document.getElementById('cBadge').textContent=list.length+' results';
+  if(!list.length){el.innerHTML=`<div class="stbox"><div class="ic">🔍</div><p>해당 조건의 게시물이 없습니다.</p></div>`;return;}
+  const sl={pos:'긍정',neu:'중립',neg:'부정'};
+  el.innerHTML=list.map((p,i)=>{
+    const sent=getEff(p), done=!!aiSent[p.permalink];
     return `
     <div class="pcard${selIdx===i?' sel':''}" id="pc${i}" style="animation-delay:${Math.min(i*.03,.15)}s" onclick="selectPost(${i})">
       <div class="pt">
-        <span class="spill ${sent}">${sl[sent]}${verified}</span>
+        <span class="spill ${sent}">${sl[sent]}${done?'<span class="ai-v">AI확인</span>':''}</span>
         <div class="ptitle">${hl(p.title,kw)}</div>
       </div>
-      ${p.selftext?`<div class="psnip">${hl(p.selftext.slice(0,160),kw)}${p.selftext.length>160?'…':''}</div>`:''}
+      ${p.selftext?`<div class="psnip">${hl(p.selftext.slice(0,150),kw)}${p.selftext.length>150?'…':''}</div>`:''}
       <div class="pmeta">
         <span class="sub-t">r/${esc(p.subreddit)}</span>
-        ${p.isAd?'<span class="ad-badge">⚠ 광고 의심</span>':''}
+        ${p.isAd?'<span class="ad-badge">⚠ 광고</span>':''}
         <span class="mi">▲${fn(p.ups)}</span>
         <span class="mi">💬${fn(p.num_comments)}</span>
         <span class="mi">${ago(p.created_utc)}</span>
@@ -381,18 +505,20 @@ function renderPosts(){
 }
 
 function updateStats(){
-  const pos = allPosts.filter(p=>getEffectiveSent(p)==='pos').length;
-  const neu = allPosts.filter(p=>getEffectiveSent(p)==='neu').length;
-  const neg = allPosts.filter(p=>getEffectiveSent(p)==='neg').length;
-  const tot = allPosts.length||1;
-  document.getElementById('sT').textContent  = allPosts.length;
-  document.getElementById('sP').textContent  = pos;
-  document.getElementById('sN2').textContent = neu;
-  document.getElementById('sN').textContent  = neg;
-  document.getElementById('sU').textContent  = fn(allPosts.reduce((s,x)=>s+x.ups,0));
-  document.getElementById('bP').style.width  = (pos/tot*100)+'%';
-  document.getElementById('bN2').style.width = (neu/tot*100)+'%';
-  document.getElementById('bN').style.width  = (neg/tot*100)+'%';
+  const pos=allPosts.filter(p=>getEff(p)==='pos').length;
+  const neu=allPosts.filter(p=>getEff(p)==='neu').length;
+  const neg=allPosts.filter(p=>getEff(p)==='neg').length;
+  const tot=allPosts.length||1;
+  // 업보트: 실제 합산
+  const ups=allPosts.reduce((s,p)=>s+(typeof p.ups==='number'?p.ups:0),0);
+  document.getElementById('sT').textContent=allPosts.length;
+  document.getElementById('sP').textContent=pos;
+  document.getElementById('sN2').textContent=neu;
+  document.getElementById('sN').textContent=neg;
+  document.getElementById('sU').textContent=fn(ups);
+  document.getElementById('bP').style.width=(pos/tot*100)+'%';
+  document.getElementById('bN2').style.width=(neu/tot*100)+'%';
+  document.getElementById('bN').style.width=(neg/tot*100)+'%';
 }
 
 function filterTab(tab,el){
@@ -402,37 +528,49 @@ function filterTab(tab,el){
   renderPosts(); showAIEmpty();
 }
 
+function switchView(v,el){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('viewMonitor').classList.toggle('active',v==='monitor');
+  document.getElementById('viewTrend').classList.toggle('active',v==='trend');
+  if(v==='trend') renderTrend();
+}
+
 // ══════════════════════════════════════
 // FETCH REDDIT
 // ══════════════════════════════════════
 async function fetchPosts(){
-  const kw   = document.getElementById('kw').value.trim()||'Coway';
-  const sort = document.getElementById('sort').value;
-  const time = document.getElementById('time').value;
-  const lim  = document.getElementById('lim').value;
+  const kw=document.getElementById('kw').value.trim()||'Coway';
+  const sort=document.getElementById('sort').value;
+  const time=document.getElementById('time').value;
+  const lim=document.getElementById('lim').value;
   setStat('warn','불러오는 중...');
-  document.getElementById('postScroll').innerHTML=`<div class="skel-list">${[0,1,2,3,4].map(()=>`<div class="skel-c"><div class="sl" style="width:85%;height:13px"></div><div class="sl" style="width:65%;height:11px"></div><div class="sl" style="width:40%;height:10px;margin-bottom:0"></div></div>`).join('')}</div>`;
+  document.getElementById('postScroll').innerHTML=`<div class="skel-list">${[0,1,2,3,4].map(()=>`<div class="skel-c"><div class="sl" style="width:85%;height:12px"></div><div class="sl" style="width:65%;height:10px"></div><div class="sl" style="width:40%;height:9px;margin-bottom:0"></div></div>`).join('')}</div>`;
   try{
-    const url  = `https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=${sort}&t=${time}&limit=${lim}&restrict_sr=false`;
-    const res  = await fetch(url,{headers:{Accept:'application/json'}});
+    const url=`https://www.reddit.com/search.json?q=${encodeURIComponent(kw)}&sort=${sort}&t=${time}&limit=${lim}&restrict_sr=false`;
+    const res=await fetch(url,{headers:{Accept:'application/json'}});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    allPosts = data.data.children.map(c=>{
-      const d = c.data;
-      const post = {
-        title:d.title, selftext:d.selftext||'',
-        subreddit:d.subreddit, ups:d.ups,
-        num_comments:d.num_comments, created_utc:d.created_utc,
-        permalink:d.permalink,
-        quickSent: quickSentiment(d.title+' '+(d.selftext||'')),
+    const data=await res.json();
+    allPosts=data.data.children.map(c=>{
+      const d=c.data;
+      const p={
+        title:d.title||'',
+        selftext:d.selftext||'',
+        subreddit:d.subreddit||'',
+        ups:Number(d.ups)||0,          // ← 수정: 명시적 숫자 변환
+        num_comments:Number(d.num_comments)||0,
+        created_utc:d.created_utc||0,
+        permalink:d.permalink||'',
+        quickSent:quickSent(d.title+' '+(d.selftext||'')),
       };
-      post.isAd = isAd(post);
-      return post;
+      p.isAd=isAd(p);
+      p.issueKey=classifyIssue(p.title+' '+(p.selftext||''));
+      return p;
     });
     selIdx=null; updateStats(); renderPosts(); showAIEmpty();
     setStat('ok','업데이트: '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
   }catch(e){
-    document.getElementById('postScroll').innerHTML=`<div class="errbox"><strong>⚠ 연결 실패</strong><br><br>Reddit API에 연결할 수 없습니다.<br>원인: ${esc(e.message)}<br><br>• CORS 차단 시: CORS Unblock 브라우저 확장을 사용하세요.</div>`;
+    document.getElementById('postScroll').innerHTML=`<div class="errbox"><strong>⚠ 연결 실패</strong><br><br>${esc(e.message)}<br><br>CORS Unblock 브라우저 확장을 설치해 주세요.</div>`;
     setStat('err','오류');
   }
 }
@@ -442,13 +580,159 @@ function setStat(t,txt){
 }
 
 // ══════════════════════════════════════
-// AI 요약 + 감성 보정
+// TREND ANALYSIS
+// ══════════════════════════════════════
+function renderTrend(){
+  const el=document.getElementById('trendContent');
+  const negPosts=allPosts.filter(p=>getEff(p)==='neg');
+
+  if(!allPosts.length){
+    el.innerHTML=`<div class="trend-empty">🔍 먼저 모니터 탭에서 검색해 주세요.</div>`;
+    return;
+  }
+  if(!negPosts.length){
+    el.innerHTML=`<div class="trend-empty">😊 부정 게시물이 없습니다!</div>`;
+    return;
+  }
+
+  // 이슈 카운트
+  const issueCounts={};
+  ISSUE_MAP.forEach(i=>issueCounts[i.key]=0);
+  negPosts.forEach(p=>{
+    const key=aiSent[p.permalink]?p.issueKey:(classifyIssue(p.title+' '+p.selftext));
+    issueCounts[key]=(issueCounts[key]||0)+1;
+  });
+
+  // 월별 트렌드 (최근 12개월)
+  const now=Date.now()/1000;
+  const monthCounts=Array(12).fill(0);
+  const monthLabels=[];
+  for(let i=11;i>=0;i--){
+    const d=new Date(); d.setMonth(d.getMonth()-i);
+    monthLabels.push(`${d.getMonth()+1}월`);
+  }
+  negPosts.forEach(p=>{
+    const diffDays=(now-p.created_utc)/86400;
+    const monthsAgo=Math.floor(diffDays/30);
+    const idx=11-monthsAgo;
+    if(idx>=0&&idx<12) monthCounts[idx]++;
+  });
+
+  // 이슈 정렬
+  const sortedIssues=ISSUE_MAP
+    .map(i=>({...i, count:issueCounts[i.key]||0}))
+    .filter(i=>i.count>0)
+    .sort((a,b)=>b.count-a.count);
+  const maxCount=sortedIssues[0]?.count||1;
+
+  el.innerHTML=`
+  <div class="trend-grid">
+    <div class="trend-card">
+      <div class="tc-title">월별 부정 게시물 추이</div>
+      <div class="chart-wrap"><canvas id="trendLineChart"></canvas></div>
+    </div>
+    <div class="trend-card">
+      <div class="tc-title">이슈별 분포</div>
+      <div class="chart-wrap"><canvas id="issueDonutChart"></canvas></div>
+    </div>
+    <div class="trend-card full">
+      <div class="tc-title">이슈 순위 (부정 ${negPosts.length}건 중)</div>
+      <div class="issue-list">
+        ${sortedIssues.map((iss,i)=>`
+        <div class="issue-row">
+          <div class="issue-rank">${i+1}</div>
+          <div class="issue-name">${iss.label}</div>
+          <div class="issue-bar-wrap">
+            <div class="issue-bar-bg">
+              <div class="issue-bar-fill" style="width:${(iss.count/maxCount*100).toFixed(1)}%"></div>
+            </div>
+          </div>
+          <div class="issue-count">${iss.count}건</div>
+          <div class="issue-pct">${(iss.count/negPosts.length*100).toFixed(0)}%</div>
+        </div>`).join('')}
+      </div>
+      <div class="trend-note">
+        📌 이슈 분류는 키워드 기반입니다. AI 요약 후 더 정확한 분류가 가능합니다.<br>
+        전체 ${allPosts.length}건 중 부정 ${negPosts.length}건 (${(negPosts.length/allPosts.length*100).toFixed(1)}%)
+      </div>
+    </div>
+  </div>`;
+
+  // 차트 렌더링
+  setTimeout(()=>{
+    // 월별 라인차트
+    const lCtx=document.getElementById('trendLineChart');
+    if(lCtx){
+      if(trendChart){trendChart.destroy();trendChart=null;}
+      trendChart=new Chart(lCtx,{
+        type:'line',
+        data:{
+          labels:monthLabels,
+          datasets:[{
+            label:'부정 게시물 수',
+            data:monthCounts,
+            borderColor:'#f43f5e',
+            backgroundColor:'rgba(244,63,94,.12)',
+            fill:true,
+            tension:0.4,
+            pointBackgroundColor:'#f43f5e',
+            pointRadius:4,
+          }]
+        },
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{
+            x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#6272a4',font:{size:10}}},
+            y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#6272a4',font:{size:10},stepSize:1},beginAtZero:true}
+          }
+        }
+      });
+    }
+    // 도넛차트
+    const dCtx=document.getElementById('issueDonutChart');
+    if(dCtx&&sortedIssues.length){
+      if(issueChart){issueChart.destroy();issueChart=null;}
+      const colors=['#f43f5e','#f59e0b','#8b5cf6','#06b6d4','#10b981','#f97316','#6366f1','#ec4899','#14b8a6','#84cc16'];
+      issueChart=new Chart(dCtx,{
+        type:'doughnut',
+        data:{
+          labels:sortedIssues.map(i=>i.label),
+          datasets:[{
+            data:sortedIssues.map(i=>i.count),
+            backgroundColor:colors.slice(0,sortedIssues.length),
+            borderColor:'#18181f',
+            borderWidth:2,
+          }]
+        },
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          plugins:{
+            legend:{position:'right',labels:{color:'#8890b0',font:{size:10},boxWidth:12,padding:8}},
+          },
+          cutout:'60%',
+        }
+      });
+    }
+  },100);
+}
+
+// ══════════════════════════════════════
+// AI SUMMARY (Gemini)
 // ══════════════════════════════════════
 function showAIEmpty(){
+  if(!GEMINI_KEY){
+    document.getElementById('aiBody').innerHTML=`
+    <div class="aie">
+      <div class="aie-i">🔑</div>
+      <div class="aie-t">상단 배너에서<br><strong style="color:var(--yel)">Gemini API 키</strong>를 입력하면<br>AI 한글 요약이 활성화됩니다.<br><br><span style="font-size:11px;color:var(--muted)">aistudio.google.com에서<br>무료 발급 (구글 계정 필요)</span></div>
+    </div>`;
+    return;
+  }
   document.getElementById('aiBody').innerHTML=`
   <div class="aie">
     <div class="aie-i">✨</div>
-    <div class="aie-t">왼쪽 게시물을 클릭하면<br>AI가 내용을 분석해<br><strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>제공합니다.<br><br><span style="font-size:12px;color:var(--muted)">※ AI 분석 완료 후 카드의 감성이<br>자동으로 정확한 값으로 업데이트됩니다.</span></div>
+    <div class="aie-t">왼쪽 게시물을 클릭하면<br><strong style="color:var(--green)">즉시</strong><br><strong style="color:var(--text)">한글 요약 + 감성 분석</strong>을<br>제공합니다.<br><br><span style="font-size:11px;color:var(--muted)">※ AI 분석 후 카드 감성이<br>자동으로 정확하게 업데이트됩니다.</span></div>
   </div>`;
 }
 
@@ -460,62 +744,45 @@ function selectPost(idx){
   const el=document.getElementById('pc'+idx);
   if(el){el.classList.add('sel');el.scrollIntoView({block:'nearest',behavior:'smooth'});}
   const post=list[idx];
-  // 캐시 있으면 바로
   if(cache[post.permalink]){showAIResult(post,cache[post.permalink]);return;}
+  if(!GEMINI_KEY){
+    document.getElementById('aiBody').innerHTML=`
+    <div class="no-key-msg"><strong>🔑 API 키 필요</strong><br><br>상단 배너에서 Gemini API 키를 입력해 주세요.<br><br><a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--acc)">무료 발급 →</a></div>`;
+    return;
+  }
   showAILoading();
-  callAI(post).then(r=>{
-    cache[post.permalink]=r;
-    // ★ AI 감성으로 카드 업데이트
-    if(r.sentiment && ['pos','neu','neg'].includes(r.sentiment)){
-      aiSent[post.permalink]=r.sentiment;
-    }
-    showAIResult(post,r);
-    // 카드 목록 & 통계 갱신
-    updateStats();
-    renderPosts();
-    const ne=document.getElementById('pc'+idx);
-    if(ne)ne.classList.add('sel');
-  }).catch(e=>showAIErr(e.message));
+  callGemini(post)
+    .then(r=>{
+      cache[post.permalink]=r;
+      if(r.sentiment&&['pos','neu','neg'].includes(r.sentiment)){
+        aiSent[post.permalink]=r.sentiment;
+        // 이슈 재분류
+        if(r.issueKey) post.issueKey=r.issueKey;
+      }
+      showAIResult(post,r);
+      updateStats(); renderPosts();
+      const ne=document.getElementById('pc'+idx);
+      if(ne)ne.classList.add('sel');
+    })
+    .catch(e=>showAIErr(e.message));
 }
 
-// 경과 타이머
-let etaInterval=null;
 function showAILoading(){
-  let sec=0;
-  if(etaInterval) clearInterval(etaInterval);
   document.getElementById('aiBody').innerHTML=`
   <div class="ail">
-    <div class="ail-label">
-      <div class="ail-spinner"></div>AI 분석 중...
-      <span class="ail-eta" id="etaLabel">0초</span>
-    </div>
-    ${['90','72','82','52','76','65','86','56','70','60'].map(w=>`<div class="ask" style="width:${w}%"></div>`).join('')}
+    <div class="ail-label"><div class="ail-sp"></div>Gemini 분석 중...</div>
+    ${['88','70','80','50','74','62','84','54','68'].map(w=>`<div class="ask" style="width:${w}%"></div>`).join('')}
   </div>`;
-  etaInterval=setInterval(()=>{
-    sec++;
-    const el=document.getElementById('etaLabel');
-    if(el) el.textContent=sec+'초 경과';
-  },1000);
 }
-
 function showAIErr(msg){
-  if(etaInterval){clearInterval(etaInterval);etaInterval=null;}
   document.getElementById('aiBody').innerHTML=`
-  <div class="ai-err">
-    <strong>⚠ AI 요약 실패</strong><br><br>${esc(msg)}<br><br>
-    • 잠시 후 다시 시도해 주세요.<br>
-    • 네트워크 연결을 확인해 주세요.
-  </div>`;
+  <div class="ai-err"><strong>⚠ AI 요약 실패</strong><br><br>${esc(msg)}<br><br>• API 키를 확인해 주세요.<br>• 잠시 후 다시 시도해 주세요.</div>`;
 }
 
 function showAIResult(post,r){
-  if(etaInterval){clearInterval(etaInterval);etaInterval=null;}
-  const sl   = {pos:'긍정 😊',neu:'중립 😐',neg:'부정 😞'};
-  const sc   = r.sentiment||'neu';
-  const score= r.sentScore||50;
-  const prevSent  = post.quickSent;
-  const corrected = sc !== prevSent;
-
+  const sl={pos:'긍정 😊',neu:'중립 😐',neg:'부정 😞'};
+  const sc=r.sentiment||'neu', score=r.sentScore||50;
+  const corrected=sc!==post.quickSent;
   document.getElementById('aiBody').innerHTML=`
   <div class="air">
     <div class="air-h">
@@ -525,10 +792,9 @@ function showAIResult(post,r){
         <span class="air-mc">▲${fn(post.ups)}</span>
         <span class="air-mc">💬${fn(post.num_comments)}</span>
         <span class="air-mc">${ago(post.created_utc)}</span>
-        ${post.isAd?'<span class="air-mc" style="color:var(--yel)">⚠ 광고 의심</span>':''}
+        ${post.isAd?'<span class="air-mc" style="color:var(--yel)">⚠ 광고</span>':''}
       </div>
     </div>
-
     <div class="aisec">
       <div class="aisec-t">AI 감성 분석</div>
       <div class="sent-box">
@@ -539,20 +805,17 @@ function showAIResult(post,r){
           <div class="sw-n">${score}% 확신</div>
         </div>
       </div>
-      ${corrected?`<div class="updated-note">✅ 카드 감성이 키워드 분석(${{pos:'긍정',neu:'중립',neg:'부정'}[prevSent]}) → AI 분석(${sl[sc]||'?'})으로 보정되었습니다</div>`:''}
+      ${corrected?`<div class="upd-note">✅ ${{pos:'긍정',neu:'중립',neg:'부정'}[post.quickSent]} → ${sl[sc]} 으로 AI 보정됨</div>`:''}
     </div>
-
     <div class="aisec">
       <div class="aisec-t">한글 요약</div>
       <div class="ai-sum">${(r.summary||'요약 없음').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}</div>
     </div>
-
     ${r.keyPoints&&r.keyPoints.length?`
     <div class="aisec">
       <div class="aisec-t">핵심 포인트</div>
       <div class="kpt">${r.keyPoints.map(pt=>`<div class="kpt-item">${esc(pt)}</div>`).join('')}</div>
     </div>`:''}
-
     <div class="aisec">
       <div class="aisec-t">키워드</div>
       <div class="kwtags">
@@ -561,76 +824,79 @@ function showAIResult(post,r){
         ${(r.topics||[]).map(k=>`<span class="kwt">${esc(k)}</span>`).join('')}
       </div>
     </div>
-
     ${r.cowayRelevance?`
     <div class="aisec">
       <div class="aisec-t">Coway 관련성</div>
       <div class="rel-box">${esc(r.cowayRelevance)}</div>
     </div>`:''}
-
-    <div class="ai-foot">AI 분석 완료 · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div class="ai-foot">Gemini 2.0 Flash · 출처: Reddit · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</div>
   </div>`;
 }
 
 // ══════════════════════════════════════
-// AI 호출 — 병렬 요청으로 가장 빠른 응답 사용
+// Gemini API 호출
 // ══════════════════════════════════════
-async function callAI(post){
-  const prompt = `당신은 공기청정기 브랜드 Coway(코웨이)에 대한 Reddit 게시물을 분석하는 마케팅 분석가입니다.
-아래 게시물을 분석하고 JSON만 응답하세요. 코드블록 없이 순수 JSON만 출력하세요.
+async function callGemini(post){
+  const prompt=`당신은 공기청정기 브랜드 Coway(코웨이)의 마케팅 분석가입니다. Reddit 게시물을 분석하고 JSON만 반환하세요. 다른 텍스트 없이 순수 JSON만 출력하세요.
 
 제목: ${post.title}
-본문: ${post.selftext||'(없음)'}
+본문: ${(post.selftext||'').slice(0,800)}
 
-{"sentiment":"pos또는neu또는neg","sentScore":0~100,"summary":"3~4문장 한국어 요약","keyPoints":["포인트1","포인트2","포인트3"],"posKws":["긍정1","긍정2"],"negKws":["부정1","부정2"],"topics":["주제1","주제2"],"cowayRelevance":"Coway 관련성 또는 null"}`;
+반환 JSON:
+{
+  "sentiment": "pos 또는 neu 또는 neg",
+  "sentScore": 0~100,
+  "summary": "3~4문장 자연스러운 한국어 요약",
+  "keyPoints": ["핵심 포인트1", "핵심 포인트2", "핵심 포인트3"],
+  "posKws": ["긍정 키워드1", "긍정 키워드2"],
+  "negKws": ["부정 키워드1", "부정 키워드2"],
+  "topics": ["주제1", "주제2"],
+  "cowayRelevance": "Coway 관련성 1~2문장 또는 null"
+}`;
 
-  // 두 엔드포인트에 병렬 요청 → 먼저 오는 응답 사용
-  const endpoints = [
-    `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&json=true&seed=${Date.now()}`,
-    `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=mistral&json=true&seed=${Date.now()+1}`,
-  ];
+  const res=await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
+    {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{parts:[{text:prompt}]}],
+        generationConfig:{temperature:0.3,maxOutputTokens:800,responseMimeType:'application/json'},
+      }),
+    }
+  );
 
-  const controller = new AbortController();
-  const timeout = setTimeout(()=>controller.abort(), 25000);
+  if(!res.ok){
+    const err=await res.json().catch(()=>({}));
+    const msg=err?.error?.message||`Gemini 오류 ${res.status}`;
+    if(res.status===400&&msg.includes('API_KEY')) throw new Error('API 키가 올바르지 않습니다. 상단에서 키를 다시 입력해 주세요.');
+    throw new Error(msg);
+  }
 
-  try {
-    // 두 요청 동시 실행, 먼저 성공한 것 사용
-    const text = await Promise.any(
-      endpoints.map(url =>
-        fetch(url, { signal: controller.signal })
-          .then(r => { if(!r.ok) throw new Error(r.status); return r.text(); })
-          .then(t => {
-            // JSON 유효성 확인
-            const m = t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
-            if (!m) throw new Error('no json');
-            JSON.parse(m[0]); // 파싱 테스트
-            return t;
-          })
-      )
-    );
-    clearTimeout(timeout);
-
-    const clean = text.replace(/```json|```/g,'').trim();
-    const jsonMatch = clean.match(/\{[\s\S]*\}/);
-    return JSON.parse(jsonMatch[0]);
-
-  } catch(e) {
-    clearTimeout(timeout);
-    if(e.name==='AbortError') throw new Error('요청 시간 초과 (25초). 다시 시도해 주세요.');
-    throw new Error('AI 서버 응답 실패. 잠시 후 다시 시도해 주세요.');
+  const data=await res.json();
+  const text=data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  try{
+    const clean=text.replace(/```json|```/g,'').trim();
+    return JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0]||clean);
+  }catch{
+    throw new Error('응답 파싱 실패: '+text.slice(0,100));
   }
 }
 
-// 패널 리사이즈
+// ══════════════════════════════════════
+// RESIZER
+// ══════════════════════════════════════
 (function(){
   const r=document.getElementById('resizer');
   const ap=document.getElementById('aiPane');
   let drag=false,sx=0,sw=0;
   r.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;sw=ap.offsetWidth;document.body.style.cursor='col-resize';e.preventDefault();});
-  document.addEventListener('mousemove',e=>{if(!drag)return;const w=Math.max(280,Math.min(620,sw-(e.clientX-sx)));ap.style.width=w+'px';});
+  document.addEventListener('mousemove',e=>{if(!drag)return;const w=Math.max(260,Math.min(600,sw-(e.clientX-sx)));ap.style.width=w+'px';});
   document.addEventListener('mouseup',()=>{drag=false;document.body.style.cursor='';});
 })();
 
+// 초기 실행
+updateKeyUI();
 fetchPosts();
 </script>
 </body>
